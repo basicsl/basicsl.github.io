@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; Analysis of Variance and Random Effects Modeling – Basic Statistical Learning: a Guide for the Perplexed</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ML.html" rel="next">
+<link href="./NonLinMod.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-5ccb035bea26c1e21f80f44cf7c27909.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./ANOVA.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Analysis of Variance and Random Effects Modeling</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Basic Statistical Learning: a Guide for the Perplexed</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./DataEx.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Exploration</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./SupLearn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./LinMod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Linear Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ExtenLin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extensions to the Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./NonLinMod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Nonlinear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ANOVA.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Analysis of Variance and Random Effects Modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ML.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Machine Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./UnsupLearn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Strings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">String Processing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#a-brief-introduction-to-experimental-design" id="toc-a-brief-introduction-to-experimental-design" class="nav-link active" data-scroll-target="#a-brief-introduction-to-experimental-design"><span class="header-section-number">7.1</span> A Brief Introduction to Experimental Design</a></li>
+  <li><a href="#analysis-of-variance" id="toc-analysis-of-variance" class="nav-link" data-scroll-target="#analysis-of-variance"><span class="header-section-number">7.2</span> Analysis of Variance</a>
+  <ul class="collapse">
+  <li><a href="#the-one-way-anova-setting" id="toc-the-one-way-anova-setting" class="nav-link" data-scroll-target="#the-one-way-anova-setting"><span class="header-section-number">7.2.1</span> The One-Way ANOVA Setting</a></li>
+  </ul></li>
+  <li><a href="#random-effects-modeling" id="toc-random-effects-modeling" class="nav-link" data-scroll-target="#random-effects-modeling"><span class="header-section-number">7.3</span> Random Effects Modeling</a>
+  <ul class="collapse">
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1"><span class="header-section-number">7.3.1</span> Example</a></li>
+  <li><a href="#example-2" id="toc-example-2" class="nav-link" data-scroll-target="#example-2"><span class="header-section-number">7.3.2</span> Example</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Analysis of Variance and Random Effects Modeling</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="a-brief-introduction-to-experimental-design" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="a-brief-introduction-to-experimental-design"><span class="header-section-number">7.1</span> A Brief Introduction to Experimental Design</h2>
+<p>While discussing supervised learning thus far, we have focused on trying to uncover the association between a set of predictor variables <span class="math inline">\(\mathbf{x}\)</span> and a response variable <span class="math inline">\(Y\)</span>, if it exists. However, even if a statistically significant association does exist, <strong>association does not imply causation!</strong>.</p>
+<p>To begin to show how one might be able to infer causation, we will look at three examples provided by Zach Branson of Carnegie Mellon University.</p>
+<p><strong>Example 1: Industrial Experiments</strong></p>
+<p>Apple wants to test the water durability of their laptops.</p>
+<ul>
+<li>They randomly sample 100 identical laptops for study, and pour water on half of them.</li>
+<li>20 of 50 “treatment” (water-doused) keyboards continued to work, as opposed to 50 of 50 “control” keyboards.</li>
+</ul>
+<p>Can we infer that the water <em>caused</em> the keyboards to break?</p>
+<ul>
+<li><strong>Yes</strong></li>
+</ul>
+<p>The laptops were otherwise identical…the only difference was the treatment.</p>
+<p><strong>Example 2: Clinical Trials</strong></p>
+<p>The Food and Drug Administration wanted to determine whether a new drug alleviated hypertension.</p>
+<ul>
+<li>It randomly picked 100 people with hypertension, and placed 50 people each into the treatment and control groups.</li>
+<li>30 of 50 treated people had alleviated hypertension, as opposed to 10 of 50 in the control group; a two-sample population proportions test yielded a <span class="math inline">\(p\)</span>-value of 0.0001.</li>
+</ul>
+<p>Did the new drug <em>cause</em> alleviated hypertension?</p>
+<ul>
+<li><strong>We cannot be sure.</strong></li>
+</ul>
+<p>Let’s say it turns out that, totally by accident, the 50 people in the treatment group had health insurance, while the 50 people in the control group did not. So perhaps it was the drug, or perhaps the insurance (or perhaps the fact that those without insurance were poorer, or…). Randomization leads to identical treatment and control groups, but only <em>on average</em>…“unlucky” randomization can happen.</p>
+<p><strong>Example 3: Epidemiology</strong></p>
+<p>We wish to study the effect of smoking on lung health. Ideally, we would run an experiment in which we randomly place people into a smoking treatment group, and into a non-smoking control group. However, it is not ethical to force people to smoke. So instead we randomly select 5000 smokers and 5000 non-smokers to study, and we find that the smokers have worse lung health.</p>
+<p>Does smoking <em>cause</em> the observed deterioration of lung function?</p>
+<ul>
+<li><strong>Again, we cannot be sure.</strong></li>
+</ul>
+<p>For instance, smokers tend to be older, poorer, and to not have insurance. Can we mitigate this issue? We can if we can identify subsets of treatment and control groups that have similar age, income, education, insurance, etc. If we continue to see similar results, we are in a better position to argue for causality.</p>
+<hr>
+<p>Let’s assume that we want to divide <span class="math inline">\(N\)</span> people into two groups, a treatment group and a control group…(assume <span class="math inline">\(N\)</span> is an even number). How might we do this? One way is via <em>Bernoulli trials</em>: we assign people to groups effectively via coin flips. An issue with this is that the group sizes can end up being very different. Alternatively, we can utilize <em>complete randomization</em>, in which pick exactly <span class="math inline">\(N/2\)</span> people at random to be in the treatment group. This resolves the group-size issue observed with Bernoulli trials, but there is still the issue of covariates. For instance, perhaps we want to run a clinical trial that includes both smokers and non-smokers: it could turn out that one group ends up with many more smokers than the other. This “covariate issue” can be dealt with when analyzing the data, but it can also be dealt with at the experimental design stage by using <em>block randomization</em>, in which we identify a potentially problematic covariate, divide people into groups on the basis of that covariate (e.g., smokers vs.&nbsp;non-smokers), and then perform complete randomization within each covariate group. (This scheme can be extended to multiple covariates, e.g., male smokers, female non-smokers, etc.) Common examples of covariates to look out for in designed studies include gender, socioeconomic status, geographic location, medical risk factors, and education, etc.</p>
+<p>The effect that covariates can have on analyses is illustrated in the following two plots. In the first one, we show the results of regressing penguin bill length onto bill depth (the distance across a bill near its base), given measurements made of 333 penguins in Antarctica’s Palmer Archipelago. This analysis would lead us to conclude that as bill depth gets larger, bill length gets smaller.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><em>However</em>…the 333 penguins represented three separate species. We thus should identify species as a possible covariate, and redo the analysis, learning three separate regression models, one for each species.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>These results make much more sense: the bigger a bill is across, the longer we would expect it to be! What we observe here is a manifestation of what statisticians refer to as <em>Simpson’s paradox</em>.</p>
+</section>
+<section id="analysis-of-variance" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="analysis-of-variance"><span class="header-section-number">7.2</span> Analysis of Variance</h2>
+<p>Let’s assume that our data consists of a predictor variable with <span class="math inline">\(k\)</span> categories (or treatment groups) and a continuous response variable. For each group, the response data are sampled according to some underlying population…how can we determine if, e.g., the means of each of the group populations are the same?</p>
+<ul>
+<li>If <span class="math inline">\(k = 2\)</span> and the response variable is normally distributed within each group, we can do a two-sample <span class="math inline">\(t\)</span> test.</li>
+<li>If <span class="math inline">\(k = 2\)</span> and the response variable is not normally distributed, but the distributions are known or can be assumed, we can utilize other hypothesis tests like the population proportions test. This is realm of so-called A/B testing…the test that is used depends on the distribution of the response values for groups A and B.</li>
+<li>If <span class="math inline">\(k &gt; 2\)</span> and the response variable is normally distributed within each group (with equal variances), we can do one-way analysis of variance (or ANOVA); if there are two categorical predictors, we can do a two-way ANOVA.</li>
+<li>If <span class="math inline">\(k &gt; 2\)</span> and the response variable is normally distributed within each group (with equal variances), <em>and</em> there is another continuous predictor that can be treated as a covariate (e.g., age), we can do (one-way) analysis of covariance (or ANCOVA).</li>
+</ul>
+<section id="the-one-way-anova-setting" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="the-one-way-anova-setting"><span class="header-section-number">7.2.1</span> The One-Way ANOVA Setting</h3>
+<p>In the simple linear regression setting, our data consists of a continuously valued predictor variable <span class="math inline">\(\mathbf{x}\)</span> that we attempt to relate to the values of response variable <span class="math inline">\(\mathbf{Y}\)</span>. However, what if instead the values of the predictor variable are discretely valued…and specifically, if they represent groups (or categories)?</p>
+<p>If there are <span class="math inline">\(k &gt; 2\)</span> groups we would utilize one-way <em>analysis of variance</em> (or one-way <em>ANOVA</em>). Here, “one-way” simply indicates that (in our chosen setting) there is only one (categorical) predictor variable.</p>
+<p>Why would we not simply use linear regression? Because categories/groups might have no natural numerical order, meaning, for instance, that if we were to learn a linear regression model, then switch the placement of any two of the groups along the <span class="math inline">\(x\)</span>-axis and relearn the model, the slope would change! (For instance, see the plot below. If we were to swap the positions of groups 1 and 2, the slope would change from being negative to being approximately zero.)</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What if we define the predictor variable <code>x</code> as a <em>factor variable</em> instead of as a continuous, numerical variable? This would cause <code>R</code> to change the definition of the linear-regression model, as a factor variable with <span class="math inline">\(k\)</span> levels is split into <span class="math inline">\(k-1\)</span> so-called <em>dummy variables</em>, with the other level becoming the so-called <em>reference level</em>. The model thus becomes <span class="math display">\[\begin{align*}
+Y_i = \beta_0 + \mathcal{I}_{x_i=2} \beta_2 + \mathcal{I}_{x_i=3} \beta_3 + \epsilon_i \,,
+\end{align*}\]</span> where <span class="math inline">\(\mathcal{I}\)</span> is the <em>indicator function</em>, and it takes on value 1 if the condition is true and 0 otherwise.(For instance, <span class="math inline">\(\mathcal{I}_{x_i=4}\)</span> is 0 if <span class="math inline">\(x_i = 3\)</span> or <span class="math inline">\(5\)</span> and 1 if <span class="math inline">\(x_i = 4\)</span>.) We can recast this model into a more intuitive form: <span class="math display">\[\begin{align*}
+Y_i = \left\{ \begin{array}{ll} \beta_0 &amp; x_i = 1 \\ \beta_0 + \beta_2 &amp; x_i = 2 \\ \beta_0 + \beta_3 &amp; x_i = 3 \end{array} \right.
+\end{align*}\]</span> If we change the ordering of the groups, the <span class="math inline">\(\beta_i\)</span>’s might change, but only because we perhaps define a new reference level. In the plot below, the dashed line is <span class="math inline">\(\beta_0\)</span> and represents the predicted response for group 1. The negative coefficients for <code>x2</code> and <code>x3</code> in the <code>lm()</code> output indicate that the model is predicting that the means in groups 2 and 3 are smaller than the mean in group 1: the mean of group 2 is predicted to be 3.893-1.276 = 2.617, and the mean of group 3 is predicted to be 3.893-1.260 = 2.633.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code>             Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept)  3.892600  0.1965203 19.807622 2.133153e-18
+x2          -1.275933  0.2947805 -4.328419 1.629668e-04
+x3          -1.260000  0.3930406 -3.205775 3.269829e-03</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>So, to go back to the question “why not use simple linear regression?” It turns out, we <em>do</em> use it…but the model definition changes since <code>x</code> is categorical and not quantitative</p>
+<p>So what then is ANOVA? <em>It is simply a mechanism for running a hypothesis test given the linear regression output.</em> For one-way ANOVA, the statistical model is <span class="math display">\[\begin{align*}
+Y_{ij} = \mu + \tau_i + \epsilon_{ij} \,,
+\end{align*}\]</span> where <span class="math inline">\(i\)</span> denotes the treatment group (there are <span class="math inline">\(k\)</span> groups overall), <span class="math inline">\(j\)</span> denotes an observed datum within group <span class="math inline">\(i\)</span>, <span class="math inline">\(\mu\)</span> is the overall mean response value,<span class="math inline">\(\tau_i\)</span> is the <em>deterministic</em> (i.e., not random) effect of treatment in group <span class="math inline">\(i\)</span>, and <span class="math inline">\(\epsilon_{ij}\)</span> are the error terms, assumed to be independent, normally distributed, and of constant variance <span class="math inline">\(\sigma^2\)</span>…thus <span class="math inline">\(Y_{ij} \sim \mathcal{N}(\mu+\tau_i,\sigma^2)\)</span></p>
+<p>In ANOVA, we perform the hypothesis test <span class="math display">\[\begin{align*}
+H_o : \tau_1 = \cdots = \tau_k = 0 ~~~~~ \mbox{vs.} ~~~~~ \text{at least one value differs from zero} \,.
+\end{align*}\]</span> To reject the null, the value of one or more of the <span class="math inline">\(\tau_i\)</span>’s has to be large with respect to <span class="math inline">\(\sigma\)</span>.</p>
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-layout-align="center">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="240"></p>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="240"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>The left figure represents a situation in which we would fail to reject the null hypothesis, while the right figure represents a situation in which we would reject the null.</p>
+<p>Before continuing, we will mathematically define the metrics that we observe in the output of ANOVA analyses. We do this for completeness; the reader can safely skip over this detail.</p>
+<p>In an ANOVA model, the the total sum of squared differences (or the TSS) between each datum <span class="math inline">\(Y_{ij}\)</span> and the <em>overall mean</em> <span class="math inline">\(\bar{Y}\)</span> is defined as <span class="math display">\[
+\sum_{i=1}^k \sum_{j=1}^{n_i} (Y_{ij}-\bar{Y})^2 \,.
+\]</span> We can break this quantity into two pieces <span class="math display">\[\begin{align*}
+TSS &amp;= \sum_{i=1}^k \sum_{j=1}^{n_i} (Y_{ij}-\bar{Y})^2 = \sum_{i=1}^k \sum_{j=1}^{n_i} (Y_{ij}-\bar{Y}_i)^2 + \sum_{i=1}^k n_i(\bar{Y}_{i\bullet}-\bar{Y})^2 \\
+&amp;= SSE + SST \,.
+\end{align*}\]</span> Here, <span class="math inline">\(\bar{Y}_{i}\)</span> is the sample mean of the data of group <span class="math inline">\(i\)</span>, and <span class="math inline">\(n_i\)</span> is the sample size in group <span class="math inline">\(i\)</span>. The <span class="math inline">\(SSE\)</span> reflects the level of data variations <em>within</em> groups, while the <span class="math inline">\(SST\)</span> gives a sense as to how far each group mean is from the overall mean. The larger the SST value is relative to the SSE value, the more likely that we will reject the null hypothesis.</p>
+<p>Under the assumption that <span class="math inline">\(\tau_1 = \cdots = \tau_k = 0\)</span>, we can write that <span class="math display">\[
+\frac{SSE}{\sigma^2} \sim \chi_{n-k}^2~~~ \mbox{and} ~~~ \frac{SST}{\sigma^2} \sim \chi_{k-1}^2 \,,
+\]</span> where <span class="math inline">\(\chi_{\nu}^2\)</span> is a chi-square distribution for <span class="math inline">\(\nu\)</span> “degrees of freedom.” We can further write that <span class="math display">\[
+\frac{SST/(k-1)}{SSE/(n-k)} = \frac{MST}{MSE} = F \sim F_{k-1,n-k} \,,
+\]</span> where <span class="math inline">\(F\)</span> is a random variable that under the null is sampled according to an <em>F distribution</em> for <span class="math inline">\(k-1\)</span> numerator, and <span class="math inline">\(n-k\)</span> denominator, degrees of freedom.</p>
+<p>We reject the null hypothesis if the value of <span class="math inline">\(F\)</span> is sufficiently large relative to its mean value, which is <span class="math inline">\((n-k)/(n-k-2)\)</span> (or <span class="math inline">\(\approx 1\)</span> if <span class="math inline">\(n \gg k\)</span>).</p>
+<section id="example" class="level4" data-number="7.2.1.1">
+<h4 data-number="7.2.1.1" class="anchored" data-anchor-id="example"><span class="header-section-number">7.2.1.1</span> Example</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(<span class="fu">lm</span>(Y<span class="sc">~</span>x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: Y
+          Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+x          2 12.879  6.4395  11.116 0.0002609 ***
+Residuals 29 16.800  0.5793                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>In the output,</p>
+<ul>
+<li>the first column shows <span class="math inline">\(k-1\)</span> and <span class="math inline">\(n-k\)</span> (so we can see that <span class="math inline">\(k = 3\)</span> and <span class="math inline">\(n = 32\)</span>);</li>
+<li>the second column shows the SST (top) and SSE (bottom) (see appendix);</li>
+<li>the third columns shows the MST (= SST /( <span class="math inline">\(k-1\)</span>); top) and MSE (= SSE /( <span class="math inline">\(n-k\)</span>); bottom);</li>
+<li>the fourth column shows <span class="math inline">\(F = MST/MSE\)</span>; and</li>
+<li>the fifth column shows the <span class="math inline">\(p\)</span>-value.</li>
+</ul>
+<p>We observe that <span class="math inline">\(p \ll \alpha = 0.05\)</span>, so we reject the null hypothesis and conclude that at least one of the means is different from the others.</p>
+<p>But…which of the means is different from the others? To try to determine this, we can use a so-called “post-hoc” test such as the Tukey HSD (honest significant difference) test.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(<span class="fu">aov</span>(Y<span class="sc">~</span>x)) <span class="co"># one quirk: it won't work with anova() output, just aov() output</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = Y ~ x)
+
+$x
+           diff        lwr        upr     p adj
+2-1 -1.27593333 -2.0039372 -0.5479295 0.0004657
+3-1 -1.26000000 -2.2306718 -0.2893282 0.0088999
+3-2  0.01593333 -0.9846122  1.0164789 0.9991476</code></pre>
+</div>
+</div>
+<p>In the output from <code>TukeyHSD</code>…</p>
+<ul>
+<li>the first column of output shows the groups being compared (2 vs.&nbsp;1, etc.);</li>
+<li>the second column gives the observed mean difference;</li>
+<li>the third and fourth columns provide confidence intervals on the <em>true</em> mean difference…if the interval does not contain zero, we can conclude the means are different; and</li>
+<li>the last column reinforces the confidence interval by providing a hypothesis test <span class="math inline">\(p\)</span>-value, where the null is that the true difference is zero.</li>
+</ul>
+<p>We note that the Tukey HSD test attempts to correct for <em>multiple comparisons</em>, i.e., for running many separate hypothesis tests. When you run many tests, then you are more likely, by chance, to see <span class="math inline">\(p\)</span>-values that are less than <span class="math inline">\(\alpha\)</span> even if the null is always true. The Tukey HSD test attempts to control the “family-wise error rate” such that if all the nulls are correct, the probability of seeing one value <span class="math inline">\(p &lt; \alpha\)</span> is <span class="math inline">\(\alpha\)</span>. Note, however, that the algorithm for controlling the rate of false positives is known to be overly conservative.</p>
+<p>Given the output above, we conclude that Group 1 has a different mean from Group 2, and also from Group 3, while the means in groups 2 and 3 are not significantly different.</p>
+</section>
+</section>
+</section>
+<section id="random-effects-modeling" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="random-effects-modeling"><span class="header-section-number">7.3</span> Random Effects Modeling</h2>
+<p>In a one-way analysis of variance (ANOVA) model, there is an implicit assumption that every possible group has been identified and is represented in the dataset. For example, in a particular study, we might have vaccine-taking, placebo-taking, and no-treatment groups, and these would be the only three possible groups. What if, alternatively, we only have data gathered from a subset of all possible groups? As an example, we might examine data for all the players on <span class="math inline">\(m\)</span> teams in a league, where the overall number of teams is <span class="math inline">\(n &gt; m\)</span>. The short answer is that we would move from the setting of (one-way) ANOVA to the setting of random effects modeling.</p>
+<p>If we are analyzing groups of data (without regard to any other possible predictor variables), the random effects model will be <span class="math display">\[\begin{eqnarray*}
+Y_{ij} = \mu + \tau_i + \epsilon_{ij} \,,
+\end{eqnarray*}\]</span> which certainly appears to be the same as the one-way ANOVA model, but here the <span class="math inline">\(\tau_i\)</span>’s are not constants, but random variables: <span class="math display">\[
+\tau_i \sim \mathcal{N}(0,\sigma_\tau^2) \,.
+\]</span></p>
+<p>What actually changes, then, if we adopt this model? In one-way ANOVA, the goal is to perform the hypothesis test <span class="math inline">\(\tau_1 = \cdots = \tau_k\)</span> versus “at least one of the <span class="math inline">\(\tau\)</span>’s differs from the others.” With a random effects model, the goal is to assess how large <span class="math inline">\(\sigma_\tau^2\)</span> (variance of the means across groups) is compared to <span class="math inline">\(\sigma^2\)</span> (variance of the data within each group).</p>
+<!--
+TBD - find a good reference, replace below
+
+- For a deeper introduction, see [this presentation](https://stat.ethz.ch/education/semesters/as2015/anova/06_Random_Effects.pdf)
+-->
+<section id="example-1" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="example-1"><span class="header-section-number">7.3.1</span> Example</h3>
+<!--
+TBD - replace the example?
+-->
+<p>The data plotted below come from <a href="https://people.math.ethz.ch/~meier/teaching/anova/random-and-mixed-effects-models.html">this book</a>. They show the birth weight of calves born to five different fathers (“sires”). Since the number of possible sires is <span class="math inline">\(\gg 5\)</span>, a random-effects model is the appropriate one to learn here.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Below, we regress weight upon sire, with the model formula indicating that there should be a random intercept term for each sire. (We will return to discuss how to write model formulae below.)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(lme4))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>re.out <span class="ot">&lt;-</span> <span class="fu">lmer</span>(weight <span class="sc">~</span> <span class="dv">1</span><span class="sc">|</span>sire,<span class="at">data=</span>animals)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(re.out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by REML ['lmerMod']
+Formula: weight ~ 1 | sire
+   Data: animals
+
+REML criterion at convergence: 358.2
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.9593 -0.7459 -0.1581  0.8143  1.9421 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ sire     (Intercept) 116.7    10.81   
+ Residual             463.8    21.54   
+Number of obs: 40, groups:  sire, 5
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept)   82.550      5.911   13.96</code></pre>
+</div>
+</div>
+<p>Here, REML is “restricted maximum likelihood,” a maximum likelihood estimator that acts to counteract biases in the estimation of variances. The fixed effect is the mean birth weight, which is 82.55. As for the random effects, the sire-to-sire variance in birth weight is estimated to be <span class="math inline">\(\sigma_\tau^2 = 116.7\)</span> (so that the standard error is <span class="math inline">\(\sqrt{116.7} = 10.81\)</span>), whereas the within-sire variance in birth weight is <span class="math inline">\(\sigma^2 = 463.8\)</span> (standard error <span class="math inline">\(\sqrt{463.8} = 21.54\)</span>). The overall variance in birth weights is thus <span class="math inline">\(\sigma^2 + \sigma_\tau^2 = 580.5\)</span>.</p>
+<p>With these results, we can infer that the correlation (magnitude of linear dependence) between the birth weights of two calves with the same sire will be <span class="math inline">\(\sigma_\tau^2/(\sigma_\tau^2+\sigma^2) = 0.20\)</span> (this is a “weak” correlation). (The correlation between the weights of calves with different sires is assumed to be zero.)</p>
+</section>
+<section id="example-2" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="example-2"><span class="header-section-number">7.3.2</span> Example</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>First, we will learn a linear regression model without regard to the fact that the species is a covariate.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># regress bill length upon bill depth</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm,<span class="at">data=</span>df)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(lm.out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2063.692</code></pre>
+</div>
+</div>
+<p>The AIC, or Akaike Information Criterion, is a metric of fit quality that penalizes model complexity and that we can use to determine which in a suite of nested models is the best representation of the data-generating process. We have seen AIC before, in the context of variable selection methods applied to linear models.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now we implement a random-intercept model (as indicated by the “(1|species)”).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># regress bill length upon bill depth</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># make species a random effect (random intercept)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lmer</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                 (<span class="dv">1</span><span class="sc">|</span>species),<span class="at">data=</span>df)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(lm.out)<span class="sc">$</span>species</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          (Intercept) bill_depth_mm
+Adelie       13.22455      1.395653
+Chinstrap    23.12096      1.395653
+Gentoo       26.63174      1.395653</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(lm.out) <span class="co"># much lower - better model</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1585.28</code></pre>
+</div>
+</div>
+<p>The AIC value is <em>much</em> lower: this model is a much better representation of the data-generating process.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now we learn a random-effects model where the intercepts are the same for each species, but the slopes differ.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># regress bill length upon bill depth</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># make species a random effect (random slopes)</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lmer</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">0</span> <span class="sc">+</span> bill_depth_mm<span class="sc">|</span>species),<span class="at">data=</span>df)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(lm.out)<span class="sc">$</span>species</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          (Intercept) bill_depth_mm
+Adelie       19.24352      1.066549
+Chinstrap    19.24352      1.607421
+Gentoo       19.24352      1.888989</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(lm.out) <span class="co"># sufficiently lower-better model still</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1566.371</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The AIC value is even lower! But we should probably just go ahead and learn the random-effects model with random slopes <em>and</em> intercepts, before saying more about which of the models is the best.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># regress bill length upon bill depth</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># make species a random effect </span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (random intercepts and slopes)</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lmer</span>(bill_length_mm <span class="sc">~</span> bill_depth_mm <span class="sc">+</span> </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>              (bill_depth_mm<span class="sc">|</span>species),<span class="at">data=</span>df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>boundary (singular) fit: see help('isSingular')</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(lm.out)<span class="sc">$</span>species</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          (Intercept) bill_depth_mm
+Adelie       22.72927     0.8773012
+Chinstrap    18.23566     1.6623990
+Gentoo       15.52816     2.1354384</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">AIC</span>(lm.out) <span class="co"># higher than before - not best model</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1567.762</code></pre>
+</div>
+</div>
+<p>The AIC value here is slightly higher than that observed for the random-slope model. Hence we can now declare the random-slope model to be the “winner.” (This model <em>does</em> make intuitive sense: if a penguin has a bill with near-zero depth, we’d expect it to have near-zero length as well.)</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="ANOVA_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./NonLinMod.html" class="pagination-link" aria-label="Nonlinear Regression">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Nonlinear Regression</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ML.html" class="pagination-link" aria-label="Machine Learning">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Machine Learning</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

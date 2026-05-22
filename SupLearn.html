@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Supervised Learning – Basic Statistical Learning: a Guide for the Perplexed</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./LinMod.html" rel="next">
+<link href="./DataEx.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-27c261d06b905028a18691de25d09dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./SupLearn.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Supervised Learning</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Basic Statistical Learning: a Guide for the Perplexed</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./DataEx.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Exploration</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./SupLearn.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./LinMod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Linear Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ExtenLin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extensions to the Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./NonLinMod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Nonlinear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ANOVA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Analysis of Variance</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ML.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Machine Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./UnsupLearn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Strings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">String Processing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">3.1</span> Introduction</a></li>
+  <li><a href="#inference-versus-prediction" id="toc-inference-versus-prediction" class="nav-link" data-scroll-target="#inference-versus-prediction"><span class="header-section-number">3.2</span> Inference Versus Prediction</a></li>
+  <li><a href="#learning-a-statistical-model" id="toc-learning-a-statistical-model" class="nav-link" data-scroll-target="#learning-a-statistical-model"><span class="header-section-number">3.3</span> Learning a Statistical Model</a></li>
+  <li><a href="#assessing-a-statistical-model" id="toc-assessing-a-statistical-model" class="nav-link" data-scroll-target="#assessing-a-statistical-model"><span class="header-section-number">3.4</span> Assessing a Statistical Model</a>
+  <ul class="collapse">
+  <li><a href="#regression" id="toc-regression" class="nav-link" data-scroll-target="#regression"><span class="header-section-number">3.4.1</span> Regression</a></li>
+  <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification"><span class="header-section-number">3.4.2</span> Classification</a></li>
+  <li><a href="#summary-a-principled-classification-workflow" id="toc-summary-a-principled-classification-workflow" class="nav-link" data-scroll-target="#summary-a-principled-classification-workflow"><span class="header-section-number">3.4.3</span> Summary: a Principled Classification Workflow</a></li>
+  </ul></li>
+  <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection"><span class="header-section-number">3.5</span> Model Selection</a></li>
+  <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility"><span class="header-section-number">3.6</span> Reproducibility</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Supervised Learning</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">3.1</span> Introduction</h2>
+<p>Let’s suppose that someone has conducted an experiment and collected data, comprising…</p>
+<ul>
+<li><span class="math inline">\(p+1\)</span> measurements (recorded in columns of a data frame) for each of…</li>
+<li><span class="math inline">\(n\)</span> objects (recorded in rows of a data frame).</li>
+</ul>
+<p>Let’s also suppose that we have carried out exploratory data analysis, and that we have found that all the measurements are statistically informative (i.e., we do not need to remove any data frame columns).</p>
+<p>If our research goal is to statistically relate the data in <span class="math inline">\(p\)</span> of the <span class="math inline">\(p+1\)</span> columns to the data in remaining column, then we are attempting <em>supervised learning</em>. For instance, perhaps we are working with the stellar temperature data introduced previously, and we wish to relate the non-temperature data to the recorded temperatures. The data in the <span class="math inline">\(p\)</span> non-temperature columns comprise the <em>predictor</em> (or <em>independent</em> or <em>explanatory</em> or <em>feature</em>) variables, while the data in the temperature column comprise the <em>response</em> (or <em>dependent</em> or <em>target</em> or <em>label</em>) variable.</p>
+<p>Another way of describing the process of relating predictor and response variables is to say that we are trying to replicate the data-generating process, or that we are attempting to learn a <em>statistical model</em>. A statistical model is <span class="math display">\[
+Y \vert \mathbf{x} = f(\mathbf{x}) + \epsilon(x) \,,
+\]</span> where <span class="math inline">\(f(\cdot)\)</span> is a deterministic function that represents the average observed value of the random variable <span class="math inline">\(Y\)</span>, given <span class="math inline">\(\mathbf{x} = \{x_1,\ldots,x_p\}\)</span> (where the <span class="math inline">\(x\)</span>’s are assumed fixed), and <span class="math inline">\(\epsilon\)</span> is an “error” term, a random variable drawn according to some distribution whose properties may or may not depend on <span class="math inline">\(x\)</span>. (<span class="math inline">\(\epsilon\)</span> represents an “irreducible” error that we typically call “noise”.) Below, we show a “simple” setting in which we have a single predictor variable <span class="math inline">\(x\)</span> and a response variable <span class="math inline">\(Y\)</span>. The black line is the unobserved true function <span class="math inline">\(y = f(x)\)</span> while the blue points represent observed noisy data. When we are learning statistical models, we are attempting to find an optimal functional form for <span class="math inline">\(f(x)\)</span>, the so-called “regression line,” and not for <span class="math inline">\(f(\mathbf{x}) + \epsilon\)</span>. In other words, we are not attempting to “fit to the noise” represented by <span class="math inline">\(\epsilon\)</span>. Why this is will become clearer as we continue to work our way through the remainder of this chapter.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="SupLearn_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<!--
+  + predicted response values are given by
+ $$\hat{y}\vert \mathbf{x} = \hat{f}(\mathbf{x}) \,$$
+ -->
+</section>
+<section id="inference-versus-prediction" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="inference-versus-prediction"><span class="header-section-number">3.2</span> Inference Versus Prediction</h2>
+<p>In typical analysis situations, it is up to us to propose models that might represent the data-generating process. Before we would do that, however, we would want to think about our research goals. For instance, are we most interested in…</p>
+<ul>
+<li>…<em>inference</em>, wherein we learn a statistical model and then examine and interpret it, or…</li>
+<li>…<em>prediction</em>, wherein we learn a statistical model and then treat it as a black box?</li>
+</ul>
+<p>For instance, for the stellar temperature data, is it important for us to be able to explain <em>how</em> individual predictor variables relate to a star’s temperature (inference), or does that not matter at all so long as we can estimate the temperature well (prediction)? There is no one-size-fits-all answer to this question: we have to come up with one on a case-by-case basis.</p>
+<p>But, the reader may ask, “why does the question really even matter?” It matters because the answer can impact the possible suite of models that we might examine in an analysis:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="http://www.stat.cmu.edu/~pfreeman/infpred.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:75.0%"></p>
+</figure>
+</div>
+<p>In this diagram, a “specified function” is one that is mathematically specifiable <em>a priori</em>; for instance, for simple linear regression, the specified function is <span class="math display">\[
+f(x) = \beta_0 + \beta_1 x \,,
+\]</span> where <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are the intercept and slope coefficients, respectively. When this model is learned, all we do is generate estimates <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>; we do not change the form of the model (by, e.g., adding additional terms like <span class="math inline">\(\beta_2 x^2\)</span> on the fly). Models with specified functions are good for inference: we can easily interpret what, e.g., <span class="math inline">\(\hat{\beta}_1\)</span> means…it means that if we change <span class="math inline">\(x\)</span> by one unit, our estimate of the average value of <span class="math inline">\(y\)</span> changes by <span class="math inline">\(\hat{\beta}_1\)</span> units.</p>
+<p>On the other hand, “learned functions” are those that are constructed piece-by-piece given an algorithm. For instance, if we were to model the relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> using a decision tree, we would not know <em>a priori</em> how many branches the tree will have, or its depth. Models with learned functions can offer some amount of inference<span class="math inline">\(-\)</span>for instance, if we plot a tree, we can see which of the predictor variables contribute to model predictions more than others<span class="math inline">\(-\)</span>but they do not offer the same level of interpretability…with some allowing little, if any, interpretation at all.</p>
+<p>Let’s delve a bit deeper into the tradeoff between inference and prediction.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="SupLearn_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Above we overlay a simple linear regression model on our observed data. We see that this model does not provide a good estimate of <span class="math inline">\(f(\mathbf{x})\)</span>…but it has the virtue of being easy to interpret.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="SupLearn_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here, we overlay a regression spline model on our observed data, and we see immediately that while it <em>does</em> provide a good (not claiming optimal, but definitely good) estimate of <span class="math inline">\(f(\mathbf{x})\)</span>, it is not easy to condense the details of this model into a concise inferential story.</p>
+<p>In the end, the more flexible a model is, the better predictions it will generate, but the harder it will be to explain.</p>
+<p>TBD - point about visualization and 1D</p>
+<p>Above, we said that our analysis goal <em>can</em> impact our modeling choices. However, we would say the following.</p>
+<ol type="1">
+<li>Even if inference is our goal, we should still always include “learned function” models among the suite of models that we learn in an analysis. That’s because if we do not explore such models, we will never know how much better they might be at representing the data-generating process. If a machine learning model does a much better job at predicting response values than linear regression, is it worthwhile to focus on linear regression so that we can tell a concise “data story”? That story may not reflect reality well!</li>
+<li>Even if prediction is our goal, we should still always include “specified function” models like linear regression in our suite of learned models, because if the true association between the predictors and the response is actually linear, learning more complex learned function-based models will not offer any return in model predictive ability. Sometimes we can have the best of both words: an easily interpreted model that generates good predictions. In short: do not be a machine learning snob!</li>
+</ol>
+<p><strong>Try all reasonable models, regardless of the analysis goal</strong>…and then sort out the results.</p>
+<!--
+TBD - move multicollinearity to linear regression
+
+## Inferential Models: Beware Multicollinearity!
+
+- Multicollinearity denotes the situation where one or more predictor variables are linearly related to other predictor variables
+
+- Assume a multiple linear regression model with two predictor variables:
+$$\hat{y} \vert x_1,x_2 = \beta_0 + \beta_1 x_1 + \beta_2 x_2$$
+- Furthermore, let's suppose that
+$$x_2 = \beta_0' + \beta_1'x_1$$
+- Then
+$$\hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 (\beta_0' + \beta_1'x_1) = \beta_0'' + \beta_1'' x_1$$
+- We cannot constrain the slope $\beta_2$ at all!
+
+
+::: {.cell}
+
+:::
+
+
+- Multicollinearity is rarely "perfect," and so in typical situations we will get estimates for $\beta_1$ and $\beta_2$
+
+  + the stated standard errors for these slopes will (perhaps much) smaller than what 
+  they really are
+
+- For now, it suffices to say that...
+
+  + the effect of multicollinearity can be estimated after modeling
+
+  + variables that have high "multicollinearity metrics" can be removed, iteratively, until we achieve of set of variables conducive for inference
+
+  + however, if we remove variables, prediction *may* suffer
+
+  + if your analysis goal is purely prediction, *you can ignore the effect of multicollinearity completely*
+
+- As a side note, avoiding multicollinearity is one of the by-products of good experimental design!
+-->
+</section>
+<section id="learning-a-statistical-model" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="learning-a-statistical-model"><span class="header-section-number">3.3</span> Learning a Statistical Model</h2>
+<p>Above, we show an example in which a flexible regression spline model represents the data-generating process well. But couldn’t we do even better if we added <em>more</em> flexibility? Shouldn’t our goal be to learn a model that, when plotted, goes through every observed data point?</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="SupLearn_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>“We are getting closer to drawing the line through every data point. That’s good, right?” As we have already indicated, it is not: what we want is an estimate of <span class="math inline">\(f(x)\)</span> and not <span class="math inline">\(f(x) + \epsilon\)</span>, i.e., we do not want to fit to the noise. This is because overly flexible models are not <em>generalizable</em>: they will do a bad job predicting the response given <em>new data</em> that were not used in learning the model.</p>
+<p>The question that naturally arises is how can we prevent learning a model like the one above, when we know that as we add flexibility, our quality of fit metrics (like the residual sum of squares) will only improve? The short answer is that we should not use all of our data to learn a model! If we hold some data out of the learning process, we can later use them to determine what level of flexibility is the right level of flexibility, i.e., to determine what model is the most generalizable of all the models we examine.</p>
+<p>There are two common approaches for holding out data:</p>
+<ol type="1">
+<li>We split our dataset into two disjoint groups, a training set that is used to learn models, and a test set that is used to assess them.</li>
+<li>We repeat the data-splitting process <span class="math inline">\(k\)</span> times, with each datum being placed in the “held-out” group exactly once. This is <em>k-fold cross validation</em>.</li>
+</ol>
+<p>In practice, the latter approach is preferred to the former approach, since it results in model assessment metrics that have less variability. However, the former approach is computationally more straightforward, and thus it is the one we will use in this work. Note that there are no heuristics, per se, that dictate how we split the data; we generally use 70% of the data, chosen randomly and without replacement, as our training data and the remaining 30% as our testing data.</p>
+</section>
+<section id="assessing-a-statistical-model" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="assessing-a-statistical-model"><span class="header-section-number">3.4</span> Assessing a Statistical Model</h2>
+<section id="regression" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="regression"><span class="header-section-number">3.4.1</span> Regression</h3>
+<p>When the response variable is quantitative, a most commonly used assessment metric is the root mean-squared error, or RMSE, computed with the <em>test-set data</em> only: <span class="math display">\[
+RMSE = \sqrt{\frac{1}{n_{\rm test}} \sum_{i=1}^{n_{\rm test}} (Y_i - \hat{Y}_i)^2} \,,
+\]</span> where <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(\hat{Y}_i\)</span> are the observed and predicted response values for the <span class="math inline">\(i^{\rm th}\)</span> test-set datum. The RMSE is technically not the average difference between <span class="math inline">\(\hat{Y}_i\)</span> and <span class="math inline">\(Y_i\)</span>, but it does give an indication of the average difference. Because the magnitude of RMSE values will be affected by the units of the response variable, we should never fixate on the RMSE value itself, but rather how that value changes as we learn different statistical models.</p>
+<p>Note: to ensure an apples-to-apples comparison of RMSE values for different models, we should always use the same training and test datasets; in other words, we should never re-split our data before learning each model. This also applies below, when are working in the context of classification.</p>
+</section>
+<section id="classification" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="classification"><span class="header-section-number">3.4.2</span> Classification</h3>
+<p>When the response variable is categorical, the choice of model assessment metric, and how it is calculated, is not as clear-cut as when the response is quantitative. Below, we outline a principled approach model assessment when we have a <em>dichotomous</em>, or <em>binary</em>, response. We will discuss how we deal with response variables that have more than two categories as needed in future chapters.</p>
+<p>To start, let’s suppose we have the following <em>test-set</em> data:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="SupLearn_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The dashed black line represents the (made up) learned statistical model. In constrast to regression, here that model does not represent the conditional mean of <span class="math inline">\(Y\)</span> given <span class="math inline">\(x\)</span>, but rather the probability of sampling the value <span class="math inline">\(Y=1\)</span> (“Class 1”) as a function of <span class="math inline">\(x\)</span>. The blue dots represent the observed data.</p>
+<p>First, let’s determine the predicted Class 1 probability for each test-set datum and plot the probabilities as a function of the true class.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>prob    <span class="ot">&lt;-</span> <span class="fl">0.32</span> <span class="sc">+</span> <span class="fl">0.68</span><span class="sc">*</span>(df.test<span class="sc">$</span>x<span class="sc">+</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">6</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df.plot <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">"x"</span><span class="ot">=</span><span class="fu">factor</span>(df.test<span class="sc">$</span>y), <span class="st">"y"</span><span class="ot">=</span>prob)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df.plot, <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)) <span class="sc">+</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill=</span><span class="st">"dodgerblue"</span>) <span class="sc">+</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="fl">0.5</span>, <span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Class"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Probability of Class 1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="SupLearn_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>What we see immediately is that, as we would expect, predicted Class 1 probabilities are larger for data that actually belong to Class 1.</p>
+<p>Next, we need to turn the predicted Class 1 probabilities into predictions of <em>classes</em>. What we think of as binary classifiers (such as logistic regression) do not actually classify data: they generate predicted Class 1 probabilities, and it is <em>up to us</em> to map them to actual classes. At first, this would seem to be trivial: “of course we would map data with predicted probabilities greater than 0.5 to Class 1, and those with predicted probabilities less than 0.5 to Class 0.” (As predicted probabilities are rarely, if ever, equal to 0.5, we will sweep the issue of how to classify data with such probabilities under the rug.) But look again at the figure above: while we would do a good job of identifying Class 1 data, we would do terribly with Class 0 data. So 0.5 is probably not the optimal threshold value to use here.</p>
+<p>Using a default threshold probability value of 0.5 doesn’t work here because the data exhibit <em>class imbalance</em>: some 68% of the data belong to Class 1, and because of that, the probability estimates for all the training data are biased upwards towards 1. So our next move might be to say, OK, instead of using 0.5 as a threshold, we will use 0.68. And this would improve our ability to identify Class 0 objects while sacrificing some ability to identify Class 1 objects. But there is a better algorithmic process that we can implement instead, one that involves computing the so-called receiver operating characteristics curve, or <em>ROC curve</em>.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(pROC))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>roc.out <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">roc</span>(df.test<span class="sc">$</span>y, prob))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(roc.out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="SupLearn_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(roc.out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "percent"            "sensitivities"      "specificities"     
+ [4] "thresholds"         "direction"          "cases"             
+ [7] "controls"           "fun.sesp"           "auc"               
+[10] "call"               "original.predictor" "original.response" 
+[13] "predictor"          "response"           "levels"            </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>roc.out<span class="sc">$</span>auc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Area under the curve: 0.7528</code></pre>
+</div>
+</div>
+<p>There is a bit to unpack here.</p>
+<ul>
+<li>One of the outputs from <code>roc()</code> is <code>auc</code>, or “area under curve.” It is literally the area under the curve plotted above. In words, the area under the curve represents the probability that a randomly selected datum of Class 1 has a higher predicted Class 1 probability than a randomly selected datum of Class 0. If our model randomly guesses probabilities, then the AUC will be around 0.5, and if our model can completely separate the two classes, the AUC will be 1. <em>If we are comparing a suite of models, we would advise adopting the one associated with the highest AUC value.</em> Here, the AUC is 0.753.</li>
+<li>The plot exhibits two values: “specificity” along the <span class="math inline">\(x\)</span>-axis, and “sensitivity” along the <span class="math inline">\(y\)</span>-axis. A ROC curve shows sensitivity versus specificity as computed for a number of thresholds between 0 and 1. The former indicates the proportion of Class 0 data that are correctly identified as such; the latter is the same, for Class 1. While there is no unique prescription, <em>we would advise determining the threshold value for which the sum of specificity and sensitivity is maximized</em>. (This sum is dubbed “Youden’s <span class="math inline">\(J\)</span> statistic,” although by definition, 1 is subtracted from the sum. Subtracting 1 makes no difference in what follows.) By maximizing this sum, what we are effectively doing is defining a classifier that does the best job of balancing the classification performance in both classes: as indicated above, we will sacrifice some of our ability to identify objects of the majority class in order to substantially improve identification of objects of the minority class.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">which.max</span>(roc.out<span class="sc">$</span>sensitivities<span class="sc">+</span>roc.out<span class="sc">$</span>specificities)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> roc.out<span class="sc">$</span>threshold[w]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(t, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.609</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df.plot, <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)) <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill=</span><span class="st">"dodgerblue"</span>) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>t, <span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Class"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Probability of Class 1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="SupLearn_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As we can see from our updated boxplot, if we shift the threshold value from 0.5 to 0.609 (as opposed to 0.68), we will do a better job of classifying data in the weaker class (Class 0), while sacrificing performance in the stronger class (Class 1).</p>
+<p>Our last step is to determine a misclassification rate, given our adopted threshold.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prob<span class="sc">&gt;</span>t, <span class="st">"1"</span>, <span class="st">"0"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pred, df.plot<span class="sc">$</span>x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    
+pred  0  1
+   0 23 19
+   1  9 49</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(pred <span class="sc">!=</span> df.plot<span class="sc">$</span>x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.28</code></pre>
+</div>
+</div>
+<p>The displayed table is dubbed a <em>confusion matrix</em>, and it shows the following information:</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Actual Negative</th>
+<th style="text-align: left;">Actual Positive</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Predicted Negative</td>
+<td style="text-align: left;">True Negative (TN)</td>
+<td style="text-align: left;">False Negative (FN)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Predicted Positive</td>
+<td style="text-align: left;">False Positive (FP)</td>
+<td style="text-align: left;">True Positive (TP)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The <em>misclassification rate</em> or <em>MCR</em> is the overall proportion of false positives and negatives; here, the MCR is 0.280. (Conversely, the <em>accuracy</em> is <span class="math inline">\(1-MCR\)</span>, or 0.720.) The MCR is a classic model assessment metric, but it does implicitly give the same weight to both types of misclassification, which may not be optimal in a given analysis situation. The sensitivity, evaluated in the right column, is <span class="math inline">\(TP/(TP+FN)\)</span> (here, 49/68 or 0.721), while the specificity, evaluated in the left column, is defined as <span class="math inline">\(TN/(TN+FP)\)</span> (here, 23/32 or 0.719). Note that some (like Wikipedia) define the confusion matrix with the negatives and positives reversed, but this is fine: it does not affect evaluated numbers. (We prefer to associate positivity with Class 1.) Also note that there are a myriad of other metrics that one can define given the four numbers in a confusion matrix; ultimately, how we combine the elements of a confusion matrix into a model assessment metric is up to us.</p>
+</section>
+<section id="summary-a-principled-classification-workflow" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="summary-a-principled-classification-workflow"><span class="header-section-number">3.4.3</span> Summary: a Principled Classification Workflow</h3>
+<ol type="1">
+<li>Learn a suite of models; for each, generate Class 1 probabilities for each test-set datum using <code>predict()</code>.</li>
+<li>Using these probabilities as input, generate ROC curves for each model, using the <code>roc()</code> function.</li>
+<li>Examine the outputs from <code>roc()</code> and record the AUC value for each model.</li>
+<li>Pick the model that has the highest AUC value.</li>
+<li>For that model only, compute the optimal class-separation threshold <span class="math inline">\(t\)</span> by maximizing Youden’s <span class="math inline">\(J\)</span> statistic (the sum of sensitivities and specificities, the values of which are provided in the output from <code>roc()</code>).</li>
+<li>Given <span class="math inline">\(t\)</span>, convert the Class 1 probabilities for the model into class predictions.</li>
+<li>Generate a confusion matrix and a misclassification rate.</li>
+</ol>
+<p>Always keep in mind that when there is class imbalance, maximizing Youden’s <span class="math inline">\(J\)</span> statistic does not mean that we are minimizing the misclassification rate. The overall MCR will go up, but classification results for the minority class will improve substantially!</p>
+</section>
+</section>
+<section id="model-selection" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="model-selection"><span class="header-section-number">3.5</span> Model Selection</h2>
+<p>Model selection is picking the best model from a suite of possible models. This can be as simple as picking the regression model with the best MSE or the classification model with the best AUC. However, we must always keep two things in mind:</p>
+<ol type="1">
+<li>To ensure an apples-to-apples comparison of metrics, every model should be learned using <em>the same training- and test-set data</em>.</li>
+<li>An assessment metric is a <em>random variable</em>, i.e., if we split the data differently, the metric will take on a different value. The possible range of values, or variance, of the metric can be made smaller by utilizing <span class="math inline">\(k\)</span>-fold cross-validation as opposed to simple data splitting (although, again, for computational simplicity we adopt the latter approach in this work).</li>
+</ol>
+</section>
+<section id="reproducibility" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="reproducibility"><span class="header-section-number">3.6</span> Reproducibility</h2>
+<p>To conclude this chapter, we will note that it is extremely important to make our statistical analyses <em>reproducible</em>. For instance:</p>
+<ul>
+<li>We should always record our analyses in a notebook, via, e.g., <code>R Markdown</code> or <code>Jupyter</code>, such that someone else can recreate them. (Or so that you yourself can figure out what you did, well after the fact.)</li>
+<li>To ensure that that someone else achieves the exact same results, we should always manually set the random-number generator seed <em>before each instance of random sampling in your analysis</em> (such as when we assign data to training or test sets, or to folds, or when we learn a model like random forest that incorporates random sampling):</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)    <span class="co"># can be any number...</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">10</span>,<span class="dv">3</span>)     <span class="co"># sample three numbers between 1 and 10 inclusive</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  9 10  6</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">10</span>,<span class="dv">3</span>)     <span class="co"># voila: the same three numbers!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  9 10  6</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./DataEx.html" class="pagination-link" aria-label="Data Exploration">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Exploration</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./LinMod.html" class="pagination-link" aria-label="Linear Models">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Linear Models</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Data Exploration – Basic Statistical Learning: a Guide for the Perplexed</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./SupLearn.html" rel="next">
+<link href="./intro.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./DataEx.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Exploration</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Basic Statistical Learning: a Guide for the Perplexed</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./DataEx.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Exploration</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./SupLearn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./LinMod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Linear Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ExtenLin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extensions to the Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./NonLinMod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Nonlinear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ANOVA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Analysis of Variance and Random Effects Modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ML.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Machine Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./UnsupLearn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Strings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">String Processing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#case-studies" id="toc-case-studies" class="nav-link active" data-scroll-target="#case-studies"><span class="header-section-number">2.1</span> Case Studies</a>
+  <ul class="collapse">
+  <li><a href="#quantiative-response-high-school-test-scores" id="toc-quantiative-response-high-school-test-scores" class="nav-link" data-scroll-target="#quantiative-response-high-school-test-scores"><span class="header-section-number">2.1.1</span> Quantiative Response: High School Test Scores</a></li>
+  <li><a href="#categorical-response-heart-disease-data" id="toc-categorical-response-heart-disease-data" class="nav-link" data-scroll-target="#categorical-response-heart-disease-data"><span class="header-section-number">2.1.2</span> Categorical Response: Heart Disease Data</a></li>
+  <li><a href="#all-qualitative-variables-stellar-temperatures" id="toc-all-qualitative-variables-stellar-temperatures" class="nav-link" data-scroll-target="#all-qualitative-variables-stellar-temperatures"><span class="header-section-number">2.1.3</span> All Qualitative Variables: Stellar Temperatures</a></li>
+  </ul></li>
+  <li><a href="#the-canonical-analysis-workflow" id="toc-the-canonical-analysis-workflow" class="nav-link" data-scroll-target="#the-canonical-analysis-workflow"><span class="header-section-number">2.2</span> The Canonical Analysis Workflow</a></li>
+  <li><a href="#data-input" id="toc-data-input" class="nav-link" data-scroll-target="#data-input"><span class="header-section-number">2.3</span> Data Input</a>
+  <ul class="collapse">
+  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data"><span class="header-section-number">2.3.1</span> Importing Data</a></li>
+  <li><a href="#missing-data" id="toc-missing-data" class="nav-link" data-scroll-target="#missing-data"><span class="header-section-number">2.3.2</span> Missing Data</a></li>
+  </ul></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling"><span class="header-section-number">2.4</span> Data Wrangling</a></li>
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis"><span class="header-section-number">2.5</span> Exploratory Data Analysis</a>
+  <ul class="collapse">
+  <li><a href="#introduction-to-ggplot2" id="toc-introduction-to-ggplot2" class="nav-link" data-scroll-target="#introduction-to-ggplot2"><span class="header-section-number">2.5.1</span> Introduction to ggplot2</a></li>
+  <li><a href="#types-of-visualizations" id="toc-types-of-visualizations" class="nav-link" data-scroll-target="#types-of-visualizations"><span class="header-section-number">2.5.2</span> Types of visualizations</a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">2.5.3</span> Example</a></li>
+  </ul></li>
+  <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1"><span class="header-section-number">2.6</span> Example</a>
+  <ul class="collapse">
+  <li><a href="#visualization-part-i" id="toc-visualization-part-i" class="nav-link" data-scroll-target="#visualization-part-i"><span class="header-section-number">2.6.1</span> Visualization Part I</a></li>
+  <li><a href="#visualization-part-ii" id="toc-visualization-part-ii" class="nav-link" data-scroll-target="#visualization-part-ii"><span class="header-section-number">2.6.2</span> Visualization Part II</a></li>
+  </ul></li>
+  <li><a href="#anomaly-detection" id="toc-anomaly-detection" class="nav-link" data-scroll-target="#anomaly-detection"><span class="header-section-number">2.7</span> Anomaly Detection</a></li>
+  <li><a href="#optional-data-reduction-via-principal-components-analysis" id="toc-optional-data-reduction-via-principal-components-analysis" class="nav-link" data-scroll-target="#optional-data-reduction-via-principal-components-analysis"><span class="header-section-number">2.8</span> Optional: Data Reduction via Principal Components Analysis</a>
+  <ul class="collapse">
+  <li><a href="#why-use-pca" id="toc-why-use-pca" class="nav-link" data-scroll-target="#why-use-pca"><span class="header-section-number">2.8.1</span> Why Use PCA?</a></li>
+  <li><a href="#its-a-linear-algorithm" id="toc-its-a-linear-algorithm" class="nav-link" data-scroll-target="#its-a-linear-algorithm"><span class="header-section-number">2.8.2</span> It’s a Linear Algorithm</a></li>
+  <li><a href="#its-not-factor-analysis" id="toc-its-not-factor-analysis" class="nav-link" data-scroll-target="#its-not-factor-analysis"><span class="header-section-number">2.8.3</span> It’s Not Factor Analysis</a></li>
+  <li><a href="#algorithm" id="toc-algorithm" class="nav-link" data-scroll-target="#algorithm"><span class="header-section-number">2.8.4</span> Algorithm</a></li>
+  <li><a href="#choosing-the-number-of-dimensions-to-retain" id="toc-choosing-the-number-of-dimensions-to-retain" class="nav-link" data-scroll-target="#choosing-the-number-of-dimensions-to-retain"><span class="header-section-number">2.8.5</span> Choosing the Number of Dimensions to Retain</a></li>
+  <li><a href="#example-2" id="toc-example-2" class="nav-link" data-scroll-target="#example-2"><span class="header-section-number">2.8.6</span> Example</a></li>
+  <li><a href="#pc-regression" id="toc-pc-regression" class="nav-link" data-scroll-target="#pc-regression"><span class="header-section-number">2.8.7</span> PC Regression</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Exploration</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="case-studies" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="case-studies"><span class="header-section-number">2.1</span> Case Studies</h2>
+<section id="quantiative-response-high-school-test-scores" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="quantiative-response-high-school-test-scores"><span class="header-section-number">2.1.1</span> Quantiative Response: High School Test Scores</h3>
+<p>The high school dataset contains demographic and standardized test score information for 200 students. There is no single target variable, but we will use this dataset to attempt to predict quantitative response values, like reading scores, given all other information.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/hs.csv"</span>,<span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       ID            Gender        SES         SchTyp        ProgTyp   
+ Min.   :  1.00   female:109   high  :58   private: 32   academic:105  
+ 1st Qu.: 50.75   male  : 91   low   :47   public :168   general : 45  
+ Median :100.50                middle:95                 vocation: 50  
+ Mean   :100.50                                                        
+ 3rd Qu.:150.25                                                        
+ Max.   :200.00                                                        
+    Reading         Writing           Math          Science         SocStud    
+ Min.   :28.00   Min.   :31.00   Min.   :33.00   Min.   :26.00   Min.   :26.0  
+ 1st Qu.:44.00   1st Qu.:45.75   1st Qu.:45.00   1st Qu.:44.00   1st Qu.:46.0  
+ Median :50.00   Median :54.00   Median :52.00   Median :53.00   Median :52.0  
+ Mean   :52.23   Mean   :52.77   Mean   :52.65   Mean   :51.85   Mean   :52.4  
+ 3rd Qu.:60.00   3rd Qu.:60.00   3rd Qu.:59.00   3rd Qu.:58.00   3rd Qu.:61.0  
+ Max.   :76.00   Max.   :67.00   Max.   :75.00   Max.   :74.00   Max.   :71.0  
+        HonorsProg      Awards    
+ enrolled    : 53   Min.   :0.00  
+ not enrolled:147   1st Qu.:0.00  
+                    Median :1.00  
+                    Mean   :1.67  
+                    3rd Qu.:2.00  
+                    Max.   :7.00  </code></pre>
+</div>
+</div>
+<p>The data contain 12 variables overall, of which four are categorical. However, we will note now that one of the variables is statistically uninformative: see the <code>ID</code> variable in the summary above. One should always examine data that have been entered and be prepared to remove uninformative variables, which we can do by, e.g., running the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(tidyverse))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">select</span>(.,<span class="sc">-</span>ID) <span class="ot">-&gt;</span> df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>TBD: pointer to <code>dplyr</code> material. For more information on this dataset, see, e.g., the documentation for the <code>hsbdemo()</code> function of <code>R</code>’s <code>glsm</code> package.</p>
+</section>
+<section id="categorical-response-heart-disease-data" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="categorical-response-heart-disease-data"><span class="header-section-number">2.1.2</span> Categorical Response: Heart Disease Data</h3>
+<p>The heart disease dataset contains demographic and medical information about 270 patients, with the nominal target variable being <code>Disease</code> (which is either <code>Absent</code> or <code>Present</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>heart <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/heart_disease.csv"</span>,<span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Gender        SES         SchTyp        ProgTyp       Reading     
+ female:109   high  :58   private: 32   academic:105   Min.   :28.00  
+ male  : 91   low   :47   public :168   general : 45   1st Qu.:44.00  
+              middle:95                 vocation: 50   Median :50.00  
+                                                       Mean   :52.23  
+                                                       3rd Qu.:60.00  
+                                                       Max.   :76.00  
+    Writing           Math          Science         SocStud    
+ Min.   :31.00   Min.   :33.00   Min.   :26.00   Min.   :26.0  
+ 1st Qu.:45.75   1st Qu.:45.00   1st Qu.:44.00   1st Qu.:46.0  
+ Median :54.00   Median :52.00   Median :53.00   Median :52.0  
+ Mean   :52.77   Mean   :52.65   Mean   :51.85   Mean   :52.4  
+ 3rd Qu.:60.00   3rd Qu.:59.00   3rd Qu.:58.00   3rd Qu.:61.0  
+ Max.   :67.00   Max.   :75.00   Max.   :74.00   Max.   :71.0  
+        HonorsProg      Awards    
+ enrolled    : 53   Min.   :0.00  
+ not enrolled:147   1st Qu.:0.00  
+                    Median :1.00  
+                    Mean   :1.67  
+                    3rd Qu.:2.00  
+                    Max.   :7.00  </code></pre>
+</div>
+</div>
+<p>The data contain 14 variables overall, with exactly half being quantitative and half being categorical. For more information on what the variables represent, see the data card on the <a href="https://www.kaggle.com/datasets/neurocipher/heartdisease/data">the Kaggle webpage</a> where these data are hosted. (Note that we have changed the values for some of the variables to be, e.g., explicitly <code>No</code>/<code>Yes</code> instead of 0/1, etc. Also note that because <code>Num.Vessels</code> has numerical meaning - i.e., because it is an <em>ordinal</em> variable, one for whom the order of values matters - it has been left as a quantitative variable despite only having the values 0, 1, 2, and 3.)</p>
+</section>
+<section id="all-qualitative-variables-stellar-temperatures" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="all-qualitative-variables-stellar-temperatures"><span class="header-section-number">2.1.3</span> All Qualitative Variables: Stellar Temperatures</h3>
+<p>TBD: add info</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/star_temps.csv"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Teff            RA                Dec             Parallax      
+ Min.   :3664   Min.   :  0.0043   Min.   :-85.713   Min.   : 0.1179  
+ 1st Qu.:4911   1st Qu.: 80.6802   1st Qu.:  9.583   1st Qu.: 0.6239  
+ Median :5548   Median :131.7663   Median : 25.928   Median : 1.0460  
+ Mean   :5518   Mean   :154.5872   Mean   : 23.149   Mean   : 1.4354  
+ 3rd Qu.:6018   3rd Qu.:231.4918   3rd Qu.: 39.772   3rd Qu.: 1.7423  
+ Max.   :8631   Max.   :359.9147   Max.   : 85.299   Max.   :16.9419  
+     PM.RA               PM.Dec                g                b         
+ Min.   :-258.5010   Min.   :-207.1520   Min.   : 5.191   Min.   : 5.776  
+ 1st Qu.:  -5.9387   1st Qu.:  -9.3328   1st Qu.:12.777   1st Qu.:13.207  
+ Median :  -0.9095   Median :  -4.0930   Median :13.878   Median :14.322  
+ Mean   :  -1.6585   Mean   :  -6.0106   Mean   :13.831   Mean   :14.302  
+ 3rd Qu.:   3.1290   3rd Qu.:  -0.5092   3rd Qu.:14.983   3rd Qu.:15.481  
+ Max.   : 188.1720   Max.   : 106.0590   Max.   :18.809   Max.   :19.448  
+       r              Gal.L               Gal.B       
+ Min.   : 4.564   Min.   :  0.03854   Min.   :-89.23  
+ 1st Qu.:12.204   1st Qu.: 91.57640   1st Qu.:-16.91  
+ Median :13.287   Median :163.15234   Median : 12.25  
+ Mean   :13.222   Mean   :154.39329   Mean   : 11.80  
+ 3rd Qu.:14.362   3rd Qu.:198.41551   3rd Qu.: 37.98  
+ Max.   :18.689   Max.   :359.99939   Max.   : 89.42  </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="the-canonical-analysis-workflow" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="the-canonical-analysis-workflow"><span class="header-section-number">2.2</span> The Canonical Analysis Workflow</h2>
+<p><img src="http://www.stat.cmu.edu/~pfreeman/workflow.png" class="img-fluid"></p>
+<ul>
+<li><p><em>Data Pre-Processing</em>: the act of extracting analyzable data (e.g., a structured data table) from unstructured sources (e.g., images, audio files, text, etc.), as well as the act of editing the data table to mitigate missing data</p></li>
+<li><p><em>Exploratory Data Analysis</em>: the act of visualizing the observed data–via, e.g., histograms, scatter plots, box plots, etc., etc.–so as to build intuition about them</p></li>
+<li><p><em>Statistical Learning</em>: the attempt to find meaningful structures in the data or to uncover relationships between elements of the dataset</p></li>
+<li><p><em>Interpretation</em>: what did you discover through your analysis?</p></li>
+</ul>
+</section>
+<section id="data-input" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="data-input"><span class="header-section-number">2.3</span> Data Input</h2>
+<section id="importing-data" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="importing-data"><span class="header-section-number">2.3.1</span> Importing Data</h3>
+<p>Before learning how to analyze data in R, we first must understand how to import it. While data can sometimes be imported from a webpage or through an R package, data is most commonly downloaded onto your computer and imported locally. When downloading data, it is best practice to store your data in either the same folder or a subfolder of the location of your script, as opposed to the <em>Downloads</em> folder. This allows for the use of <em>relative</em> paths instead of <em>absolute paths</em>, which makes collaboration much easier.</p>
+<p>After downloading the data, open your script in RStudio/Positron and check your working directory by typing <code>getwd()</code> in the console. Does the listed file path match where your script is located? If needed, change the working directory by using <code>setwd()</code>.</p>
+<p>Now we can write code to import the data. Below, we import the high school test scores dataset (hs.csv), which is located in the <em>data</em> subfolder of our working directory. This can be done using <code>read.csv()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>hs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/hs.csv"</span>, <span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>read.csv()</code> takes a number of optional arguments. <code>stringAsFactors=TRUE</code> converts character strings (text) into factors when importing the data frame. In the high school test scores data, there are several categorical variables that take a small number of values (e.g.&nbsp;school type, program type, honors program). Treating these variables as factors is good practice in downstream analyses. Other optional arguments include <code>header</code>, which can be set to <code>TRUE</code> if the file contains the names of the variables as its first line, and <code>sep</code>, which allows delimiters other than comma, such as semicolon, tab, or pipe. Type <code>?read.csv</code> to see more optional arugments that may prove useful, especially when importing large or messy data.</p>
+<p>Alternative file formats (e.g.&nbsp;.rds, .xlsx, .dta) can be imported using other functions, such as <code>readRDS()</code>, <code>readxl::read_xlsx()</code>, or <code>haven::read_dta()</code>. While these have their own optional arguments, the key step of specifying the correct file path to the data is the same.</p>
+</section>
+<section id="missing-data" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="missing-data"><span class="header-section-number">2.3.2</span> Missing Data</h3>
+<p>In any given structured data table, there may be cells that are empty. These cells indicate data that are <em>missing</em>. For instance, perhaps we are trying to import the comma-separated-value file assigned to <code>txt</code>. The second element of the first row is missing, as is the first element of the second row. <code>R</code>, for instance, can still read this table, with <code>NA</code> (for <code>Not Available</code>) inserted as the data values.</p>
+<!-- x,y,z
+1,,1
+,2,2
+3,3,3  -->
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>txt <span class="ot">&lt;-</span> <span class="st">"x,y,z</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">        1,,1</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">        ,2,2</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">        3,3,-99"</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">text =</span> txt, <span class="at">colClasses =</span> <span class="st">"numeric"</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   x  y   z
+1  1 NA   1
+2 NA  2   2
+3  3  3 -99</code></pre>
+</div>
+</div>
+<p>It is important to note, however, that missing data are not always represented by empty table cells. For instance, as shown in <code>df</code> above, the person collecting the data may elect to use a particular value (like <code>-99</code>) to indicate missingness (and, perhaps, not document that choice!). We should always be careful to examine data during exploratory data analysis to see if there are particular values that appear strange (and perhaps over-represented). We can always convert these values to <code>NA</code> as we need to, as demonstrated in the code below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">==-</span><span class="dv">99</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   x  y  z
+1  1 NA  1
+2 NA  2  2
+3  3  3 NA</code></pre>
+</div>
+</div>
+<p>Additionally, missing values in imported data may not truly be missing. For example, in the <code>names</code> dataset below, it is likely fair to assume that Mia is an only child, meaning we can replace <code>NA</code> with <code>0</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">text =</span> txt, <span class="at">colClasses =</span> <span class="fu">c</span>(<span class="st">"factor"</span>, <span class="st">"integer"</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>names</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            name siblings
+1           Fred        2
+2         Joanna        1
+3            Mia       NA
+4          Mateo        3
+5            Kai        1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> names <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">siblings =</span> tidyr<span class="sc">::</span><span class="fu">replace_na</span>(siblings, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The short explanation of why missing data matter is that statistical learning algorithms cannot run if there are missing table entries. Any observations with a missing value for a variable that is part of the algorithm will be omitted entirely. The picture below represents two measurements, <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, made for 12 objects. Both measurements are observed for 10 of the 12 objects. However, for one object, <span class="math inline">\(x_1\)</span> is known, but <span class="math inline">\(x_2\)</span> is missing. The value of <span class="math inline">\(x_2\)</span> can therefore lie anywhere along the vertical orange line. Statistical learning algorithms will not “guess” where that <span class="math inline">\(x_2\)</span> datum is to go.</p>
+<p><img src="./figures/missing_data_I.png" class="img-fluid"></p>
+<p>To solve the issue of missing data and complete downstream analyses, we have two options. The first is to remove rows and/or columns with missing data from the dataset prior to analyses. The second is to attempt to <em>impute</em> the missing data.</p>
+<section id="removing-data" class="level4" data-number="2.3.2.1">
+<h4 data-number="2.3.2.1" class="anchored" data-anchor-id="removing-data"><span class="header-section-number">2.3.2.1</span> Removing data</h4>
+<p>Removal of data prior to analysis can be tricky in that there is no simple recipe to follow. For instance, say all the missing data in our dataset come from one variable. We might be tempted to remove that variable from our analysis. However, if the number of missing values in that variable is small, we might be tempted to simply remove those observations with missing data and retain the rest of the observations with complete data.</p>
+<p><strong>TODO: Paragraph on MCAR, MAR, MNAR</strong></p>
+<p>There are two primary considerations to keep in mind when trying to decide between removing observations versus removing variables:</p>
+<ol type="1">
+<li>When we remove observations, we reduce the overall sample size. This impacts the level of uncertainty in estimation. For example, if we are trying to estimate an average, recall that the variance of the mean is <span class="math inline">\(V[\bar{X}] = \sigma^2/n\)</span>, where <span class="math inline">\(\sigma^2\)</span> is the population mean and <span class="math inline">\(n\)</span> is the number of observations. The smaller the <span class="math inline">\(n\)</span>, the larger our variance, and the more uncertain we are about <span class="math inline">\(\bar{X}\)</span>.</li>
+<li>When we remove variables, we <em>may</em> greatly impact the ability of any learned statistical model to make predictions. Or we may not. For instance, if we are trying to predict hospital costs for patients, removing the variable <code>gender</code> will have less of an impact on our accuracy than removing the variable <code>age</code>.</li>
+</ol>
+<p>If the number of observations with missing data is relatively small, the safest initial approach is to remove those observations and proceed, regardless of the proportion of the variables for which the data are actually missing. But, if we have sufficient time and resources, we should always explore a variety of approaches. For instance, we could take out the observations with missing data and do an analysis and then separately only take out the variables with missing data and do an analysis. We could then compare the predictive abilities of the models.</p>
+</section>
+<section id="data-imputation" class="level4" data-number="2.3.2.2">
+<h4 data-number="2.3.2.2" class="anchored" data-anchor-id="data-imputation"><span class="header-section-number">2.3.2.2</span> Data imputation</h4>
+<p>Instead of removing data, we may also consider data imputation. Data imputation means using the known values in our dataset and background knowledge to estimate the missing data values. For instance, given our schematic picture of missingness above, we might think that, yes, there are certain regimes along the vertical and horizontal green lines where it would be more probable to observe data than others. Imputation is simply turning that intuition into an algorithm. However…</p>
+<pre><code>The idea of imputation is both seductive and dangerous. It is seductive because
+it can lull the user into the pleasurable state of believing that the data are
+complete after all, and it is dangerous because it lumps together situations
+where the problem is sufficiently minor that it can be legitimately handled [via
+imputation] and situations where standard estimators applied to the real and
+imputed data have substantial biases.
+
+- Dempster &amp; Rubin (1983)</code></pre>
+<p>In other words, how do we know that we’ve put the data in “good places”, and how do we know that our attempt at imputation might not simply lead us down the road to biased results? Several procedures have been developed with the intent of avoiding biased results. As with most procedures, there are easy (but sub-optimal) approaches and more principled (but more computationally intensive) approaches.</p>
+<p>The simplest approach of all is to determine the sample mean or median of the known data for the variable and use that value. The pro of this approach is that it is easy to implement and explain, while the con is that the imputed data are not distributed as the known data are. Instead, they only take one value.</p>
+<p>To improve this approach, we could use a method known as <em>hot-deck imputation</em>. Let’s say that we have data on United States counties, but that the county’s unemployment rate is missing in some observations. With hot-deck imputation, we’d take an observation missing unemployment rate, look for the counties in our dataset with similar characteristics (e.g.&nbsp;similar population density, population size, region of county), pick of one of those counties, and then use that county’s unemployment rate as the imputed value. The way we pick which county can either be deterministic (the county with the closest matching attributes) or random (draw a random sample from the subset of counties with similar records). The approach is known as <em>hot-deck</em> imputation because <em>hot</em> refers to using the current dataset, as opposed to <em>cold-deck</em>, which relies on external data sources. The term <em>deck</em> comes from the idea of a deck of cards, where each “card” represents an observation (such as a county), and missing values are filled by drawing from similar observations within that deck.</p>
+<p>While there are many more imputation alogorithms for various types of data, the last we will introduce here is <em>Multiple Imputation by Chained Equations (MICE)</em>. The MICE procedure imputes missing values in a dataset through an iterative series of predictive models, where in each iteration, missing values for one variable are predicted using values from other variables in the dataset. Suppose we have a dataset with three variables (<code>A</code>, <code>B</code>, and <code>C</code>). The steps to perform MICE are as follows, and can also be implemented with the <a href="https://cran.r-project.org/web/packages/mice/index.html">mice R package</a>:</p>
+<ol type="1">
+<li><p>Choose the number of iterations <em>k</em> you will perform: Using five to ten iterations often works well in practice.</p></li>
+<li><p>Initialize missing values: For each variable, temporarily replace the missing values with the mean or median of the observed values. At this stage, there are no missing values in the dataset.</p></li>
+<li><p>Select a target variable for imputation: For variable <code>A</code>, for instance, change the imputed values back to missing.</p></li>
+<li><p>Fit an imputation model: Regress <code>A</code> on the other variables (<code>B</code> and <code>C</code>), using only the rows where A is observed. Then use this model to predict and impute the missing values in <code>A</code>.</p></li>
+<li><p>Repeat steps 3-4 for variables <code>B</code> and <code>C</code> as well, using the newly predicted values for <code>A</code>.</p></li>
+</ol>
+<p>These are the steps for one of the <code>k</code> iterations. Each iteration begins using the dataset produced at the end of the previous iteration, which is where the <em>chained</em> part of the name comes from. With each iteration, the predicted values improve until some convergence point. MICE can be implemented not only for continuous variables, but also for binary, unordered categorical, and ordered categorical variables. We should, however, keep in mind that MICE requires the data to be missing at random. Additionally, the effectiveness of the method may wane with increased levels of missingness or at smaller sample sizes.</p>
+</section>
+</section>
+</section>
+<section id="data-wrangling" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="data-wrangling"><span class="header-section-number">2.4</span> Data Wrangling</h2>
+<p><strong>TODO: INSERT SECTION HERE: 6 main verbs, joining, pivoting</strong></p>
+</section>
+<section id="exploratory-data-analysis" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="exploratory-data-analysis"><span class="header-section-number">2.5</span> Exploratory Data Analysis</h2>
+<p>Exploratory Data Analysis (EDA) is the act of building intuition about observed data through visualization and statistical summaries. It is a critical component of any data analysis. Sometimes, research questions can be answered from EDA alone. For example, a histogram of exam scores can tell the professor how their class performed and whether a curve should be applied—no statistical learning model is needed. Oftentimes, however, EDA serves as a foundation for subsequent modeling and inference. Even when it is not sufficient to fully answer a research question, EDA is a necessary step in the data analysis process. In the words of American mathematician and statistician John Tukey,</p>
+<pre><code>The greatest value of a picture is when it forces us to 
+notice what we never expected to see.</code></pre>
+<p>EDA can reveal outliers, identify potential errors in the data, guide the selection of appropriate statistical learning methods, inform variable selection for predictive modeling, and generate hypotheses about relationships within the data. Jumping directly into modeling without first understanding the data can lead to misleading conclusions and poorly chosen methods.</p>
+<p>So, if EDA is so important, how do we go about it? EDA is more of an art than a science. There is no single correct procedure, and the exact process will vary depending on our research goals and the nature of the data being analyzed. Nevertheless, we can outline a general framework that can be adapted to a wide range of scientific questions and applications. The steps are as follows:</p>
+<ol type="1">
+<li><strong>Understand how the data is structured.</strong> Explore simple questions like:</li>
+</ol>
+<ul>
+<li>How many variables and observations are there?</li>
+<li>What are the variable types (e.g.&nbsp;numeric, categorical, date, logical)? Do we need to manually correct any of these types?</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>Understand relevant variables individually.</strong> Univariate visualizations and summaries help us explore the typical values that a variable will take. For each relevant variable, we recommmend creating summaries or graphs to answer questions such as:</li>
+</ol>
+<ul>
+<li>For continuous variables: How is the variable distributed—unimodally or bimodally? Is it symmetric or skewed? What are the mix/max values for this variable, and do they seem reasonable?</li>
+<li>For categorical variables: How many different values does this variable take? Are certain values more prevalent than others? Is than an unordered or ordered categorical variable?</li>
+<li>Is this variable uninformative (e.g.&nbsp;a columns of 1’s) or does it take different values than we might expect?</li>
+<li>Does the variable contain any missing values? If so, how many?</li>
+</ul>
+<ol start="3" type="1">
+<li><strong>Explore relationships between variables.</strong> This step is particularly helpful for choosing an appropriate statistical learning model. Explore questions including:</li>
+</ol>
+<ul>
+<li>Is there a visually apparently association between each relevant predictor variable and the response? Is this relationship linear or nonlinear? Strong or weak?</li>
+<li>Are any of the predictor variables correlated with one another? If so, are they strongly correlated? Do they convey the same information?</li>
+<li>For variables with missing values: Does it seem like the missingness is linked to the values of any other variables?</li>
+</ul>
+<p>We now walk through how we go about answering these questions.</p>
+<!-- - If the number of predictor variables is larger than three, one cannot directly visualize the native space of the data; one can only visualize *projections* of that space
+
+  + if those projections yield useful information, great!
+  
+  + if they do not: one should not give up, *because information may have been lost in projection*
+
+![](http://www.stat.cmu.edu/~pfreeman/Fig_EDA_TwoVars_I.png)
+
+![](http://www.stat.cmu.edu/~pfreeman/Fig_EDA_TwoVars_II.png)
+
+![](http://www.stat.cmu.edu/~pfreeman/Fig_EDA_TwoVars_III.png)
+
+- If we can only "see" in one dimension, then we would conclude when we use EDA that there is no association between the $(x,y)$ coordinates and the object class...however, if we could visualize the native space, we'd conclude there is definitely an association between coordinates and class
+
+  + EDA: visualization of *projected* data
+
+  + statistical learning: modeling of data in their *native space*
+
+- The following figures illustrate the limits of EDA:
+
+![](http://www.stat.cmu.edu/~pfreeman/Fig_EDA_TwoVars_IV.png)
+
+![](http://www.stat.cmu.edu/~pfreeman/Fig_EDA_TwoVars_V.png)
+
+![](http://www.stat.cmu.edu/~pfreeman/Fig_EDA_TwoVars_VI.png)
+
+- Here, we would conclude when we use EDA that there is an association between the $(x,y)$ coordinates and the object class
+
+- If by eye we see clear associations between, e.g., at least some predictor variables and the response variable, then we know that we when apply statistical learning techniques we will uncover meaningful information about associations between variables -->
+<section id="introduction-to-ggplot2" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="introduction-to-ggplot2"><span class="header-section-number">2.5.1</span> Introduction to ggplot2</h3>
+<p>In this book, we will use the <code>ggplot2</code> R package for data visualization. The <code>ggplot2</code> framework builds plots from composable elements, allowing for extensive customization. The image below shows the seven components used to create a visualization with <code>ggplot2</code>. Of these, the data, mapping,and layers components are required for every plot.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./figures/composable_parts.png" class="img-fluid figure-img"></p>
+<figcaption>Source: https://ggplot2.tidyverse.org/articles/ggplot2.html</figcaption>
+</figure>
+</div>
+<p>The first step to constructing a data visualization with <code>ggplot2</code> is to specify the <strong>data</strong> by passing it into the <code>ggplot()</code> function. This stores the data to be used later by other parts of the plotting system.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>heart)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we specify a <strong>mapping</strong> using <code>aes()</code> within the <code>ggplot()</code> function. Short for <em>aesthetics</em>, this describes how variables in the data are connected to visual properties of the plot. For example, if want <code>Age</code> to map to the x-coordinates and <code>BP</code> to the y-coordinates, we’d state that as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The last required component for creating a plot are the <strong>layers</strong>, which take the mapped data and represent it in a way that humans can understand. Every layer consists of a geometry, which determines how the data are displayed (e.g.&nbsp;as points, lines, curves).</p>
+<p>Using the code below, we have created our first complete data visualization! The layer <code>geom_point()</code> specifies that each observation should be displayed as a point. Notice that <code>geom_point()</code> is added to the data and mapping components using <code>+</code>. A common mistake when creating visualizations with <code>ggplot2</code> is to use a pipe (<code>|&gt;</code> or <code>%&gt;%</code>) in place of a <code>+</code>. Just remember, once you start the initial <code>gglot()</code> call, all components become connected with a <code>+</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP))<span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We now introduce what we consider as bonus components. These components have default settings in order to allow the user to build plots more efficiently, which is what makes them not required. However, knowing how to modify them can greatly enhance the clarity of your visualizations.</p>
+<p>The first of these components is <strong>scales</strong>. Scales may be responsible for updating the limits of a plot, setting the breaks, formatting the labels, or applying a transformation. To add a scales component, find a function patterned as <code>scale_{aesthetic}_{type}()</code>, where <code>{aesthetic}</code> is one of the pairings made in the mapping part of a plot. For instance, below we map the <code>Disease</code> variable to the viridis color palette. Additionally, we state that we want more granularity of labels on the y-axis using <code>scale_y_continuous()</code> with <code>n.breaks=6</code> (notice in the plot above, there were only four).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP, <span class="at">color =</span> Disease))<span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()<span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our next optional component is <strong>facets</strong>. Facets can be used to split up the plot into smaller panels based on one or more variables. They are especially helpful when trying to visualize trends within multiple subsets at once. For example, in the plot below, facets allow us to compare the relationship between <code>Age</code> and <code>BP</code> for males to females. By coloring by <code>Disease</code>, we can see more males in the dataset have heart disease than females.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP, <span class="at">color =</span> Disease))<span class="sc">+</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()<span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">6</span>)<span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A third optional component is <strong>coordinates</strong>. The vast majority of the time, Cartesian coordinates are used, but certain data may be well-suited for polar or radial coordiates. Another useful <code>coord_{}</code> function is <code>coord_fixed()</code>. This can be used to display a plot with a fixed aspect ratio so that one unit has the same length in both the x and y directions. <em>note: silly with current example</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP))<span class="sc">+</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, there is the <strong>theme</strong> component, which is where all additional customizations related to the look of the plot are done. The theme can be used for additional customizations including changing the background color, removing the legend, changing the size of the text, and <em>much</em> more. <code>ggplot2</code> offers a variety of pre-designed themes to choose from (<code>theme_bw()</code>, <code>theme_classic()</code>, and <code>theme_minimal()</code> are some of our personal favorites!), each of which can be further customized with the <code>theme()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP, <span class="at">color =</span> Disease))<span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()<span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="types-of-visualizations" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="types-of-visualizations"><span class="header-section-number">2.5.2</span> Types of visualizations</h3>
+</section>
+<section id="example" class="level3" data-number="2.5.3">
+<h3 data-number="2.5.3" class="anchored" data-anchor-id="example"><span class="header-section-number">2.5.3</span> Example</h3>
+</section>
+</section>
+<section id="example-1" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="example-1"><span class="header-section-number">2.6</span> Example</h2>
+<ul>
+<li>We start by calling <code>summary()</code>, as it will identify amounts of missing data (assuming they have been identified and marked as <code>NA</code>) and give a sense of how the data are distributed</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(df)           <span class="co"># 10 measurements for each of 3,456 galaxies</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3456   10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df[,<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]) <span class="co"># showing a subset only so as to fit on the slide</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    field          Gini              M20                C        
+ COSMOS:905   Min.   :0.03829   Min.   :-2.2154   Min.   :1.093  
+ EGS   :750   1st Qu.:0.41397   1st Qu.:-1.7181   1st Qu.:2.665  
+ GOODSN:464   Median :0.45774   Median :-1.5802   Median :3.008  
+ GOODSS:588   Mean   :0.44359   Mean   :-1.5135   Mean   :3.023  
+ UDS   :749   3rd Qu.:0.48947   3rd Qu.:-1.3431   3rd Qu.:3.402  
+              Max.   :0.85754   Max.   :-0.4342   Max.   :4.922  </code></pre>
+</div>
+</div>
+<ul>
+<li><p><code>field</code> is a categorial variable…all the others are quantitative</p></li>
+<li><p>There are no missing data</p></li>
+</ul>
+<p><img src="http://www.stat.cmu.edu/~pfreeman/missing_data.png" class="img-fluid"></p>
+<section id="visualization-part-i" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="visualization-part-i"><span class="header-section-number">2.6.1</span> Visualization Part I</h3>
+<ul>
+<li><p><code>ggplot2</code> is a package for creating graphics, utilizing principles discussed in the book <em>The Grammar of Graphics</em></p>
+<ul>
+<li><code>ggplot2</code> is part of the <code>tidyverse</code></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(tidyverse))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>A <em>very</em> basic call to <code>ggplot()</code> has the following structure:</li>
+</ul>
+<pre><code>ggplot(data=&lt;data frame&gt;,mapping=aes(x=&lt;x axis variable&gt;,...)) + 
+  geom_&lt;plot type&gt;(&lt;arguments&gt;) + ...</code></pre>
+<section id="single-categorical-variable" class="level4" data-number="2.6.1.1">
+<h4 data-number="2.6.1.1" class="anchored" data-anchor-id="single-categorical-variable"><span class="header-section-number">2.6.1.1</span> Single Categorical Variable</h4>
+<ul>
+<li>To visualize a single categorical variable, we could use a <code>table()</code>…</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">select</span>(.,field) <span class="sc">%&gt;%</span> <span class="fu">table</span>(.)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>field
+COSMOS    EGS GOODSN GOODSS    UDS 
+   905    750    464    588    749 </code></pre>
+</div>
+</div>
+<ul>
+<li>…or a bar chart…</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>field)) <span class="sc">+</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">fill=</span><span class="st">"seagreen"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="single-quantitative-variable" class="level4" data-number="2.6.1.2">
+<h4 data-number="2.6.1.2" class="anchored" data-anchor-id="single-quantitative-variable"><span class="header-section-number">2.6.1.2</span> Single Quantitative Variable</h4>
+<ul>
+<li>To visualize a single quantitative variable, we would most often use a histogram</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>C,<span class="at">y=</span><span class="fu">after_stat</span>(density))) <span class="sc">+</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins=</span><span class="dv">40</span>,<span class="at">fill=</span><span class="st">"seagreen"</span>) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Concentration"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>Features of histograms to keep in mind:</p>
+<ul>
+<li><p>they exhibit a nonparametric estimate of the shapes of underlying data distributions</p></li>
+<li><p>they are sensitive to bin width: too few bins, and noise and localized features are smoothed out; too many bins, and noise obscures the underlying distribution</p></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df.new  <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">select</span>(.,<span class="sc">-</span>field) <span class="sc">%&gt;%</span> <span class="fu">gather</span>(.)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df.new,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>value)) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill=</span><span class="st">"blue"</span>,<span class="at">bins=</span><span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>key,<span class="at">scales=</span><span class="st">'free'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>What do we observe here?</p>
+<ul>
+<li><p><code>C</code> and <code>q</code> have unimodal and symmetric distributions</p></li>
+<li><p><code>M20</code>, <code>n</code>, <code>mass</code>, and <code>size</code> are somewhat positively skewed</p></li>
+<li><p><code>Gini</code> is somewhat negatively skewed</p></li>
+<li><p>we cannot make firm conclusions about <code>A</code> and <code>z.mode</code> other than there are apparent outlier values for these variables</p></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="visualization-part-ii" class="level3" data-number="2.6.2">
+<h3 data-number="2.6.2" class="anchored" data-anchor-id="visualization-part-ii"><span class="header-section-number">2.6.2</span> Visualization Part II</h3>
+<section id="categorical-response-versus-categorical-predictor" class="level4" data-number="2.6.2.1">
+<h4 data-number="2.6.2.1" class="anchored" data-anchor-id="categorical-response-versus-categorical-predictor"><span class="header-section-number">2.6.2.1</span> Categorical Response versus Categorical Predictor</h4>
+<ul>
+<li>To visually ascertain whether there might be an association between a categorical response variable and a categorical predictor variable, the simplest approach is to use a table</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fake.var <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="dv">2</span>,<span class="fu">nrow</span>(df),<span class="at">replace=</span><span class="cn">TRUE</span>))</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(fake.var,df<span class="sc">$</span>field)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        
+fake.var COSMOS EGS GOODSN GOODSS UDS
+       1    462 372    232    312 396
+       2    443 378    232    276 353</code></pre>
+</div>
+</div>
+</section>
+<section id="quantitative-response-versus-categorical-predictor" class="level4" data-number="2.6.2.2">
+<h4 data-number="2.6.2.2" class="anchored" data-anchor-id="quantitative-response-versus-categorical-predictor"><span class="header-section-number">2.6.2.2</span> Quantitative Response versus Categorical Predictor</h4>
+<ul>
+<li>To visually ascertain whether there might be an association between a quantitative response variable and a categorical predictor variable, we would most often use grouped boxplots</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>field,<span class="at">y=</span>z.mode)) <span class="sc">+</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill=</span><span class="st">"seagreen"</span>) <span class="sc">+</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Galaxy Field"</span>) <span class="sc">+</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Redshift"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>If we draw a line through the boxes, it is flat: there is no apparent association between galaxy distance and sky location</p></li>
+<li><p>If we want to visualize a categorical response versus a quantitative predictor, we would simply “turn the plot 90 degrees” (reverse <code>x</code> and <code>y</code> in the <code>ggplot()</code> function call)</p></li>
+</ul>
+</section>
+<section id="quantitative-response-versus-quantitative-predictor" class="level4" data-number="2.6.2.3">
+<h4 data-number="2.6.2.3" class="anchored" data-anchor-id="quantitative-response-versus-quantitative-predictor"><span class="header-section-number">2.6.2.3</span> Quantitative Response versus Quantitative Predictor</h4>
+<ul>
+<li>To visually ascertain whether there might be an association between a quantitative response variable and a quantitative predictor variable, we would most often use scatter plots</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>mass,<span class="at">y=</span>z.mode)) <span class="sc">+</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">col=</span><span class="st">"seagreen"</span>,<span class="at">cex=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Galaxy Mass"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Redshift"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p><strong>IMPORTANT!</strong> Here are some tips of the trade to keep in mind when constructing scatter plots:</p>
+<ul>
+<li><p>if your sample size is <span class="math inline">\(\gtrsim 10^4\)</span>, randomly sample <span class="math inline">\(\sim\)</span> 1000 points for plotting</p></li>
+<li><p>to improve interpretability, mitigate the effect of point overlap by both reducing the size of points and altering point transparency</p></li>
+<li><p>change the plot limits manually if necessary to zoom in on the bulk of the points</p></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df),<span class="dv">1000</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df[s,],<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>mass,<span class="at">y=</span>z.mode)) <span class="sc">+</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">col=</span><span class="st">"seagreen"</span>,<span class="at">cex=</span><span class="fl">0.5</span>,<span class="at">alpha=</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Galaxy Mass"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Redshift"</span>) <span class="sc">+</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="dv">9</span>,<span class="fl">11.5</span>) <span class="sc">+</span> </span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">1</span>,<span class="fl">2.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 28 rows containing missing values or values outside the scale range
+(`geom_point()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="anomaly-detection" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="anomaly-detection"><span class="header-section-number">2.7</span> Anomaly Detection</h2>
+<p>An <em>anomaly</em>, or <em>outlier</em>, is for our purposes a data point that lies far from other data. (Note that statisticians have a more precise definition for “outliers” - they are specific data points with <em>response variable values</em> that are extreme relative to the pattern exhibited by the rest of the data - but the word is often used colloquially to denote any datum that lies far from the rest of the data.) An anomaly is an anomaly because we can not model it effectively. A statistical model is a representation of the data-generating process, and anomalies are values that we will not naturally observe, given our understanding of the process.</p>
+<p><img src="./figures/anomaly_I.png" class="img-fluid"></p>
+<p>The single point to the lower right is an anomaly! Note that while it may be useful or necessary to determine <em>how</em> anomalous data points are generated, that’s not our concern here: we simply want to detect possibly anomalous points. Given the picture above, it appears easy, but…imagine again that we are “line-landers”: we exist and see in one dimension only, and thus can only examine the data above in projection. In that case, you would not see the anomalous point at all! By the same token, we who exist and see in three dimensions might not see anomalies present in higher-dimensional data. We should always visualize the data…but visualization on its own will not guarantee that we will detect anomalous data points.</p>
+<p>Let’s say we examine the values for each column of our structured dataset separately. How might we detect anomalies?</p>
+<ul>
+<li>The <em>empirical approach</em>: we, e.g., create a histogram or boxplot and look to see if there are data that lie far from other data, where “far” is a judgement call. Are the data points plausible given the apparent distribution of the (vast) majority of the data? (Or do they have strange values that might indicate misrecording or missingness?) Implementing this approach is fine <em>so long as we explicitly record what data points we deem to be outliers (and remove from the dataset)</em>; that way, others can replicate our processing and possibly change it (if necessary).</li>
+</ul>
+<p>However, perhaps we want to establish a quantitative rule for excluding data from further analysis. How might we do this?</p>
+<ul>
+<li>Via box plots: look for data beyond the whiskers. However, see below!</li>
+<li>Via Dixon’s Q Test, or Grubbs’ Test, or the Tietjen-Moore Test, or the generalized extreme studentized deviate test, <em>if</em> the data are normally distributed. See, e.g., <a href="link to https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h1.htm">this web page for more details</a>. However, data are often <em>not</em> normally distributed!</li>
+</ul>
+<p>A box plot, by default, determines the interquartile range of the data (i.e., the distance between the values corresponding to the 25th and 75th percentiles of the data), and then decrees that any data that lies more than 1.5 <span class="math inline">\(\times\)</span> IQR below the 25th percentile value, or above the 75th percentile data, are anomalous data.</p>
+<p><img src="./figures/anomaly_II.png" class="img-fluid"></p>
+<p>The problem with relying on this default approach is that it is sensitive to the sample size. For normally distributed data, the probability that a datum will lie beyond the whiskers is 0.007. This is a small value…but if we have 10,000 data, we will observe approximately 70 data that are “anomalous by rule” but are not actually anomalous. We would need to be careful to manually adjust the lengths of the whiskers if our sample sizes are large…or we can fall back on the empirical approach.</p>
+<p>A means by which to extend anomaly detection to the native space of high-dimensional data is to utilize <em>pairwise distance</em> (or <em>similarity</em>) measures. Let’s assume that data table whose (quanitative) values on rows <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> are <span class="math inline">\(\mathbf{x}_i = \{x_{i,1},\ldots,x_{i,p}\}\)</span> and <span class="math inline">\(\mathbf{x}_j = \{x_{j,1},\ldots,x_{j,p}\}\)</span>, respectively. Then the <em>Euclidean distance</em> between objects <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> is <span class="math display">\[
+D_{ij} = \sqrt{(x_{i,1}-x_{j,1})^2 + \cdots + (x_{i,p}-x_{j,p})^2} \,.
+\]</span> For each object, we can determine, e.g., the minimum distance to its nearest neighbor, and histogram those values: a anomalous datum might appear as a data point with an extremely large “minimum distance” value. (Note that, e.g., there are efficient methods in <code>R</code> and <code>Python</code> for generating the full ensemble of pairwise distances and storing them in an <span class="math inline">\(n \times n\)</span> symmetric matrix (which zeros along the diagonal), but beware: the memory required to store a matrix is such that these methods are only really applicable if the number of rows is <span class="math inline">\(\lesssim\)</span> 20,000.)</p>
+<p>A caveat for computing pairwise Euclidean distances is that they might not be the optimal distance measures. For instance, the ranges of each variable might be such that some variables “dominate” over others in a distance measurement: e.g., if a variable has units kilometers, and we change the units to millimeters, its relative contribution to the Euclidean distance will greatly increase!</p>
+<p>One often used alternative approach to computing the Euclidean distance is to compute the <em>Mahalanobis distance</em>: <span class="math display">\[
+D_i =  \sqrt{(\mathbf{x}_i-\bar{\mathbf{x}})^T \Sigma^{-1} (\mathbf{x}_i-\bar{\mathbf{x}})} \,,
+\]</span> where <span class="math inline">\(\mathbf{x}_i\)</span> represents a single row of the data table and <span class="math inline">\(\bar{\mathbf{x}}\)</span> represents the average values in each column, and where <span class="math inline">\(\Sigma^{-1}\)</span> is the inverse of the covariance matrix. This last term helps mitigate differences in scale from variable to variable. <span class="math inline">\(D_i\)</span> is not a pairwise distance but rather the distance from the global average point in the <span class="math inline">\(p\)</span>-dimensional space of the data. We can histogram the distance values: an outlier might appear as a data point that lies anomalously far from the global average point.</p>
+<p>We conclude by mentioning two other anomaly-detection algorithms:</p>
+<ul>
+<li><em>Local Outlier Factor (LOF)</em>: this algorithm compares the local density of data around a given data point to the local densities of its nearest neighbors, with points that have substantially lower densities than their neighbors being potential outliers.</li>
+<li><em>Isolation Forest</em>: as will become apparent later, this algorithm is similar to that for a classification and regression tree, but with the data in the <span class="math inline">\(p\)</span>-dimensional space between repeatedly partitioned <em>randomly</em>. Data that require, on average, fewer random partitions to become completely isolated are potential anomalies.</li>
+</ul>
+<p><img src="./figures/anomaly_III.png" class="img-fluid"> <img src="./figures/anomaly_IV.png" class="img-fluid"></p>
+<p>(See, e.g., the Wikipedia entries for <a href="link to https://en.wikipedia.org/wiki/Local_outlier_factor">local outlier factor</a> and <a href="link to https://en.wikipedia.org/wiki/Isolation_forest">isolation forest</a>.)</p>
+<p>As a final note, regardless of what quantitative approach we take, <em>we need to explicitly record what data points we deem to be anomalous (and remove from the dataset)!</em> We always record our choices, to ensure our analyses are reproducible.</p>
+<ul>
+<li>TBD: integrate the material below</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>df.new  <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(.,A,z.mode) <span class="sc">%&gt;%</span> <span class="fu">gather</span>(.)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df.new,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>value)) <span class="sc">+</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill=</span><span class="st">"blue"</span>,<span class="at">bins=</span><span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>key,<span class="at">scales=</span><span class="st">'free'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>One goal of EDA is to perform <em>anomaly detection</em>, i.e., to find possible outlying values in the data</p>
+<ul>
+<li><p>we will assume that we will detect anomalous values “by eye,” using the qualitative criterion that data that lie “far from the core” of any histogram cannot be plausibly generated by the same mechanisms that generated the rest of the data</p></li>
+<li><p><strong>be sure to record any removal of apparent anomalous values so that others can reproduce your analyses later!</strong></p></li>
+</ul></li>
+<li><p>Here, I will remove rows of data with values of <code>A</code> less than <span class="math inline">\(-0.5\)</span> and values of <code>z.mode</code> greater than 3.5. I can do that using the <code>dplyr</code> function <code>filter()</code>:</p></li>
+</ul>
+<pre><code>df.filtered &lt;- df %&gt;% filter(.,A&gt;-0.5,z.mode&lt;3.5)</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>df.filtered <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(.,A<span class="sc">&gt;-</span><span class="fl">0.5</span>,z.mode<span class="sc">&lt;</span><span class="fl">3.5</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>df.new  <span class="ot">&lt;-</span> df.filtered <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(.,A,z.mode) <span class="sc">%&gt;%</span> <span class="fu">gather</span>(.)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df.new,<span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>value)) <span class="sc">+</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill=</span><span class="st">"blue"</span>,<span class="at">bins=</span><span class="dv">30</span>) <span class="sc">+</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>key,<span class="at">scales=</span><span class="st">'free'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>Do not use the “1.5 IQR rule” for determining whether a datum is anomalously valued</p></li>
+<li><p>This rule is <em>far</em> too conservative to use when the sample size is (moderately) large</p>
+<ul>
+<li><p>if we have <span class="math inline">\(n = 100\)</span> normally distributed data, the rule will on average identify 0.7 <em>valid</em> data as being anomalous</p></li>
+<li><p>if we have <span class="math inline">\(n = 10000\)</span> data, 70 <em>valid</em> data, on average, will be flagged as anomalous</p></li>
+<li><p>etc.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="optional-data-reduction-via-principal-components-analysis" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="optional-data-reduction-via-principal-components-analysis"><span class="header-section-number">2.8</span> Optional: Data Reduction via Principal Components Analysis</h2>
+<ul>
+<li>Let’s build up intuition for PCA by starting off with a picture:</li>
+</ul>
+<p><img src="http://www.stat.cmu.edu/~pfreeman/pca_new.png" class="img-fluid"></p>
+<ul>
+<li><p>At left, we visualize the contents of a data frame with six rows (six data points) and two columns, <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span></p></li>
+<li><p>What does the PCA algorithm do? It utilizes algorithms of linear algebra to move the coordinate system origin to the centroid of the point “cloud,” then rotates the axes such that “PC 1” lays along the direction of greatest variation (i.e., along the points), and “PC 2” lays orthogonal to to “PC 1”</p></li>
+<li><p>In the end, PCA is the linear transformation of a coordinate system…</p></li>
+<li><p>…but, there is actually more to PCA then just the transformation.</p></li>
+<li><p>At right, we move into “PC space,” where PC1 has become the <span class="math inline">\(x\)</span> axis, etc.</p></li>
+<li><p>Note how the data all lie along the PC1 axis</p>
+<ul>
+<li><p>in PC space, we can see that the true space of the data is one-dimensional: a second dimension adds no statistical information at all</p></li>
+<li><p>we can visualize and interpret the data using, e.g., a histogram of PC1 values and ignore PC2 entirely</p></li>
+</ul></li>
+<li><p>So in the end, PCA is also a dimension-reduction tool</p></li>
+</ul>
+<section id="why-use-pca" class="level3" data-number="2.8.1">
+<h3 data-number="2.8.1" class="anchored" data-anchor-id="why-use-pca"><span class="header-section-number">2.8.1</span> Why Use PCA?</h3>
+<ul>
+<li><p>There are two principal (pun not intended) reasons to use PCA:</p>
+<ul>
+<li><p>it can assist data visualization: if the predictor data lay within a subspace of the native space, we can try to visualize the data in that space</p></li>
+<li><p>it can help statistical inference: PCA “decorrelates” the data <span class="math inline">\(-\)</span> there is no linear association between the data along PC1 and PC2, etc. <span class="math inline">\(-\)</span> so multicollinearity is mitigated!</p></li>
+</ul></li>
+<li><p><strong>NOTE:</strong> <em>PCA is not appropriate for use with categorical data!</em></p></li>
+</ul>
+</section>
+<section id="its-a-linear-algorithm" class="level3" data-number="2.8.2">
+<h3 data-number="2.8.2" class="anchored" data-anchor-id="its-a-linear-algorithm"><span class="header-section-number">2.8.2</span> It’s a Linear Algorithm</h3>
+<ul>
+<li>The main limitation of PCA is that it is a <em>linear</em> algorithm: it projects data to hyperplanes</li>
+</ul>
+<p><img src="http://www.stat.cmu.edu/~pfreeman/swiss_roll.png" class="img-fluid"></p>
+<ul>
+<li><p>These data lay on a curving two-dimensional strip embedded in a three-dimensional space</p>
+<ul>
+<li><p>projecting these data to a two-dimensional plane or a one-dimensional line would effectively randomize the statistical information they contain</p></li>
+<li><p>for visualization and/or learning, we could explore the use of <em>nonlinear</em> techniques like diffusion map or local linear embedding, or self-organizing maps or tSNE, etc.</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="its-not-factor-analysis" class="level3" data-number="2.8.3">
+<h3 data-number="2.8.3" class="anchored" data-anchor-id="its-not-factor-analysis"><span class="header-section-number">2.8.3</span> It’s Not Factor Analysis</h3>
+<ul>
+<li><p>PCA is one of a family of related algorithms commonly dubbed <em>factor analyses</em>, and, for instance, some use the phrases “PCA” and “factor analysis” interchangeably</p></li>
+<li><p>The PCA algorithm as described here is a <strong>deterministic algorithm</strong>: it just ingests the data values as they are and produces a result, full stop</p></li>
+<li><p><em>Exploratory factor analysis</em> is a variant of PCA which <em>does</em> attempt to take the random variability of the data into account</p>
+<ul>
+<li>it maps the <span class="math inline">\(p\)</span> observed variables to <span class="math inline">\(k &lt; p\)</span> factors; “exploratory” means we do not know <em>a priori</em> how that mapping may occur</li>
+</ul></li>
+<li><p><em>Confirmatory factor analysis</em> basically adds on a hypothesis-testing layer to EFA for confirming that links actually exist between the <span class="math inline">\(k\)</span> factors uncovered by EFA and the <span class="math inline">\(p\)</span> original variables</p></li>
+</ul>
+</section>
+<section id="algorithm" class="level3" data-number="2.8.4">
+<h3 data-number="2.8.4" class="anchored" data-anchor-id="algorithm"><span class="header-section-number">2.8.4</span> Algorithm</h3>
+<p><img src="http://www.stat.cmu.edu/~pfreeman/pc1_proj.png" class="img-fluid"></p>
+<p><img src="http://www.stat.cmu.edu/~pfreeman/pc1.png" class="img-fluid"></p>
+<ul>
+<li><p>The <em>score</em>, or the coordinate of the <span class="math inline">\(i^{\rm th}\)</span> observation along PC <span class="math inline">\(j\)</span> is <span class="math display">\[Z_{ij} = \sum_{k=1}^p X_{ik} \phi_{kj}\]</span></p>
+<ul>
+<li><p><span class="math inline">\(k\)</span> represents the <span class="math inline">\(k^{\rm th}\)</span> variable or feature (i.e., the <span class="math inline">\(k^{\rm th}\)</span> column of your [predictor] data frame)</p></li>
+<li><p><span class="math inline">\(\phi\)</span> is the rotation (or <em>loading</em>) matrix, which is normalized such that <span class="math inline">\(\sum_{k=1}^p \phi_{kj}^2 = 1\)</span></p></li>
+</ul></li>
+<li><p>Note that since we are “mixing axes” when doing PCA, it is generally best to standardize (or scale) the data frame before applying the algorithm</p></li>
+</ul>
+</section>
+<section id="choosing-the-number-of-dimensions-to-retain" class="level3" data-number="2.8.5">
+<h3 data-number="2.8.5" class="anchored" data-anchor-id="choosing-the-number-of-dimensions-to-retain"><span class="header-section-number">2.8.5</span> Choosing the Number of Dimensions to Retain</h3>
+<ul>
+<li><p>Ideally, we choose <span class="math inline">\(M &lt; p\)</span> such that <span class="math display">\[x_{ij} = \sum_{m=1}^p z_{im}\phi_{jm} \approx \sum_{m=1}^M z_{im}\phi_{jm}\]</span></p>
+<ul>
+<li>in other words, we don’t lose much ability to reconstruct the input data <span class="math inline">\(X\)</span> by dropping the last <span class="math inline">\(p-M\)</span> principal components, which we assume represent random variation in the data (i.e., noise)</li>
+</ul></li>
+<li><p>One convention is to sum up the amount of variance explained in the first <span class="math inline">\(M\)</span> PCs, and adopt the smallest value of <span class="math inline">\(M\)</span> such that 90% or 95% or 99%, etc., of the overall variance is “explained”</p></li>
+<li><p>Another convention is to look for an “elbow” in the left plot below (the “scree plot”)</p>
+<p><img src="http://www.stat.cmu.edu/~pfreeman/propvar.png" class="img-fluid"></p></li>
+</ul>
+</section>
+<section id="example-2" class="level3" data-number="2.8.6">
+<h3 data-number="2.8.6" class="anchored" data-anchor-id="example-2"><span class="header-section-number">2.8.6</span> Example</h3>
+<ul>
+<li>Let’s suppose we have a catalog of galaxies that contains measures of brightness in different wavelength bands, from <code>u</code> (for ultraviolet) to <code>z</code> and <code>y</code> in the near-infrared</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>The six brightness metrics are obviously highly correlated!</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>pca.out <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(df[,<span class="sc">-</span><span class="dv">7</span>],<span class="at">scale=</span><span class="cn">TRUE</span>) <span class="co"># do not include response variable!</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>v       <span class="ot">&lt;-</span> pca.out<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cumsum</span>(v<span class="sc">/</span><span class="fu">sum</span>(v)),<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.977 0.998 0.999 1.000 1.000 1.000</code></pre>
+</div>
+</div>
+<ul>
+<li><p>The first principal component explains 97.7% of the variance in the dataset: the data can safely be transformed from a six-dimensional space to a one-dimensional one with minimal loss of statistical information</p></li>
+<li><p>Let’s print the column(s) for the PCs that we retain:</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(pca.out<span class="sc">$</span>rotation[,<span class="dv">1</span>],<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    u     g     r     i     z     y 
+0.396 0.411 0.413 0.412 0.410 0.408 </code></pre>
+</div>
+</div>
+<ul>
+<li><p>Here, we see that all the original variables contribute almost equally to the first PC (sign doesn’t matter)</p>
+<ul>
+<li>we conclude that the predictor variables (for all intents and purposes) lie along a one-dimensional line in the native six-dimensional space, and that the orientation of the line is such that it spans all six of the original predictor variable axes</li>
+</ul></li>
+<li><p>What information is in the second PC?</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(pca.out<span class="sc">$</span>rotation[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    PC1    PC2
+u 0.396  0.793
+g 0.411  0.247
+r 0.413 -0.089
+i 0.412 -0.205
+z 0.410 -0.320
+y 0.408 -0.398</code></pre>
+</div>
+</div>
+<ul>
+<li>The second PC primarily maps to u-band magnitude…basically, the PC2 vector, orthogonal to the PC1 vector, points largely along the u-band axis, meaning there is some data variability along that axis that PC1 does not “pick up”</li>
+</ul>
+</section>
+<section id="pc-regression" class="level3" data-number="2.8.7">
+<h3 data-number="2.8.7" class="anchored" data-anchor-id="pc-regression"><span class="header-section-number">2.8.7</span> PC Regression</h3>
+<ul>
+<li><p>TBD: move to extensions to linear regression chapter</p></li>
+<li><p>Let’s demonstrate how we would learn a principal components regression model using the distance of a galaxy from the Sun as a response variable</p></li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="DataEx_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>Reminder: why are we doing this?</p>
+<ul>
+<li><p>to mitigate multicollinearity</p></li>
+<li><p>so we can “trust” the standard error estimates output in the summary</p></li>
+</ul></li>
+<li><p>Let’s split the data:</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df),<span class="fu">round</span>(<span class="fl">0.7</span><span class="sc">*</span><span class="fu">nrow</span>(df)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>The test-set mean-squared error for a linear-regression model learned in the data’s native space:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>lm.out  <span class="ot">&lt;-</span> <span class="fu">lm</span>(redshift<span class="sc">~</span>.,<span class="at">data=</span>df,<span class="at">subset=</span>s)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>lm.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out,<span class="at">newdata=</span>df[<span class="sc">-</span>s,])</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lm.pred<span class="sc">-</span>df<span class="sc">$</span>redshift[<span class="sc">-</span>s])<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0008416416</code></pre>
+</div>
+</div>
+<ul>
+<li>The test-set mean-squared error for a PC regression model learned using all PCs:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>df.pc <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(pca.out<span class="sc">$</span>x,df<span class="sc">$</span>redshift)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df.pc) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PC1"</span>,<span class="st">"PC2"</span>,<span class="st">"PC3"</span>,<span class="st">"PC4"</span>,<span class="st">"PC5"</span>,<span class="st">"PC6"</span>,<span class="st">"y"</span>)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>.,<span class="at">data=</span>df.pc,<span class="at">subset=</span>s)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>lm.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out,<span class="at">newdata=</span>df.pc[<span class="sc">-</span>s,])</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lm.pred<span class="sc">-</span>df.pc<span class="sc">$</span>y[<span class="sc">-</span>s])<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0008416416</code></pre>
+</div>
+</div>
+<ul>
+<li><p>The test-set MSEs are the same!</p></li>
+<li><p>What happens if we learn a model with just the first two PCs, the ones that account for 99.8% of the data variability?</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>PC1<span class="sc">+</span>PC2,<span class="at">data=</span>df.pc,<span class="at">subset=</span>s)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>lm.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out,<span class="at">newdata=</span>df.pc[<span class="sc">-</span>s,])</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lm.pred<span class="sc">-</span>df.pc<span class="sc">$</span>y[<span class="sc">-</span>s])<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.001437671</code></pre>
+</div>
+</div>
+<ul>
+<li><p>The test-set MSE <em>increases</em>: there can be/will be a tradeoff between enhanced model interpretability and decreased model predictive ability if we summarily remove PCs</p>
+<ul>
+<li>PC regression learns models with “shifted” predictor variable values: with sufficient sample size, this can markedly impact prediction results, even if the retained PCs represent an overwhelming proportion of the cumulative variance</li>
+</ul></li>
+<li><p>What happens if we utilize <code>bestglm</code>?</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(bestglm))</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>bg.out <span class="ot">&lt;-</span> <span class="fu">bestglm</span>(df.pc,<span class="at">IC=</span><span class="st">"BIC"</span>)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>bg.out<span class="sc">$</span>BestModel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ ., data = data.frame(Xy[, c(bestset[-1], FALSE), 
+    drop = FALSE], y = y))
+
+Coefficients:
+(Intercept)          PC1          PC2          PC3          PC4          PC5  
+    0.17455      0.00569      0.02354     -0.09395      0.25060     -0.45007  
+        PC6  
+   -0.74064  </code></pre>
+</div>
+</div>
+<ul>
+<li><p>Upshot: the best set of PCs for visualization/intuition-building is not necessarily the best set of PCs for modeling!</p></li>
+<li><p>Let’s summarize the “best” model</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bg.out<span class="sc">$</span>BestModel)<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                Estimate   Std. Error    t value     Pr(&gt;|t|)
+(Intercept)  0.174550826 0.0009369600 186.294847 0.000000e+00
+PC1          0.005690051 0.0003872504  14.693466 2.389390e-44
+PC2          0.023536423 0.0025977839   9.060193 6.830750e-19
+PC3         -0.093945739 0.0118547286  -7.924748 6.147270e-15
+PC4          0.250602201 0.0179780474  13.939345 1.901929e-40
+PC5         -0.450074996 0.0369510332 -12.180309 6.773436e-32
+PC6         -0.740638090 0.0671668890 -11.026833 9.593036e-27</code></pre>
+</div>
+</div>
+<ul>
+<li><p>We see if we change, e.g., PC2 by 1 unit, the distance will change by 0.024…but how does that change map back to the original variables?</p>
+<ul>
+<li>so while it can be worthwhile to shift to PC coordinates to mitigate multicollinearity, <em>crafting an inferential data story that refers back to the original variables can be difficult</em> (and this would be the reason why we wouldn’t “just do” PC regression all the time!)</li>
+</ul></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./intro.html" class="pagination-link" aria-label="Introduction">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./SupLearn.html" class="pagination-link" aria-label="Supervised Learning">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

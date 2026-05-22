@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>10&nbsp; String Processing – Basic Statistical Learning: a Guide for the Perplexed</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./UnsupLearn.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Strings.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">String Processing</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Basic Statistical Learning: a Guide for the Perplexed</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./DataEx.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Exploration</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./SupLearn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./LinMod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Linear Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ExtenLin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extensions to the Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./NonLinMod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Nonlinear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ANOVA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Analysis of Variance and Random Effects Modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ML.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Machine Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./UnsupLearn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Strings.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">String Processing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#basic-string-manipulation" id="toc-basic-string-manipulation" class="nav-link active" data-scroll-target="#basic-string-manipulation"><span class="header-section-number">10.1</span> Basic String Manipulation</a></li>
+  <li><a href="#regular-expressions" id="toc-regular-expressions" class="nav-link" data-scroll-target="#regular-expressions"><span class="header-section-number">10.2</span> Regular Expressions</a></li>
+  <li><a href="#word-tables" id="toc-word-tables" class="nav-link" data-scroll-target="#word-tables"><span class="header-section-number">10.3</span> Word Tables</a></li>
+  <li><a href="#string-searching" id="toc-string-searching" class="nav-link" data-scroll-target="#string-searching"><span class="header-section-number">10.4</span> String Searching</a></li>
+  <li><a href="#string-extraction-and-replacement" id="toc-string-extraction-and-replacement" class="nav-link" data-scroll-target="#string-extraction-and-replacement"><span class="header-section-number">10.5</span> String Extraction and Replacement</a></li>
+  <li><a href="#stopwords" id="toc-stopwords" class="nav-link" data-scroll-target="#stopwords"><span class="header-section-number">10.6</span> Stopwords</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">String Processing</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<ul>
+<li><p>A string is a sequence of characters that are bound together, where a character is a symbol is a written language</p>
+<ul>
+<li>in <code>R</code>, a string is of class <code>character</code> and is bounded by quotes (either single or double)…double quotes are preferable, because then one can use single quotes as apostrophes in strings</li>
+</ul></li>
+</ul>
+<section id="basic-string-manipulation" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="basic-string-manipulation"><span class="header-section-number">10.1</span> Basic String Manipulation</h2>
+<ul>
+<li><p>Below, we load in the text of Hillary Clinton’s acceptance of the Democratic Party nomination in 2016</p>
+<ul>
+<li>we use the <code>readLines()</code> function, which reads in data from an ASCII text file line-by-line</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>lines <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">"http://www.stat.cmu.edu/~pfreeman/clinton.txt"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>lines[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Thank you! Thank you all very much! Thank you for that amazing welcome. "</code></pre>
+</div>
+</div>
+<ul>
+<li>To concatenate strings, use the <code>paste()</code> function</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(lines[<span class="dv">1</span>],lines[<span class="dv">3</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Thank you! Thank you all very much! Thank you for that amazing welcome.  Thank you all for the great convention that we’ve had."</code></pre>
+</div>
+</div>
+<ul>
+<li>Note that by default, the strings are concatenated with a space separating them; this is controlled by the <code>sep</code> argument</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(lines[<span class="dv">1</span>],lines[<span class="dv">3</span>],<span class="at">sep=</span><span class="st">" 1 2 3 "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Thank you! Thank you all very much! Thank you for that amazing welcome.  1 2 3 Thank you all for the great convention that we’ve had."</code></pre>
+</div>
+</div>
+<ul>
+<li>Note that above, we pasted two separate arguments together; we can also pass in a vector of strings, in which case the separation is controlled by the <code>collapse</code> argument</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(lines[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>],<span class="at">collapse=</span><span class="st">" "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Thank you! Thank you all very much! Thank you for that amazing welcome.   Thank you all for the great convention that we’ve had."</code></pre>
+</div>
+</div>
+<ul>
+<li><code>sep</code> and <code>collapse</code> can be combined</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="fu">c</span>(<span class="st">"a"</span>,<span class="st">"b"</span>),<span class="fu">c</span>(<span class="st">"1"</span>,<span class="st">"2"</span>),<span class="at">sep=</span><span class="st">"+"</span>) ; <span class="fu">paste</span>(<span class="fu">c</span>(<span class="st">"a"</span>,<span class="st">"b"</span>),<span class="fu">c</span>(<span class="st">"1"</span>,<span class="st">"2"</span>),<span class="at">sep=</span><span class="st">"+"</span>,<span class="at">collapse=</span><span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "a+1" "b+2"</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "a+1,b+2"</code></pre>
+</div>
+</div>
+<ul>
+<li>To count the number of characters in a string, use the function <code>nchar()</code> (as opposed to <code>length()</code>, which counts the number of elements in a vector)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(lines)       <span class="co"># number of lines input via readLines()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 301</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nchar</span>(lines)[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]   <span class="co"># number of characters in each of the first three lines</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 72  0 54</code></pre>
+</div>
+</div>
+<ul>
+<li>If you, for instance, want to extract the first and last ten characters in one of the lines, you would use <code>substr()</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">substr</span>(lines[<span class="dv">53</span>],<span class="dv">1</span>,<span class="dv">10</span>)                                <span class="co"># characters 1 through 10 of line 53</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Too many p"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">substr</span>(lines[<span class="dv">53</span>],<span class="fu">nchar</span>(lines[<span class="dv">53</span>])<span class="sc">-</span><span class="dv">9</span>,<span class="fu">nchar</span>(lines[<span class="dv">53</span>])) <span class="co"># ...and the last ten characters</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "the crash."</code></pre>
+</div>
+</div>
+<ul>
+<li><p>Suppose you want to split a string on a particular character</p>
+<ul>
+<li>the most common example is splitting on spaces, to get all the words in a string</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">strsplit</span>(lines[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)],<span class="at">split=</span><span class="st">" "</span>)  <span class="co"># split the first and third lines on spaces</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+ [1] "Thank"    "you!"     "Thank"    "you"      "all"      "very"    
+ [7] "much!"    "Thank"    "you"      "for"      "that"     "amazing" 
+[13] "welcome."
+
+[[2]]
+ [1] "Thank"      "you"        "all"        "for"        "the"       
+ [6] "great"      "convention" "that"       "we’ve"      "had."      </code></pre>
+</div>
+</div>
+<ul>
+<li><p>We immediately note the following:</p>
+<ul>
+<li><p><code>strsplit()</code> returns a list, with each element of the list mapping back to each element of the string vector that was input (here, we input two lines, and got back a list with two elements)</p></li>
+<li><p>each list element contains a vector of split-up characters</p></li>
+<li><p>not every output string is actually a word</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="regular-expressions" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="regular-expressions"><span class="header-section-number">10.2</span> Regular Expressions</h2>
+<ul>
+<li><p><em>Regular expressions</em>, or <em>regexes</em>, are specially constructed strings that allow for flexible pattern matching</p>
+<ul>
+<li>the rules for constructing regexes are independent of <code>R</code>; you may already know them</li>
+</ul></li>
+<li><p>We will focus on the use of square brackets and metacharacters to define a regex</p></li>
+<li><p>Square brackets: we want to match any one character that appears inside</p>
+<ul>
+<li><p>“[abcde]” means “look for any string that contains a, b, c, d, or e” (case sensitive!)</p></li>
+<li><p>“[a-e]” means the same thing; the dash denotes a range</p></li>
+<li><p>“[^a-e]” means “look for any string that contain characters other than a, b, c, d, or e”</p></li>
+<li><p>” [1-4][2-6] ” matches strings that contain the numbers 12-16, 22-26, 32-36, or 42-46</p></li>
+</ul></li>
+<li><p>Let’s split the first two lines from the speech on spaces <em>and</em> exclamation points</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">strsplit</span>(lines[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)],<span class="at">split=</span><span class="st">"[ !]"</span>) <span class="co"># not space, then exclamation point, but space or exclamation point</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+ [1] "Thank"    "you"      ""         "Thank"    "you"      "all"     
+ [7] "very"     "much"     ""         "Thank"    "you"      "for"     
+[13] "that"     "amazing"  "welcome."
+
+[[2]]
+ [1] "Thank"      "you"        "all"        "for"        "the"       
+ [6] "great"      "convention" "that"       "we’ve"      "had."      </code></pre>
+</div>
+</div>
+<ul>
+<li><p>Commonly used metacharacters include</p>
+<ul>
+<li><p>“[[:alnum:]]” is the same as “[a-zA-Z0-9]”</p></li>
+<li><p>“[[:punct:]]” means “match any string that contains a punctuation mark”</p></li>
+<li><p>“[[:space:]]” means “match any string that contains a space, a tab, or a new line”</p></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">strsplit</span>(lines[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)],<span class="at">split=</span><span class="st">"( |[[:punct:]])"</span>) <span class="co"># split on space or a punctuation mark</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+ [1] "Thank"   "you"     ""        "Thank"   "you"     "all"     "very"   
+ [8] "much"    ""        "Thank"   "you"     "for"     "that"    "amazing"
+[15] "welcome" ""       
+
+[[2]]
+ [1] "Thank"      "you"        "all"        "for"        "the"       
+ [6] "great"      "convention" "that"       "we"         "ve"        
+[11] "had"       </code></pre>
+</div>
+</div>
+<ul>
+<li><p>But now we’ve split on the apostrophe (and we have empty strings)</p>
+<ul>
+<li>we’ll stop here because we’ve (basically) made the point of how to turn text input into words…</li>
+</ul></li>
+<li><p>…well, except for one last thing</p></li>
+<li><p>In <code>R</code>, the following are special characters</p></li>
+</ul>
+<pre><code>. $ ^ * + ? \ | { } [ ] ( ) \</code></pre>
+<ul>
+<li><p>To find occurrences of these symbols in strings, we use an <em>escape sequence</em>: we place a backslash in front of the symbol</p>
+<ul>
+<li>but given that the backslash is a special character, it itself needs to be escaped</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">strsplit</span>(lines[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)],<span class="at">split=</span><span class="st">"[ !</span><span class="sc">\\</span><span class="st">.]"</span>) <span class="co"># split on spaces, exclamation points, and escaped periods</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+ [1] "Thank"   "you"     ""        "Thank"   "you"     "all"     "very"   
+ [8] "much"    ""        "Thank"   "you"     "for"     "that"    "amazing"
+[15] "welcome" ""       
+
+[[2]]
+ [1] "Thank"      "you"        "all"        "for"        "the"       
+ [6] "great"      "convention" "that"       "we’ve"      "had"       </code></pre>
+</div>
+</div>
+</section>
+<section id="word-tables" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="word-tables"><span class="header-section-number">10.3</span> Word Tables</h2>
+<ul>
+<li>What are the 20 most common words in Clinton’s speech?</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">table</span>(<span class="fu">unlist</span>(<span class="fu">strsplit</span>(lines,<span class="at">split=</span><span class="st">"[ !</span><span class="sc">\\</span><span class="st">.]"</span>))),<span class="at">decreasing=</span><span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+      the   to  and    a   of   in  you  our   we  And that    I  for    -   is 
+ 253  199  171  157   99   97   72   70   69   69   59   58   56   53   43   42 
+ are   it will with 
+  36   36   36   36 </code></pre>
+</div>
+</div>
+<ul>
+<li><p>We note a few more things here:</p>
+<ul>
+<li><p><code>unlist()</code> is a way to concatenate all the elements of a list together into a single vector</p></li>
+<li><p>we need to do some additional processing to remove the empty strings</p></li>
+<li><p>case sensitivity impacts the count (e.g., “and” and “And” were treated separately)…this can be mitigated by applying the <code>tolower()</code> function after <code>unlist()</code>, which converts all letters to lower case</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="string-searching" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="string-searching"><span class="header-section-number">10.4</span> String Searching</h2>
+<ul>
+<li><p>If you want to see if a particular word appears in a line, you can use the <code>grep</code> family of functions</p>
+<ul>
+<li>e.g., if you want to determine if “And” occurs on a line, use <code>grepl()</code>, which turns <code>TRUE</code> or <code>FALSE</code></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grepl</span>(<span class="st">"And"</span>,lines[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE FALSE FALSE  TRUE</code></pre>
+</div>
+</div>
+<ul>
+<li>String searches allow for regexes</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grepl</span>(<span class="st">"(and|And)"</span>,lines[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE FALSE FALSE  TRUE</code></pre>
+</div>
+</div>
+<ul>
+<li><code>grep()</code> itself either returns the number of the line in which the string is observed (here, line 5)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">"and"</span>,lines[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+</div>
+<ul>
+<li>If you pass in the argument <code>value=TRUE</code>, you get the lines themselves</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">"and"</span>,lines[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>],<span class="at">value=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "And Chelsea, thank you. I'm so proud to be your mother and so proud of the woman you've become. Thank you for bringing Marc into our family, and Charlotte and Aidan into the world. "</code></pre>
+</div>
+</div>
+</section>
+<section id="string-extraction-and-replacement" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="string-extraction-and-replacement"><span class="header-section-number">10.5</span> String Extraction and Replacement</h2>
+<ul>
+<li><p>We saw above that we can use <code>substr()</code> to extract a substring</p>
+<ul>
+<li>however, we need to specify where the substring starts and where it ends</li>
+</ul></li>
+<li><p>A more dynamic extractor involves combining <code>gregexpr()</code> and <code>regmatches()</code></p>
+<ul>
+<li>let’s extract every occurrence of “and” and “And” in the first five lines</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>out     <span class="ot">&lt;-</span> <span class="fu">gregexpr</span>(<span class="st">"(a|A)nd"</span>,lines[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>matches <span class="ot">&lt;-</span> <span class="fu">regmatches</span>(lines[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>],out)     <span class="co"># outputs a list, one for each line</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unlist</span>(matches)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "And" "and" "and" "and"</code></pre>
+</div>
+</div>
+<ul>
+<li><p>Let’s say that instead of splitting on punctuation, as we (eventually) did above, we want to remove or replace them</p>
+<ul>
+<li>one way to do that is to use <code>gsub()</code></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gsub</span>(<span class="st">"[[:punct:]]"</span>,<span class="st">"-"</span>,lines[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Thank you- Thank you all very much- Thank you for that amazing welcome- "</code></pre>
+</div>
+</div>
+</section>
+<section id="stopwords" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="stopwords"><span class="header-section-number">10.6</span> Stopwords</h2>
+<ul>
+<li><p>One last thing to look at is the removal of uninformative <em>stopwords</em> from a document</p></li>
+<li><p>It is often the case that we’d want to remove words like “a”, “and”, and “the,” etc., before doing any real statistical analysis</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stopwords)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">stopwords</span>(<span class="st">"en"</span>),<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "i"         "me"        "my"        "myself"    "we"        "our"      
+ [7] "ours"      "ourselves" "you"       "your"     </code></pre>
+</div>
+</div>
+<ul>
+<li>Here’s what Clinton’s speech looks like after simplistic processing and stopword removal</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>speech           <span class="ot">&lt;-</span> <span class="fu">tolower</span>(<span class="fu">unlist</span>(<span class="fu">strsplit</span>(lines,<span class="at">split=</span><span class="st">"[ ,!</span><span class="sc">\\</span><span class="st">.]"</span>)))</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>w                <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">nchar</span>(speech)<span class="sc">==</span><span class="dv">0</span>)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>speech           <span class="ot">&lt;-</span> speech[<span class="sc">-</span>w]  <span class="co"># could do speech &lt;- speech[speech!=""] also, or dplyr...</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>stopword.logical <span class="ot">&lt;-</span> speech <span class="sc">%in%</span> <span class="fu">stopwords</span>(<span class="st">"en"</span>)      <span class="co"># is element of left "in" vector at right? [T/F]</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(speech[stopword.logical<span class="sc">==</span><span class="cn">FALSE</span>],<span class="at">collapse=</span><span class="st">" "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "thank thank much thank amazing welcome thank great convention we’ve chelsea thank proud mother proud woman become thank bringing marc family charlotte aidan world bill conversation started law library 45 years ago still going strong know conversation lasted good times filled us joy hard times tested us even gotten words along way tuesday night happy see explainer-in-chief still job also grateful rest family friends lifetime whose hard work brought us tonight joined campaign week thank remarkable week heard man hope bill clinton man hope barack obama america stronger president obama's leadership better friendship heard terrific vice president one-and-only joe biden spoke big heart party's commitment working people can first lady michelle obama reminded us children watching president elect going president just getting know tim kaine - soon understand people virginia keep promoting him: city council mayor governor now senator make whole country proud vice president want thank bernie sanders bernie campaign inspired millions americans particularly young people threw hearts souls primary put economic social justice issues front center belong supporters around country: want know heard cause cause country needs ideas energy passion way can turn progressive platform real change america wrote together - now go make happen together friends come philadelphia - birthplace nation - happened city 240 years ago still something teach us today know story usually focus turned - enough close story came never written representatives 13 unruly colonies met just road wanted stick king wanted stick king revolution hung balance somehow began listening - compromising - finding common purpose time left philadelphia begun see one nation made possible stand king took courage courage founders embraced enduring truth stronger together now america moment reckoning powerful forces threatening pull us apart bonds trust respect fraying just founders guarantees truly us decide whether work together can rise together country's motto e pluribus unum: many one stay true motto? well heard donald trump's answer last week convention wants divide us - rest world betting perils today's world blind us unlimited promise taken republican party long way \"morning america\" \"midnight america \" wants us fear future fear well great democratic president franklin delano roosevelt came perfect rebuke trump 80 years ago much perilous time: “the thing fear fear ” now clear-eyed country afraid rise challenge just always build wall instead build economy everyone wants good job can get one build path citizenship millions immigrants already contributing economy ban religion work americans allies fight defeat terrorism yet know lot many people pay raise since crash much inequality little social mobility much paralysis washington many threats home abroad just look minute strengths bring americans meet challenges dynamic diverse people world tolerant generous young people ever powerful military innovative entrepreneurs enduring values - freedom equality justice opportunity proud words associated us tell secretary state went 112 countries people hear words hear america let anyone tell country weak let anyone tell takes believe anyone says: “i alone can fix ” yes actually donald trump's words cleveland set alarm bells us really? alone can fix it? forgetting troops front lines? police officers firefighters run toward danger? doctors nurses care us? teachers change lives? entrepreneurs see possibilities every problem? mothers lost children violence building movement keep kids safe? forgetting every last one us americans say: “i alone can fix ” say: “we'll fix together ” remember remember: founders fought revolution wrote constitution america never nation one person power two hundred forty years later still put faith look happened dallas assassinations five brave police officers police chief david brown asked community support force maybe even join know community responded? nearly 500 people applied just 12 days americans answer call help goes twenty years ago wrote book called \"it takes village \" lot people looked title asked \"what heck mean that?\" mean: none us can raise family build business heal community lift country totally alone america needs every one us lend energy talents ambition making nation better stronger believe heart \"stronger together\" just lesson history just slogan campaign guiding principle country always future going build country economy works everyone just top can get good job send kids good school matter zip code live country children can dream dreams within reach families strong communities safe yes love trumps hate country fighting future working toward humility determination boundless confidence america's promise accept nomination president united states now sometimes people podium new national stage know one people first lady served eight years senator great state new york represented secretary state job titles tell done tell truth years public service \"service\" part always come easier \"public\" part get people just know make let tell family well one name big buildings family builders different kind builders way american families used whatever tools - whatever god gave - whatever life america provided - built better lives better futures kids grandfather worked scranton lace mill 50 years believed gave everything children better life right dad hugh made college played football penn state enlisted navy pearl harbor war started small business printing fabric draperies remember watching stand hours silk screens wanted give brothers opportunities never mother dorothy abandoned parents young girl ended 14 working house maid saved kindness others first grade teacher saw nothing eat lunch brought extra food share lesson passed years later stuck me: one gets life alone look lift made sure learned words methodist faith: \"do good can people can ways can long ever can \" went work children's defense fund going door-to-door new bedford massachusetts behalf children disabilities denied chance go school remember meeting young girl wheelchair small back porch house told badly wanted go school - just seem possible days stop thinking mother went child became clear simply caring enough drive real progress change hearts laws need understanding action gathered facts built coalition work helped convince congress ensure access education students disabilities big idea it? every kid disability right go school how? make idea like real? step-by-step year-by-year sometimes even door-by-door heart just swelled saw anastasia somoza representing millions young people stage - changed law make sure got education true sweat details policy - whether talking exact level lead drinking water flint michigan number mental health facilities iowa cost prescription drugs just detail kid family big deal big deal president four days convention seen people who've inspired people let lives became part mine people like ryan moore lauren manning told stories tuesday night first met ryan 7-year-old wearing full body brace must weighed 40 pounds leaned lift children like ryan kept going plan universal health care failed kept working leaders parties help create children's health insurance program covers 8 million kids country lauren manning stood grace power gravely injured 9/11 thought debbie st john saw movie john dolan joe sweeney victims survivors kept working hard senate behalf 9/11 families first responders got sick time ground zero still thinking lauren debbie others 10 years later white house situation room president obama made courageous decision finally brought osama bin laden justice campaign met many people motivate keep fighting change help carry voices stories white house heard heard republicans independents supporting campaign well president democrats republicans independents struggling striving successful vote americans together tonight reached milestone nation's march toward perfect union: first time major party nominated woman president standing - standing mother's daughter daughter's mother happy day come i’m happy grandmothers little girls everyone i’m happy boys men - barrier falls americait clears way everyone ceilings sky's limit keep going let’s keep going every one 161 million women girls across america opportunity deserves even important history make tonight history write together years ahead begin going help working people country get ahead stay ahead now think president obama vice president biden get credit deserve saving us worst economic crisis lifetimes economy much stronger took office nearly 15 million new private-sector jobs twenty million americans health insurance auto industry just best year ever now real progress none us can satisfied status quo long shot still facing deep-seated problems developed long recession stayed us recovery gone around country talking working families heard many feel like economy sure isn’t working frustrated - even furious know what? right yet working way americans willing work work hard right now awful lot people feel less less respect work less respect period democrats party working people done good enough job showing get going going something help want tell tonight empower americans live better lives primary mission president create opportunity good jobs rising wages right united states first day office last especially places long left left behind inner cities small towns indian country coal country communities ravaged addiction regions hollowed plant closures believe believe america thrives middle class thrives believe economy working way democracy working way need appoint supreme court justices get money politics expand voting rights restrict necessary pass constitutional amendment overturn citizens united believe american corporations gotten much country just patriotic return many many wrong take tax breaks one hand give pink slips believe wall street can never ever allowed wreck main street believe science believe climate change real can save planet creating millions good-paying clean energy jobs believe millions hardworking immigrants contributing economy self-defeating inhumane try kick comprehensive immigration reform grow economy keep families together - right thing whatever party belong belong party share beliefs campaign believe companies share profits pad executive bonuses join us believe minimum wage living wage… one working full time raise children poverty join us believe every man woman child america right affordable health care join us believe say \"no\" unfair trade deals stand china support steelworkers autoworkers homegrown manufacturers join us believe expand social security protect woman's right make health care decisions join us yes believe working mother wife sister daughter deserves equal pay join us that’s we’re going make sure economy works everyone just top now hear - - donald trump convention spoke 70-odd minutes - mean odd offered zero solutions already know believe things wonder like talking plans might noticed love talking mine first 100 days work parties pass biggest investment new good-paying jobs since world war ii jobs manufacturing clean energy technology innovation small business infrastructure invest infrastructure now create jobs today lay foundation jobs future also transform way prepare young people jobs bernie sanders work together make college tuition-free middle class debt-free also - also - liberate millions people already student debt just right donald trump can ignore debts students families refinance debts something say often enough: sure college crucial four-year degree path good job help people learn skill practice trade make good living give small businesses like dad's boost make easier get credit way many dreams die parking lots banks america can dream able build help balance family work know fighting affordable child care paid family leave playing \"woman card \" deal now now thing now going make investments going pay every single one how: wall street corporations super-rich going start paying fair share taxes - resent success 90% gains gone top 1% money going follow money companies take tax breaks ship jobs overseas make pay us back put money work belongs: creating jobs home now imagine sitting home thinking well sounds pretty good going get done? going break gridlock washington? well look record i’ve worked across aisle pass laws treaties launch new programs help millions people give chance that’s exactly i’ll president — also imagine people thinking trump businessman must know something economy well take closer look shall we? atlantic city 60 miles find contractors small businesses lost everything donald trump refused pay bills now remember president said last night — boo vote think people work needed money pay pay just stiffed know sales pitch making president? put faith - win big? sales pitch made small businesses trump walked away left working people holding bag also talks big game putting america first well please explain part america first leads make trump ties china colorado trump suits mexico michigan trump furniture turkey ohio trump picture frames india wisconsin donald trump says wants make america great - well start actually making things america now choice face election just stark comes national security anyone anyone reading news can see threats turbulence face baghdad kabul nice paris brussels san bernardino toorlando dealing determined enemies must defeated wonder people anxious looking reassurance looking steady leadership wanting leader understands stronger work allies around world care veterans home keeping nation safe honoring people highest priority proud put lid iran's nuclear program without firing single shot - now enforce must keep supporting israel's security proud shaped global climate agreement - now hold every country accountable commitments including proud stand allies nato threat face including russia laid strategy defeating isis strike sanctuaries air support local forces taking ground surge intelligence detect prevent attacks happen disrupt efforts online reach radicalize young people country easy quick make mistake - prevail now donald trump donald trump says quote \"i know isis generals \" donald thinks knows military claimed armed forces \"a disaster \" well privilege work closely troops veterans many years including senator armed services committee know wrong military national treasure entrust commander-in-chief make hardest decisions nation faces decisions war peace life death president respect men women risk lives serve country - including captain khan sons tim kaine mike pence marines just ask yourself: really think donald trump temperament commander-in-chief? donald trump even handle rough-and-tumble presidential campaign loses cool slightest provocation - gotten tough question reporter challenged debate sees protestor rally imagine dare imagine imagine oval office facing real crisis man can bait tweet man can trust nuclear weapons put better jackie kennedy cuban missile crisis said worried president kennedy dangerous time war might started - big men self-control restraint little men - ones moved fear pride america's strength come lashing relies smarts judgment cool resolve precise strategic application power kind commander-in-chief pledge serious keeping country safe also afford president pocket gun lobby repeal 2nd amendment take away guns just want shot someone gun first place work tirelessly responsible gun owners pass common-sense reforms keep guns hands criminals terrorists others us harm decades people said issue hard solve politics hot touch ask you: can just stand nothing? heard saw family members people killed gun violence stage heard saw family members police officers killed line duty outgunned criminals refuse believe find common ground heal divides country just guns race immigration starts listening listening trying best can walk other's shoes put shoes young black latino men women face effects systemic racism made feel like lives disposable put shoes police officers kissing kids spouses goodbye every day heading dangerous necessary job reform criminal justice system end-to-end rebuild trust law enforcement communities serve defend defend rights - civil rights human rights voting rights - women's rights workers' rights - lgbt rights rights people disabilities stand mean divisive rhetoric wherever comes past year many people made mistake laughing donald trump's comments - excusing entertainer just putting show thought possibly mean horrible things says - like called women \"pigs \" said american judge fair mexican heritage mocks mimics reporter disability insults prisoners war like john mccain — hero patriot deserves respect now first admit believe meant either just hard fathom - someone wants lead nation say things like sad truth: donald trump end comes donald trump get: america great - america good enough bigotry bombast donald trump's offering real change offering empty promises offering? bold agenda improve lives people across country - keep safe get good jobs give kids opportunities deserve choice clear friends every generation americans come together make country freer fairer stronger none us ever can alone know time much seems pulling us apart can hard imagine ever pull together tell tonight - progress possible know know seen lives people across america get knocked get right back know life times pick get back game like much else life got mother never let back challenge tried hide neighborhood bully literally blocked door \"go back \" said right stand bullies keep working make things better even odds long opposition fierce lost mother years ago miss every day still hear voice urging keep working keep fighting right matter need together nation though \"we may live see glory \" song musical hamilton goes \"let us gladly join fight \" let legacy \"planting seeds garden never get see \" just hall earth founders showed us many others since drawn together love country selfless passion build something better follow story america begin new chapter tonight yes world watching yes america's destiny choose stronger together fellow americans look future courage confidence build better tomorrow beloved children beloved country america greater ever thank may god bless united states america"</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./UnsupLearn.html" class="pagination-link" aria-label="Unsupervised Learning">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

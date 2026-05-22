@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Linear Models – Basic Statistical Learning: a Guide for the Perplexed</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ExtenLin.html" rel="next">
+<link href="./SupLearn.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./LinMod.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Linear Models</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Basic Statistical Learning: a Guide for the Perplexed</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./DataEx.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Data Exploration</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./SupLearn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./LinMod.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Linear Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ExtenLin.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extensions to the Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./NonLinMod.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Nonlinear Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ANOVA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Analysis of Variance and Random Effects Modeling</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ML.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Machine Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./UnsupLearn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Strings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">String Processing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup"><span class="header-section-number">4.1</span> Setup</a></li>
+  <li><a href="#model-assumptions-and-diagnostics" id="toc-model-assumptions-and-diagnostics" class="nav-link" data-scroll-target="#model-assumptions-and-diagnostics"><span class="header-section-number">4.2</span> Model Assumptions and Diagnostics</a>
+  <ul class="collapse">
+  <li><a href="#mean-model-mispecification" id="toc-mean-model-mispecification" class="nav-link" data-scroll-target="#mean-model-mispecification"><span class="header-section-number">4.2.1</span> Mean Model Mispecification</a></li>
+  <li><a href="#non-constant-error-variance" id="toc-non-constant-error-variance" class="nav-link" data-scroll-target="#non-constant-error-variance"><span class="header-section-number">4.2.2</span> Non-Constant Error Variance</a></li>
+  <li><a href="#non-normality-of-errors" id="toc-non-normality-of-errors" class="nav-link" data-scroll-target="#non-normality-of-errors"><span class="header-section-number">4.2.3</span> Non-Normality of Errors</a></li>
+  </ul></li>
+  <li><a href="#outliers" id="toc-outliers" class="nav-link" data-scroll-target="#outliers"><span class="header-section-number">4.3</span> Outliers</a></li>
+  <li><a href="#multicollinearity" id="toc-multicollinearity" class="nav-link" data-scroll-target="#multicollinearity"><span class="header-section-number">4.4</span> Multicollinearity</a>
+  <ul class="collapse">
+  <li><a href="#variance-inflation-factor" id="toc-variance-inflation-factor" class="nav-link" data-scroll-target="#variance-inflation-factor"><span class="header-section-number">4.4.1</span> Variance Inflation Factor</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Linear Models</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- 
+## The Setting
+
+- A probability distribution is a mathematical function $f_X(x \vert \theta)$ where
+
+  + $x$ is discretely or continuously valued
+
+  + $\theta$ is a set of one or more parameters governing the shape and location of the distribution (e.g., $\theta = \{\mu,\sigma^2\}$ for a normal)
+
+- When $x$ is discretely valued, $f_X(x \vert \theta)$ is a *probability mass function*, or *pmf*
+
+- When $x$ is continuously valued, $f_X(x \vert \theta)$ is a *probability density function* or *pdf*
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+:::
+
+
+- We are discussing distributions because in parameterized regression we make assumptions about how the response variable is distributed around the true regression line
+
+- For instance, for simple linear regression, we assume that for every $x$:
+
+  + the mean of the normal distribution is $\mu \vert x = E[Y \vert x] = \beta_0 + \beta_1 x$
+
+  + the variance of the normal distribution is $\sigma^2$, which is a constant (i.e., does not vary with $x$)
+
+  + the distribution governing the possible values of $Y \vert x$ has an infinite domain (and maybe it is a *normal* distribution)
+
+- But...
+
+  + what is $Y \vert x$ does not have an infinite domain? 
+  
+  + what if $Y \vert x$ is not continuously valued?
+
+- If one or both of these is the case, we would consider utilizing *generalized linear models*, or *GLMs*
+
+- In practice, there will be many possibilities and we might not know which one is right, but any assumption we make *should* be consistent with how the response is distributed
+  
+- Common assumptions that are made in practice:
+
+| Domain of $Y$ | Consistent Distributions |
+| ------------- | ------------------------ |
+| $(-\infty,\infty)$ | normal |
+| $[0,\infty)$ | Poisson, gamma, exponential, chi-square |
+| $[0,n]$ | multinomial |
+| $[0,1]$ | beta, binomial |
+
+- Some of the distributions above are appropriate for continuous data (gamma, exponential, chi-square, beta) and some for discrete data (Poisson, multinomial, binomial)
+
+  + foreshadowing: logistic regression assumes the binomial distribution
+
+.pull-left[
+- Let's assume we have one predictor, where the linear function is
+$$
+\beta_0 + \beta_1 x
+$$
+
+- We use a *link function* $g(\cdot)$ to map this line to a restricted domain 
+
+- There are no unique transformations, but there are some that are commonly used
+
+- To map to the domain $Y \vert x \geq 0$ (above right):
+$$
+g(\mu \vert x) = \log(\mu \vert x) = \beta_0 + \beta_1 x ~\Rightarrow~ \mu \vert x = e^{\beta_0 + \beta_1 x}
+$$
+
+- To map to the domain $Y \vert x \in [0,1]$ (below right):
+$$
+g(\mu \vert x) = \log\left(\frac{\mu \vert x}{1 - \mu \vert x}\right) = \beta_0 + \beta_1 x ~\Rightarrow~ \mu \vert x = \frac{e^{\beta_0 + \beta_1 x}}{1+e^{\beta_0 + \beta_1 x}}
+$$
+]
+
+
+::: {.cell}
+
+:::
+
+
+- Estimates $\beta_0$ and $\beta_1$ are made via maximization of the likelihood function, e.g.,
+$${\cal L} = \prod_{i=1}^{n_{\rm train}} f_{Y}(y_i \vert \mu_i = e^{\beta_0 + \beta_1 x_i})$$
+  + how to read this: plug in guesses $\beta_0$ and $\beta_1$,
+  determine $\mu_i$ given those guesses, evaluate
+  the probability density function amplitude for $Y_i$ given $\mu_i$,
+  and repeat for all data (and multiply the results together)
+  
+  + change $\beta_0$ and $\beta_1$ until this function attains its 
+  maximum value
+  
+  + the MLE is found via *numerical* optimization and thus GLMs are slower
+  to learn than ordinary least squares models
+
+- Of course, we need to *pick an appropriate distribution* (go back
+two slide) so that we have the functional form for $f_Y(y_i \vert \mu_i)$
+-->
+<section id="setup" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="setup"><span class="header-section-number">4.1</span> Setup</h2>
+<p>Simple linear regression describes the linear relationship between the outcome <span class="math inline">\(Y\)</span> and a covariate of interest <span class="math inline">\(x\)</span> (for simplicity, we will assume that the <span class="math inline">\(x\)</span>’s are fixed and the <span class="math inline">\(Y\)</span>’s are random variables). Under simple linear regression, we assume that for all units <span class="math inline">\(i = 1, \dots, n\)</span>:</p>
+<p><span id="eq-SLR"><span class="math display">\[
+Y_i = \beta_0 + \beta_1 x_i + \epsilon_i \quad \text{with }\epsilon_i \sim \text{Normal}(0, \sigma^2)
+\tag{4.1}\]</span></span></p>
+<p>The simple linear regression model given in <a href="#eq-SLR" class="quarto-xref">Equation&nbsp;<span>4.1</span></a> can be extended in various ways. For example, we might want to include different powers of <span class="math inline">\(x\)</span> (e.g., <span class="math inline">\(x, x^2, x^3, \dots\)</span>) in the linear model. This is known as <em>polynomial regression</em>, which we discuss in more detail in <a href="./NonLinMod.html">Chapter 6</a>.</p>
+<p>Another natural extension is to include multiple covariates <span class="math inline">\(\mathbf{x} = (x_1, \dots, x_p)\)</span>, rather than just a single covariate, in the linear model. This is commonly referred to as <em>multiple linear regression</em>, which assumes that for all units <span class="math inline">\(i = 1, \dots, n\)</span>:</p>
+<p><span id="eq-MLR"><span class="math display">\[
+Y_i = \beta_0 + \beta_1 x_{1i} + \cdots + \beta_p x_{pi} + \epsilon_i \quad \text{with } \epsilon_i \sim \text{Normal}(0, \sigma^2)
+\tag{4.2}\]</span></span></p>
+<p>Thus, simple linear regression can be seen as a special case of multiple linear regression, where the number of covariates <span class="math inline">\(p = 1\)</span>. For simplicity, we refer to mulitple linear regression as linear regression.</p>
+</section>
+<section id="model-assumptions-and-diagnostics" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="model-assumptions-and-diagnostics"><span class="header-section-number">4.2</span> Model Assumptions and Diagnostics</h2>
+<p>Per <a href="#eq-MLR" class="quarto-xref">Equation&nbsp;<span>4.2</span></a>, linear regression makes the following assumptions:</p>
+<ol type="1">
+<li><p>The error terms have mean zero: <span class="math inline">\(E[\epsilon_i] = 0\)</span>, or equivalently, the mean of <span class="math inline">\(Y_i\)</span> is a linear function of <span class="math inline">\(\mathbf{x}_i\)</span>: <span class="math display">\[
+E[Y_i] = \beta_0 + \beta_1 x_{1i} + \dots + \beta_p x_{pi}.
+\]</span></p></li>
+<li><p>The error terms have constant variance: <span class="math inline">\(\text{Var}[\epsilon_i] = \sigma^2\)</span>.</p></li>
+<li><p>The error terms are independent of each other. That is, having information about an error term <span class="math inline">\(\epsilon_i\)</span> does not tell us something about another error term <span class="math inline">\(\epsilon_j\)</span>.</p></li>
+<li><p>The error terms are normally distributed: <span class="math inline">\(\epsilon_i \sim \text{Normal}(0, \sigma^2)\)</span></p></li>
+</ol>
+<p>However, to calculate the parameters <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_p\)</span> we would need access to the entire population. Since we only have a (random) sample <span class="math inline">\((\mathbf{x}, y)_{i = 1}^n\)</span> from the population, we estimate the parameters using our sample. We denote our sample estimates as: <span class="math inline">\(b_0, b_1, \dots, b_p\)</span>. So, our fitted linear model is:</p>
+<p><span id="eq-prediction"><span class="math display">\[
+\hat{y}_i = b_0 + b_1 x_{1i} + \dots + b_p x_{pi},
+\tag{4.3}\]</span></span></p>
+<p>where <span class="math inline">\(\hat{y}_i\)</span> denotes our <em>predicted</em> outcome for observation <span class="math inline">\(i\)</span>.</p>
+<p>We can use <em>residuals</em> to assess several of the above assumptions. Residuals are the sample version of the error terms in <a href="#eq-MLR" class="quarto-xref">Equation&nbsp;<span>4.2</span></a>, which represent the observed error, which is computed as:</p>
+<p><span id="eq-residual"><span class="math display">\[
+\begin{aligned}
+e_i &amp;= y_i - \hat{y}_i \\
+&amp;= y_i - (b_0 + b_1 x_{1i} + \dots + b_p x_{pi})
+\end{aligned}
+\tag{4.4}\]</span></span></p>
+<section id="mean-model-mispecification" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="mean-model-mispecification"><span class="header-section-number">4.2.1</span> Mean Model Mispecification</h3>
+<p>The first assumption requires that the mean model of the outcome is <em>linear</em> with respect to the included covariates. If this assumption is violated, then the current linear model is not a good representation of the data-generating process.[[need to add influence on inference and/or predictions]]</p>
+<p>There are two primary ways in which the mean model of the outcome may be misspecified in linear regression. First, some covariates may have a <em>nonlinear</em> relationship with the outcome that is not properly captured by the linear model. Second, the linear model may omit one or more important covariates that are associated with the outcome.</p>
+<p><strong>Nonlinearity:</strong> We can assess whether the mean model is correctly specified by plotting the residuals against the fitted values. If the mean model is correctly specified, the points will be randomly scattered around zero, with no clear pattern. For example, the linear model producing the fitted vs.&nbsp;residual plot in <a href="#fig-misspecified" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>(a) is correctly specified since the points are randomly scattered around zero. In constrast, the linear model producing the fitted vs.&nbsp;residual plot in <a href="#fig-misspecified" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>(b) is misspecified, with the points following a quadratic trend.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-misspecified" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-misspecified-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="LinMod_files/figure-html/fig-misspecified-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-misspecified-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.1: TO ADD
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We can evaluate where the misspecification occurs by plotting the residuals against each covariate. [[ADD DETAILS]]. <a href="#fig-misspecified_covar" class="quarto-xref">Figure&nbsp;<span>4.2</span></a> shows that the mispecification occurs in <span class="math inline">\(\mathbf{x}_1\)</span>, and not <span class="math inline">\(\mathbf{x}_2\)</span>.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-misspecified_covar" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-misspecified_covar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="LinMod_files/figure-html/fig-misspecified_covar-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-misspecified_covar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.2: TO ADD
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>[[add blurb about how to fix]]</p>
+<p><strong>Missing covariates:</strong> We can also assess whether the linear model is missing are one or more important covariates using residuals. We can plot the values of any potential covariates <em>not</em> included in the linear model against the residuals to determine if that predictor should be added. For instance, suppose we have two covariates <span class="math inline">\(\mathbf{x}_1\)</span> and <span class="math inline">\(\mathbf{x}_2\)</span>, but only include <span class="math inline">\(\mathbf{x}_1\)</span> in our linear model. <a href="#fig-missing-covar" class="quarto-xref">Figure&nbsp;<span>4.3</span></a> shows that the points in the plot of <span class="math inline">\(\mathbf{x}_2\)</span> against the residuals have a linear trend. This suggests that our mean model is incorrectly specified; in particular, <span class="math inline">\(\mathbf{x}_2\)</span> should be included in our linear model.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-missing-covar" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-missing-covar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="LinMod_files/figure-html/fig-missing-covar-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-missing-covar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.3: TO ADD
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="non-constant-error-variance" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="non-constant-error-variance"><span class="header-section-number">4.2.2</span> Non-Constant Error Variance</h3>
+<p>The second assumption of linear regression is that the error terms have constant variance. If the error variance is constant, we say that the errors are called <em>homoskedastic</em>. Meanwhile, the errors are called <em>heteroskedastic</em> if they have non-constant variance.[[need to add influence on inference and/or predictions]]</p>
+<p>Like for mean model misspecification, we can use the fitted values versus residuals plot to determine whether the constant error variance assumption is satisfied. Under constant error variance, we expect for the variance of the residuals to be approximately constant across the fitted values. [[explain figure]]</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-error-var" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-error-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="LinMod_files/figure-html/fig-error-var-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-error-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.4: TO ADD
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>There are various ways to correct for error heteroskedasticity. One approach is to transform the outcome to stablize the variance. [[add how this would be done and what are some covariates of this]]. Alternatively, [[weighted regression]]. A third approach is to use the <em>sandwich estimator</em> to estimate the variance of our parameter estimates. We show how to compute the sandwich estimator in <em>R</em> in [[ADD SECTION]].</p>
+</section>
+<section id="non-normality-of-errors" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="non-normality-of-errors"><span class="header-section-number">4.2.3</span> Non-Normality of Errors</h3>
+<p>[[explain why this is optional assumption]]. [[two ways to evaluate]]</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="LinMod_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>[[shapiro wilk test]]</p>
+<p>[[qq-plot]]</p>
+</section>
+</section>
+<section id="outliers" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="outliers"><span class="header-section-number">4.3</span> Outliers</h2>
+</section>
+<section id="multicollinearity" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="multicollinearity"><span class="header-section-number">4.4</span> Multicollinearity</h2>
+<section id="variance-inflation-factor" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="variance-inflation-factor"><span class="header-section-number">4.4.1</span> Variance Inflation Factor</h3>
+<!--
+### The Setting
+
+
+- Linear regression is an inferential (read: inflexible) model in which we assume that $Y$ is related to the predictor variables $\mathbf{x}$ via the model
+$$Y \vert \mathbf{x} = \beta_0 + \beta_1 x_1 + \cdots + \beta_p x_p + \epsilon$$
+  + $\epsilon$ is a random variable that is assumed (1) to have mean zero,
+  (2) to have variance $\sigma^2$ that is constant as a function of $x$, and
+  (3) (optional...we will return to this point) to be normally distributed
+
+- Why would we use linear regression?
+
+  + while it is inflexible, it is also readily interpretable
+
+  + it is a fast model to learn: the $\beta$'s can be computed via formula
+  
+  + to be clear: it is not necessarily the case that there is an *a priori* belief that $\mathbf{x}$ and $Y$ are exactly linearly related
+
+## Example in R
+
+In this example, we use stellar temperature data. Each row represents a star, and the columns describe their location on the sky, brightness at a number of wavelengths, and surface temperature. 
+
+
+::: {.cell}
+
+```{.r .cell-code}
+star_temps <- read.csv("./data/star_temps.csv")
+```
+:::
+
+
+Suppose our outcome is effective temperature (`Teff`) and our covariates of interest are surface gravity (`g`), ... [[add others??]]. We visualize relationships between effective temperature and each of the covariates in @fig-slr.
+
+
+::: {.cell layout-align="center"}
+
+:::
+
+
+Now, we regress ....
+
+
+::: {.cell}
+
+```{.r .cell-code}
+lm.out <- lm(Teff ~ r + Gal.B + Dec + g, data = star_temps) 
+summary(lm.out)
+```
+:::
+
+
+The estimated coefficients are
+
+  + $\hat{\beta}_0 = -0.040$
+  
+  + $\hat{\beta}_1 = 1.006$
+  
+- the estimated probability that one would observe a value of 1.006 or larger (or -1.006 or smaller) is $\leq 10^{-16}$
+
+  + this is (much) less than 0.05, so we conclude that the true value of $\beta_1$ is not zero
+  
+  + i.e., there is a significant association between $x$ and $y$!
+
+- Caveats to keep in mind regarding $p$ values:
+
+  + if the true value of a coefficient $\beta_i$ is equal to zero, then the $p$-value will be sampled from a Uniform(0,1) distribution (so there's a 5% chance that you'll conclude there's a significant association between a predictor variable and the response even when there is none)
+
+  + as the sample size $n$ gets large, the estimated coefficient uncertainty goes to zero, and so *all* associations are eventually deemed statistically significant, even if they do not have practical significance
+
+$\Rightarrow$ Rather than using $p$-values, use variable selection methods (covered soon) to determine which subset of the predictor variables should be included in your final model
+
+- To compare the linear regression model against other models, we
+compute the mean-squared error for the data in the *test* set
+
+
+::: {.cell}
+
+```{.r .cell-code}
+y.hat <- predict(lm.out,newdata=df.test)
+mean((df.test$y-y.hat)^2)
+```
+:::
+
+
+- To determine the quality of the linear regression model as a 
+representation of the data-generating process in absolute terms, we use "Adjusted R-squared" (which has value 0.8957)
+  
+  + it is an estimate of the proportion of the variance of the 
+  data along the $y$-axis that is explained by the linear 
+  regression model
+  
+  + values near zero indicate that there is no apparent association
+  between the predictor variables and the response variable
+  
+  + values near one indicate a strong linear association between
+  the predictors and the response
+  
+  + values in between? the model has value, perhaps, but doesn't
+  tell the whole story about the data-generating process
+  
+- A useful diagnostic (for *any* regression model, not just a linear regression model!) is to plot predicted responses (for the test-set data only) versus the observed responses
+
+  + if there is no association between the predictor variable and
+  the response variable, the points will stretch horizontally
+  across the plot
+  
+  + if there is a deterministic association between the
+  predictor variable and the response variable, the points will
+  follow the red line
+  
+  + a "good" model follows the red line, but with random scatter!
+
+
+
+
+::: {.cell}
+
+:::
+
+
+- Here are the data with the best-fit model overlaid:
+
+
+::: {.cell}
+
+:::
+
+
+### Linear Regression: Assumptions
+
+- Let's go back to the "optional" assumption (3): $\epsilon$ is assumed to be normally distributed
+
+  + to check this, plot a histogram of the fitted model residuals $e = Y - \hat{Y}$
+  
+- To test for normality, e.g., pass the values of the residuals into the Shapiro-Wilk test
+
+  + the $p$-value is 0.983 $>$ 0.05
+  
+  + we fail to reject the null hypothesis that the data are normally distributed
+  
+- If we *reject* normality, it means that we "cannot take the numbers output by `R` at face value"
+
+  + however, if assumptions (1) and (2) still hold, then the model is still perfectly
+  valid...we just cannot "trust" the estimated uncertainties on the coefficients and
+  the associated $p$-values (i.e., inference is affected, but not prediction)
+  
+  + it may make sense to attempt a transformation of the response values, e.g.,
+  $Y \rightarrow \log Y$
+
+
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+y.hat <- predict(lm.out,newdata=df.test)
+e     <- df.test$y - y.hat
+shapiro.test(e)$p.value
+```
+:::
+
+
+::: {.cell}
+
+:::
+
+]
+
+- Now let's go back to assumption (2): $\epsilon$ has constant variance $\sigma^2$
+
+  + to check this, plot the residuals $e$ versus predictions $\hat{Y}$
+
+- If the scatter around $e=0$ appears constant as a function of $\hat{Y}$ appears
+constant, then assumption (2) holds
+
+- If assumption (2) does not hold (but assumption (1) does), then the linear model is
+not the "best linear unbiased estimator" or BLUE model
+
+  + it may make sense to attempt *weighted* linear regression, if we can estimate
+  $\sigma_i^2$ for each datum
+  
+- Note again that if your goal is prediction, whether assumption (2) holds or not really
+  doesn't matter...the model either makes competitive predictions, or it doesn't!
+
+
+::: {.cell}
+
+:::
+
+
+- If assumption (1), that the mean of $\epsilon$ is zero, does
+not hold...
+
+  + ...then linear regression is simply not a good representation
+  of the data-generating process...full stop
+
+
+::: {.cell}
+
+:::
+
+
+### What if I Have Categorical Predictors?
+
+
+::: {.cell}
+
+:::
+
+
+::: {.cell}
+
+```{.r .cell-code}
+summary(lm(y~.,data=df.ic))
+```
+:::
+
+
+- Let's add a factor variable with favorite ice-cream flavor
+
+- When a predictor variable is a factor variable with $k$ levels, then $k-1$ so-called *dummy variables* are shown in the output
+
+  + `ic` has levels `Chocolate` and `Vanilla`, and so `Chocolate` (the first level) becomes the "reference level" and `icVanilla` is what gets output
+
+- Mathematically, the model is
+$$\hat{Y} \vert \mathbf{x} = \beta_0 + \beta_1 x + \beta_2 \mathbb{I}_{vanilla}$$
+  + $\mathbb{I}$ is an *indicator variable*: here, it takes on value 1 if the value of `ic` is `Vanilla` and 0 otherwise
+  
+  + for chocolate ice-cream eaters, the model is
+$$\hat{Y} \vert \mathbf{x} = \beta_0 + \beta_1 x$$
+
+  + for vanilla ice-cream eaters, the model is
+$$\hat{Y} \vert \mathbf{x} = \beta_0 + \beta_1 x + \beta_2$$
+
+### Multicollinearity
+
+- Let's now remove the factor variable and add a second predictor
+variable that is linearly related to the first one
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+suppressMessages(library(corrplot))
+corrplot(cor(df.train[,1:2]),method="ellipse") # correlation between columns 1 and 2
+```
+:::
+
+
+- Visual inspection of this plot indicates clearly that multicollinearity is present
+
+  + keep in mind that multicollinearity affects inference, but not
+  prediction!
+
+### Variance Inflation Factor
+
+- The variance inflation factor, or vif, is the amount by which the estimated variance for a coefficient is inflated because of multicollinearity
+
+- For instance, assume a modeled regression line is
+$$\hat{Y} = 5 + 4 x_1 - 2 x_2$$
+  + let the estimated standard deviations for $\hat{\beta}_1$ and $\hat{\beta}_2$ be 2, and let the vif's be 4 and 9, respectively
+  
+  + the actual estimate of the standard deviation for $\hat{\beta}_1$ should be $2 \times \sqrt{4} = 4$, and for $\hat{\beta}_2$, it should be $2 \times \sqrt{9} = 6$
+
+- If a vif value is high, then the coefficient estimate by `lm()` for that variable can be much more uncertain than `R` indicates
+
+  + the rule of thumb is to worry if vif values are above 5 (more conservative) or 10 (less conservative)
+
+
+::: {.cell}
+
+```{.r .cell-code}
+suppressMessages(library(car))
+lm.out <- lm(y~.,data=df.train)
+vif(lm.out)
+```
+:::
+
+
+- A mitigation here is to remove one variable at a time until 
+the vif values for those that remain fall below 5 or 10, but this
+can adversely affect the model's predictive abilities...a better
+(but not necessarily perfect) strategy is to pursue *principal components regression*
+
+## Logistic Regression
+
+![Figure 4.2, *Introduction to Statistical Learning* by James et al.](http://www.stat.cmu.edu/~pfreeman/Figure_4.2.png)
+
+- To the left is a linear regression fit. The regression line *is not* limited to lie within the domain [0,1]
+
+- To the right is a logistic regression fit. The regression line *is* limited to lie within the range [0,1]
+
+- Logistic regression is appropriate for datasets where the response variable takes on two discrete values (assumed to map to 0 and 1)
+
+  + the underlying distribution is the *binomial distribution*, whose parameter is $p$, the probability of success (seeing outcome 1)
+
+- Why is it named "logistic regression" and not "binomial regression"? 
+
+  + the conventional choice for the link function $g(p \vert x)$ is the *logit* function, seen on a previous slide (note: here, $\mu \rightarrow p$):
+\begin{align*}
+\log\left(\frac{p \vert x}{1-p \vert x}\right) = \beta_0 + \beta_1 x
+\end{align*}
+
+- The probability of sampling a datum of class 1 at coordinate $x_i$ is thus
+\begin{align*}
+p_i \vert x_i = \frac{e^{\beta_0 + \beta_1 x_i}}{1 + e^{\beta_0 + \beta_1 x_i}}
+\end{align*}
+
+- The likelihood function to be optimized is
+\begin{align*}
+{\cal L} = \left( \prod_{i: Y_i=1} p_i \vert x_i \right) \left( \prod_{i: Y_i=0} (1 - p_i \vert x_i) \right)
+\end{align*}
+  + we want $p_i \vert x_i$ to be large when $Y_i = 1$ and $p_i \vert x_i$ to be small when $Y_i = 0$
+
+### Inference
+
+- In logistic regression, inference is done via *odds*
+
+  + assume we have one predictor variable, and a datum with predicted response $p_i \vert x_i = 0.8$
+  
+  + that would mean that if we were to repeatedly sample response values at $x_i$, we would expect class 1 to be sampled four times as often as class 0:
+\begin{align*}
+O_i = \frac{p_i \vert x_i}{1-p_i \vert x_i} = \frac{0.8}{1-0.8} = 4 = e^{\beta_0+\beta_1 x_i}
+\end{align*}
+  + the odds $O$ are thus 4 (or 4-1 in favor of class 1)
+
+- How do the odds change if we change the value of the predictor variable by one unit?
+\begin{align*}
+O_{\rm new} = e^{\beta_0+\beta_1(x_i+1)} = e^{\beta_0+\beta_1x_i}e^{\beta_1} = e^{\beta_1}O_{\rm old}
+\end{align*}
+  + if $\beta_1 > 0$, the odds go up as $x_i$ increases
+  
+  + if $\beta_1 \gg 0$, the odds go up *quickly*; the sigmoid function
+  $p \vert x$ quickly transitions from 0 to 1
+
+### Output
+
+- The true $p \vert x$ is given by the green dashed line
+
+- The estimated $p \vert x$ is given by the red line
+
+  + note: a logistic function is "only so flexible" and may not replicate the truth
+
+
+::: {.cell}
+
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+out.log = glm(y~x,family=binomial)
+ggplot(data=data.frame(x=x,y=out.log$fitted.values),mapping=aes(x=x,y=y)) +
+  geom_line(color="red") +
+  geom_point(data=data.frame(x=x,y=y),mapping=aes(x=x,y=y),color="blue") +
+  geom_abline(slope=0.05,intercept=0,color="green",linetype="dashed")
+```
+:::
+
+]
+
+
+::: {.cell}
+
+```{.r .cell-code}
+summary(out.log)
+```
+:::
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+logLik(out.log)   # the maximum log-likelihood value
+```
+:::
+
+
+- The model residual computed for each datum is the so-called *deviance residual*:
+\begin{align*}
+d_i = \mbox{sign}(y_i-\hat{p}_i) \sqrt{-2[y_i \log \hat{p}_i + (1-y_i) \log (1 - \hat{p}_i)]}
+\end{align*}
+  + the sum of squares of the deviance residuals is $-2\log{\cal L}$
+
+```
+    Coefficients:
+               Estimate Std. Error z value Pr(>|z|)  
+    (Intercept)  -5.2800     2.3424  -2.254   0.0242 *
+    x             0.4186     0.1843   2.271   0.0231 *
+```
+- the intercept is $e^{-5.28}/(1+e^{-5.28}) = 0.005$ 
+
+- the odds ratio is $O_{\rm new}/O_{\rm old} = e^{0.4186}$
+
+```
+        Null deviance: 25.008  on 18  degrees of freedom
+    Residual deviance: 14.236  on 17  degrees of freedom
+    AIC: 18.236
+    ...
+    'log Lik.' -7.117803 (df=2)
+```
+
+- The maximum value of the log-likelihood function is -7.118
+
+  + the sum-of-squares of the residual deviances is -2 times -7.118, or 14.236
+  
+  + the AIC is $2k - 2\log{\cal L}$ = $2 \cdot 2 - 2 \cdot (-7.118)$ = 18.236, where $k$ is the number of degrees of freedom (here, `df` = 2)
+  
+  + note that these metrics do *not* tell you whether the model 
+  represents the data-generating process well in an absolute sense
+  (see the Hosmer-Lemeshow test for further details)
+
+- Recall: when selecting models, select the one with the lowest AIC
+
+### Predictions
+
+- In the previous example, there was no training/testing split
+
+- In "real" analyses, there would be...you'd learn the model and generate test-set predictions by running the following code
+
+```
+    resp.prob <- predict(out.log,newdata=pred.test,type="response")
+    resp.pred <- rep(NA,length(resp.prob))
+    for ( ii in 1:length(resp.prob) ) {
+      if (resp.prob[ii] > 0.5) {
+        resp.pred[ii] <- "<class 1>"    # FILL IN THE NAME OF CLASS 1
+      } else {
+        resp.pred[ii] <- "<class 0>"    # FILL IN THE NAME OF CLASS 0
+      }
+    }
+```
+
+- `resp.prob` is a number between 0 and 1: if that number is less than 0.5, we predict that the test datum is associated with class 0, otherwise we predict it is associated with class 1
+
+- In a future lecture, we will re-examine our use of 0.5 as a threshold for class splitting
+
+### Diagnostics
+
+- The most straightforward diagnostic tool for assessing a classification model is the *confusion matrix*
+
+  + the rows are predicted classes 
+  
+  + the columns are observed classes
+  
+- To create a confusion matrix: 
+
+```
+    resp.prob = predict(out.log,newdata=pred.test,type="response")   # same as on the last slide
+    resp.pred = ifelse(resp.prob>0.5,"<class 1>","<class 0>")        # compressed if-else
+    mean(resp.pred!=resp.test)                                       # compressed MCR calculator
+    table(resp.pred,resp.test)                                       # confusion matrix
+```
+
+- Here's an example of a confusion matrix:
+
+![](http://www.stat.cmu.edu/~pfreeman/Classification_Diagnostic.png)
+
+- There are *many* metrics associated with confusion matrices
+
+  + the *misclassification rate*, or *MCR*, is the ratio of the sum of the off-diagonal values in the confusion matrix (top right and bottom left) to the overall table sum (0.223 above)
+  
+  + *accuracy* is simply 1 $-$ MCR
+  
+  + see, e.g., [this web page](https://en.wikipedia.org/wiki/Confusion_matrix) so as to be
+  overwhelmed by all the possible choices
+  -->
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./SupLearn.html" class="pagination-link" aria-label="Supervised Learning">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Supervised Learning</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ExtenLin.html" class="pagination-link" aria-label="Extensions to the Linear Model">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Extensions to the Linear Model</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
