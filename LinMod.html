@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -226,7 +261,7 @@ window.Quarto = {
   <li><a href="#non-normality-of-errors" id="toc-non-normality-of-errors" class="nav-link" data-scroll-target="#non-normality-of-errors"><span class="header-section-number">4.2.3</span> Non-Normality of Errors</a></li>
   </ul></li>
   <li><a href="#outliers" id="toc-outliers" class="nav-link" data-scroll-target="#outliers"><span class="header-section-number">4.3</span> Outliers</a></li>
-  <li><a href="#multicollinearity" id="toc-multicollinearity" class="nav-link" data-scroll-target="#multicollinearity"><span class="header-section-number">4.4</span> Multicollinearity</a>
+  <li><a href="#multiollinearity" id="toc-multiollinearity" class="nav-link" data-scroll-target="#multiollinearity"><span class="header-section-number">4.4</span> Multiollinearity</a>
   <ul class="collapse">
   <li><a href="#variance-inflation-factor" id="toc-variance-inflation-factor" class="nav-link" data-scroll-target="#variance-inflation-factor"><span class="header-section-number">4.4.1</span> Variance Inflation Factor</a></li>
   </ul></li>
@@ -360,7 +395,9 @@ two slide) so that we have the functional form for $f_Y(y_i \vert \mu_i)$
 <h2 data-number="4.1" class="anchored" data-anchor-id="setup"><span class="header-section-number">4.1</span> Setup</h2>
 <p>Simple linear regression describes the linear relationship between the outcome <span class="math inline">\(Y\)</span> and a covariate of interest <span class="math inline">\(x\)</span> (for simplicity, we will assume that the <span class="math inline">\(x\)</span>’s are fixed and the <span class="math inline">\(Y\)</span>’s are random variables). Under simple linear regression, we assume that for all units <span class="math inline">\(i = 1, \dots, n\)</span>:</p>
 <p><span id="eq-SLR"><span class="math display">\[
-Y_i = \beta_0 + \beta_1 x_i + \epsilon_i \quad \text{with }\epsilon_i \sim \text{Normal}(0, \sigma^2)
+\begin{aligned}
+Y_i = \beta_0 + \beta_1 x_i + \epsilon_i \text{with }\epsilon_i \sim \text{Normal}(0, \sigma^2)
+\end{aligned}
 \tag{4.1}\]</span></span></p>
 <p>The simple linear regression model given in <a href="#eq-SLR" class="quarto-xref">Equation&nbsp;<span>4.1</span></a> can be extended in various ways. For example, we might want to include different powers of <span class="math inline">\(x\)</span> (e.g., <span class="math inline">\(x, x^2, x^3, \dots\)</span>) in the linear model. This is known as <em>polynomial regression</em>, which we discuss in more detail in <a href="./NonLinMod.html">Chapter 6</a>.</p>
 <p>Another natural extension is to include multiple covariates <span class="math inline">\(\mathbf{x} = (x_1, \dots, x_p)\)</span>, rather than just a single covariate, in the linear model. This is commonly referred to as <em>multiple linear regression</em>, which assumes that for all units <span class="math inline">\(i = 1, \dots, n\)</span>:</p>
@@ -380,12 +417,12 @@ E[Y_i] = \beta_0 + \beta_1 x_{1i} + \dots + \beta_p x_{pi}.
 <li><p>The error terms are independent of each other. That is, having information about an error term <span class="math inline">\(\epsilon_i\)</span> does not tell us something about another error term <span class="math inline">\(\epsilon_j\)</span>.</p></li>
 <li><p>The error terms are normally distributed: <span class="math inline">\(\epsilon_i \sim \text{Normal}(0, \sigma^2)\)</span></p></li>
 </ol>
-<p>However, to calculate the parameters <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_p\)</span> we would need access to the entire population. Since we only have a (random) sample <span class="math inline">\((\mathbf{x}, y)_{i = 1}^n\)</span> from the population, we estimate the parameters using our sample. We denote our sample estimates as: <span class="math inline">\(b_0, b_1, \dots, b_p\)</span>. So, our fitted linear model is:</p>
+<p>However, we cannot directly calculate the parameters <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_p\)</span>, as we would need access to the entire population to do so. Instead, we estimate the parameters using our sample using our (random) sample <span class="math inline">\((\mathbf{x}, y)_{i = 1}^n\)</span> from the population. We denote our sample estimates as: <span class="math inline">\(b_0, b_1, \dots, b_p\)</span>. So, our fitted linear model is:</p>
 <p><span id="eq-prediction"><span class="math display">\[
 \hat{y}_i = b_0 + b_1 x_{1i} + \dots + b_p x_{pi},
 \tag{4.3}\]</span></span></p>
 <p>where <span class="math inline">\(\hat{y}_i\)</span> denotes our <em>predicted</em> outcome for observation <span class="math inline">\(i\)</span>.</p>
-<p>We can use <em>residuals</em> to assess several of the above assumptions. Residuals are the sample version of the error terms in <a href="#eq-MLR" class="quarto-xref">Equation&nbsp;<span>4.2</span></a>, which represent the observed error, which is computed as:</p>
+<p>We can use the fitted linear model’s <em>residuals</em> (i.e., the observed errors) to assess assumptions (1)-(4). Residuals are the sample version of the error terms in <a href="#eq-MLR" class="quarto-xref">Equation&nbsp;<span>4.2</span></a>, and are defined as:</p>
 <p><span id="eq-residual"><span class="math display">\[
 \begin{aligned}
 e_i &amp;= y_i - \hat{y}_i \\
@@ -394,9 +431,9 @@ e_i &amp;= y_i - \hat{y}_i \\
 \tag{4.4}\]</span></span></p>
 <section id="mean-model-mispecification" class="level3" data-number="4.2.1">
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="mean-model-mispecification"><span class="header-section-number">4.2.1</span> Mean Model Mispecification</h3>
-<p>The first assumption requires that the mean model of the outcome is <em>linear</em> with respect to the included covariates. If this assumption is violated, then the current linear model is not a good representation of the data-generating process.[[need to add influence on inference and/or predictions]]</p>
+<p>Assumption (1) requires that the mean model of the outcome is <em>linear</em> with respect to the included covariates. If this assumption is violated, then the current linear model is not a good representation of the data-generating process.[[need to add influence on inference and/or predictions]]</p>
 <p>There are two primary ways in which the mean model of the outcome may be misspecified in linear regression. First, some covariates may have a <em>nonlinear</em> relationship with the outcome that is not properly captured by the linear model. Second, the linear model may omit one or more important covariates that are associated with the outcome.</p>
-<p><strong>Nonlinearity:</strong> We can assess whether the mean model is correctly specified by plotting the residuals against the fitted values. If the mean model is correctly specified, the points will be randomly scattered around zero, with no clear pattern. For example, the linear model producing the fitted vs.&nbsp;residual plot in <a href="#fig-misspecified" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>(a) is correctly specified since the points are randomly scattered around zero. In constrast, the linear model producing the fitted vs.&nbsp;residual plot in <a href="#fig-misspecified" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>(b) is misspecified, with the points following a quadratic trend.</p>
+<p><strong>Nonlinearity:</strong> We can assess whether there is nonlinear relationship between the covariate and outcome by plotting the residuals against the fitted values. If the mean model is correctly specified, the points will be randomly scattered around zero, with no clear pattern. For example, the linear model producing the fitted vs.&nbsp;residual plot in <a href="#fig-misspecified" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>(a) is correctly specified since the points are randomly scattered around zero. In constrast, the linear model producing the fitted vs.&nbsp;residual plot in <a href="#fig-misspecified" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>(b) is misspecified, with the points following a quadratic trend.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-misspecified" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
@@ -445,7 +482,7 @@ Figure&nbsp;4.3: TO ADD
 </section>
 <section id="non-constant-error-variance" class="level3" data-number="4.2.2">
 <h3 data-number="4.2.2" class="anchored" data-anchor-id="non-constant-error-variance"><span class="header-section-number">4.2.2</span> Non-Constant Error Variance</h3>
-<p>The second assumption of linear regression is that the error terms have constant variance. If the error variance is constant, we say that the errors are called <em>homoskedastic</em>. Meanwhile, the errors are called <em>heteroskedastic</em> if they have non-constant variance.[[need to add influence on inference and/or predictions]]</p>
+<p>Assumption (2) of linear regression is that the error terms have constant variance. If the error variance is constant, we say that the errors are called <em>homoskedastic</em>. Meanwhile, the errors are called <em>heteroskedastic</em> if they have non-constant variance.[[need to add influence on inference and/or predictions]]</p>
 <p>Like for mean model misspecification, we can use the fitted values versus residuals plot to determine whether the constant error variance assumption is satisfied. Under constant error variance, we expect for the variance of the residuals to be approximately constant across the fitted values. [[explain figure]]</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -465,27 +502,98 @@ Figure&nbsp;4.4: TO ADD
 </section>
 <section id="non-normality-of-errors" class="level3" data-number="4.2.3">
 <h3 data-number="4.2.3" class="anchored" data-anchor-id="non-normality-of-errors"><span class="header-section-number">4.2.3</span> Non-Normality of Errors</h3>
-<p>[[explain why this is optional assumption]]. [[two ways to evaluate]]</p>
-<div class="cell" data-layout-align="center">
+<p>Assumption (4) requires that the errors are normally distributed. If this assumption holds, then the sampling distribution of our parameter estimates will be normally distributed; so, we can use standard procedures for obtain valid confidence intervals and <span class="math inline">\(p\)</span>-values [[need to explain more what these are]]. On the other hand, if assumptions (1)-(3) hold, but assumption (4) does not, the linear model is still perfectly valid – we just cannot “trust” the estimated uncertainties on the coefficients and associated <span class="math inline">\(p\)</span>-values; in other words, inference is affected, but not prediction. However, an important caveat to this is that if the number of observations is sufficiently large [[add heuristic of what this is]], the sampling distribution of our parameter estimates will be approximately normally distribution even if the errors are not normally distributed [[footnote to CLT]]. Therefore, assumption (4) is “optional” if (i) we have a small number of observations but only care about prediction, not inference, or (ii) we have a sufficiently large number of observations in our sample.</p>
+<p>We can assess whether the errors are normally distributed by plotting a histogram of the residuals. <a href="#fig-resid-histogram" class="quarto-xref">Figure&nbsp;<span>4.5</span></a> shows an example of the histogram of the residuals, where the error terms are normally distributed. We can see that the residuals appear to be <em>roughly</em> normally distributed.</p>
+<div class="cell" data-layout-align="center" data-caption="TO ADD">
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="LinMod_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+<div id="fig-resid-histogram" class="quarto-float quarto-figure quarto-figure-center anchored" width="672" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resid-histogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="LinMod_files/figure-html/fig-resid-histogram-1.png" id="fig-resid-histogram" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-resid-histogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.5
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>[[shapiro wilk test]]</p>
-<p>[[qq-plot]]</p>
+<p>We can formally test whether the residuals follow a normal distribution using the Shapiro-Wilk test. The null hypothesis (<span class="math inline">\(H_0\)</span>) of the Shapiro-Wilk test is the data is normally distributed, and the alternative hypothesis (<span class="math inline">\(H_1\)</span>) is that the data are <em>not</em> normally distributed. If we obtain a <span class="math inline">\(p\)</span>-value less than our pre-specified cut-off (e.g., <span class="math inline">\(p &lt; 0.05\)</span>), then we reject the null hypothesis that the data are normally distributed. If the <span class="math inline">\(p\)</span>-value is greater than our pre-specified cut-off we fail to reject the null hypothesis that the data are normally distributed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>y.hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>e     <span class="ot">&lt;-</span> df<span class="sc">$</span>y <span class="sc">-</span> y.hat</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(e)<span class="sc">$</span>p.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9099408</code></pre>
+</div>
+</div>
+<p>[[shapiro wilk test example in R]]</p>
+<p>Another option to check for non-normal errors is to use a QQ-plot (i.e., a Quantile-Quantile plot). In particular, we can plot the observed quantiles of the standardized residuals against the theoretical quantiles of a normal distribution with mean zero and variance one [[need to better introduce standardized residuals]]. If the errors are normally distributed, we expect observed quantiles of standardized residuals to approximately follow the theoretical quantiles of a normal distribution with mean zero and variance one. <a href="#fig-resid-qqplot" class="quarto-xref">Figure&nbsp;<span>4.6</span></a> shows the QQ-plot, in which the residuals are simulated to be normally distributed. While the observed standardized residuals quantiles appear to deviate a bit from the theoretical quantiles of the normal distribution (particularly in the upper and lower quantiles), these deviations are relatively small. This indicates that the assumption of the errors being normally distributed is satisfied.</p>
+<div class="cell" data-layout-align="center" data-caption="TO ADD">
+<div class="cell-output-display">
+<div id="fig-resid-qqplot" class="quarto-float quarto-figure quarto-figure-center anchored" width="672" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resid-qqplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="LinMod_files/figure-html/fig-resid-qqplot-1.png" id="fig-resid-qqplot" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-resid-qqplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.6
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="outliers" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="outliers"><span class="header-section-number">4.3</span> Outliers</h2>
 </section>
-<section id="multicollinearity" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="multicollinearity"><span class="header-section-number">4.4</span> Multicollinearity</h2>
+<section id="multiollinearity" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="multiollinearity"><span class="header-section-number">4.4</span> Multiollinearity</h2>
 <section id="variance-inflation-factor" class="level3" data-number="4.4.1">
 <h3 data-number="4.4.1" class="anchored" data-anchor-id="variance-inflation-factor"><span class="header-section-number">4.4.1</span> Variance Inflation Factor</h3>
+<p>The variance inflation factor, or vif, is the factor by which the estimated variance for a coefficient is inflated due to multicollinearity. If a vif value is high, then the coefficient estimate for that variable obtained from the <code>lm()</code> function can be much more uncertain than R indicates.</p>
+<p><strong>Example:</strong> Suppose we have the following fitted model:</p>
+<p><span class="math display">\[
+\hat{Y} = 5 + 4 x_1 - 2 x_2,
+\]</span></p>
+<p>then, <span class="math inline">\(b_0 = 5, b_1 = 4\)</span>, and <span class="math inline">\(b_2 = -2\)</span>. Let the estimated standard errors for <span class="math inline">\(b_1\)</span> and <span class="math inline">\(b_2\)</span> both be 2, and the vifs for <span class="math inline">\(b_1\)</span> and <span class="math inline">\(b_2\)</span> be <span class="math inline">\(4\)</span> and <span class="math inline">\(9\)</span>, respectively. This information is summarized in <a href="#tbl-vif" class="quarto-xref">Table&nbsp;<span>4.1</span></a>.</p>
+<div id="tbl-vif" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-vif-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4.1: My Caption
+</figcaption>
+<div aria-describedby="tbl-vif-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Coefficient estimate</th>
+<th>Standard Error estimate</th>
+<th>vif</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>-2</td>
+<td>2</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Since the vif value is the factor by which the estimated <em>variance</em> is inflated, multiplying the estimated standard error by the <em>square-root</em> of the vif value gives us the actual standard error estimates for <span class="math inline">\(b_1\)</span> and <span class="math inline">\(b_2\)</span>:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<ul>
+<li><p>The actual standard error estimate for <span class="math inline">\(b_1\)</span>: <span class="math inline">\(2 \times \sqrt{4} = 4\)</span></p></li>
+<li><p>The actual standard error estimate for <span class="math inline">\(b_2\)</span>: <span class="math inline">\(2 \times \sqrt{9} = 6\)</span>.</p></li>
+</ul>
+<p>A typical rule-of-thumb is to worry if vif values are above 5 (more conservative) or 10 (less conservative). One mitigation strategy is to remove one variable at a time until the vif values for the remaining covariates fall below 5 or 10. However, this can lead to [[post-selection problems?]]. Moreover, removing covariates can adversely affect the linear model’s predictive abilities. Thus, common alternative approaches include performing ridge regression or principal components regression. [[I think it would be best to include more details of these in other chapters]].</p>
 <!--
 ### The Setting
 
@@ -965,6 +1073,12 @@ d_i = \mbox{sign}(y_i-\hat{p}_i) \sqrt{-2[y_i \log \hat{p}_i + (1-y_i) \log (1 -
 
 
 </section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Recall that the standard error of an estimate is the square-root of its variance.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

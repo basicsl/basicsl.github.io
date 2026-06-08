@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -69,15 +69,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./DataEx.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-27c261d06b905028a18691de25d09dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -120,7 +119,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -217,7 +216,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ANOVA.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Analysis of Variance</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Analysis of Variance and Random Effects Modeling</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -448,14 +447,14 @@ RMSE = \sqrt{\frac{1}{n_{\rm test}} \sum_{i=1}^{n_{\rm test}} (Y_i - \hat{Y}_i)^
 <p>The dashed black line represents the (made up) learned statistical model. In constrast to regression, here that model does not represent the conditional mean of <span class="math inline">\(Y\)</span> given <span class="math inline">\(x\)</span>, but rather the probability of sampling the value <span class="math inline">\(Y=1\)</span> (“Class 1”) as a function of <span class="math inline">\(x\)</span>. The blue dots represent the observed data.</p>
 <p>First, let’s determine the predicted Class 1 probability for each test-set datum and plot the probabilities as a function of the true class.</p>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>prob    <span class="ot">&lt;-</span> <span class="fl">0.32</span> <span class="sc">+</span> <span class="fl">0.68</span><span class="sc">*</span>(df.test<span class="sc">$</span>x<span class="sc">+</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">6</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>prob    <span class="ot">&lt;-</span> <span class="fl">0.32</span> <span class="sc">+</span> <span class="fl">0.68</span><span class="sc">*</span>(df.test<span class="sc">$</span>x<span class="sc">+</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">6</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df.plot <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">"x"</span><span class="ot">=</span><span class="fu">factor</span>(df.test<span class="sc">$</span>y), <span class="st">"y"</span><span class="ot">=</span>prob)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df.plot, <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)) <span class="sc">+</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill=</span><span class="st">"dodgerblue"</span>) <span class="sc">+</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="fl">0.5</span>, <span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Class"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Probability of Class 1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Class"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Probability of Class 1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -468,9 +467,9 @@ RMSE = \sqrt{\frac{1}{n_{\rm test}} \sum_{i=1}^{n_{\rm test}} (Y_i - \hat{Y}_i)^
 <p>Next, we need to turn the predicted Class 1 probabilities into predictions of <em>classes</em>. What we think of as binary classifiers (such as logistic regression) do not actually classify data: they generate predicted Class 1 probabilities, and it is <em>up to us</em> to map them to actual classes. At first, this would seem to be trivial: “of course we would map data with predicted probabilities greater than 0.5 to Class 1, and those with predicted probabilities less than 0.5 to Class 0.” (As predicted probabilities are rarely, if ever, equal to 0.5, we will sweep the issue of how to classify data with such probabilities under the rug.) But look again at the figure above: while we would do a good job of identifying Class 1 data, we would do terribly with Class 0 data. So 0.5 is probably not the optimal threshold value to use here.</p>
 <p>Using a default threshold probability value of 0.5 doesn’t work here because the data exhibit <em>class imbalance</em>: some 68% of the data belong to Class 1, and because of that, the probability estimates for all the training data are biased upwards towards 1. So our next move might be to say, OK, instead of using 0.5 as a threshold, we will use 0.68. And this would improve our ability to identify Class 0 objects while sacrificing some ability to identify Class 1 objects. But there is a better algorithmic process that we can implement instead, one that involves computing the so-called receiver operating characteristics curve, or <em>ROC curve</em>.</p>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(pROC))</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(pROC))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>roc.out <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">roc</span>(df.test<span class="sc">$</span>y, prob))</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(roc.out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(roc.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -478,7 +477,7 @@ RMSE = \sqrt{\frac{1}{n_{\rm test}} \sum_{i=1}^{n_{\rm test}} (Y_i - \hat{Y}_i)^
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(roc.out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(roc.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "percent"            "sensitivities"      "specificities"     
  [4] "thresholds"         "direction"          "cases"             
@@ -486,7 +485,7 @@ RMSE = \sqrt{\frac{1}{n_{\rm test}} \sum_{i=1}^{n_{\rm test}} (Y_i - \hat{Y}_i)^
 [10] "call"               "original.predictor" "original.response" 
 [13] "predictor"          "response"           "levels"            </code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>roc.out<span class="sc">$</span>auc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>roc.out<span class="sc">$</span>auc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Area under the curve: 0.7528</code></pre>
 </div>
@@ -497,17 +496,17 @@ RMSE = \sqrt{\frac{1}{n_{\rm test}} \sum_{i=1}^{n_{\rm test}} (Y_i - \hat{Y}_i)^
 <li>The plot exhibits two values: “specificity” along the <span class="math inline">\(x\)</span>-axis, and “sensitivity” along the <span class="math inline">\(y\)</span>-axis. A ROC curve shows sensitivity versus specificity as computed for a number of thresholds between 0 and 1. The former indicates the proportion of Class 0 data that are correctly identified as such; the latter is the same, for Class 1. While there is no unique prescription, <em>we would advise determining the threshold value for which the sum of specificity and sensitivity is maximized</em>. (This sum is dubbed “Youden’s <span class="math inline">\(J\)</span> statistic,” although by definition, 1 is subtracted from the sum. Subtracting 1 makes no difference in what follows.) By maximizing this sum, what we are effectively doing is defining a classifier that does the best job of balancing the classification performance in both classes: as indicated above, we will sacrifice some of our ability to identify objects of the majority class in order to substantially improve identification of objects of the minority class.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">which.max</span>(roc.out<span class="sc">$</span>sensitivities<span class="sc">+</span>roc.out<span class="sc">$</span>specificities)</span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">which.max</span>(roc.out<span class="sc">$</span>sensitivities<span class="sc">+</span>roc.out<span class="sc">$</span>specificities)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> roc.out<span class="sc">$</span>threshold[w]</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(t, <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(t, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.609</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df.plot, <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>df.plot, <span class="at">mapping=</span><span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)) <span class="sc">+</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill=</span><span class="st">"dodgerblue"</span>) <span class="sc">+</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>t, <span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Class"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Probability of Class 1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Class"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Probability of Class 1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -519,15 +518,15 @@ RMSE = \sqrt{\frac{1}{n_{\rm test}} \sum_{i=1}^{n_{\rm test}} (Y_i - \hat{Y}_i)^
 <p>As we can see from our updated boxplot, if we shift the threshold value from 0.5 to 0.609 (as opposed to 0.68), we will do a better job of classifying data in the weaker class (Class 0), while sacrificing performance in the stronger class (Class 1).</p>
 <p>Our last step is to determine a misclassification rate, given our adopted threshold.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prob<span class="sc">&gt;</span>t, <span class="st">"1"</span>, <span class="st">"0"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pred, df.plot<span class="sc">$</span>x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prob<span class="sc">&gt;</span>t, <span class="st">"1"</span>, <span class="st">"0"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(pred, df.plot<span class="sc">$</span>x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    
 pred  0  1
    0 23 19
    1  9 49</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(pred <span class="sc">!=</span> df.plot<span class="sc">$</span>x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(pred <span class="sc">!=</span> df.plot<span class="sc">$</span>x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.28</code></pre>
 </div>
@@ -590,13 +589,13 @@ pred  0  1
 <li>To ensure that that someone else achieves the exact same results, we should always manually set the random-number generator seed <em>before each instance of random sampling in your analysis</em> (such as when we assign data to training or test sets, or to folds, or when we learn a model like random forest that incorporates random sampling):</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)    <span class="co"># can be any number...</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">10</span>,<span class="dv">3</span>)     <span class="co"># sample three numbers between 1 and 10 inclusive</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)    <span class="co"># can be any number...</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">10</span>,<span class="dv">3</span>)     <span class="co"># sample three numbers between 1 and 10 inclusive</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  9 10  6</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">10</span>,<span class="dv">3</span>)     <span class="co"># voila: the same three numbers!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sample</span>(<span class="dv">10</span>,<span class="dv">3</span>)     <span class="co"># voila: the same three numbers!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  9 10  6</code></pre>
 </div>
@@ -657,14 +656,13 @@ pred  0  1
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
