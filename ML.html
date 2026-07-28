@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>8&nbsp; Machine Learning – Basic Statistical Learning: a Guide for the Perplexed</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -59,7 +62,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -93,10 +95,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-5ccb035bea26c1e21f80f44cf7c27909.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -126,7 +128,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -139,7 +141,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -396,8 +398,8 @@ G = \sum_{m=1}^M \sum_{k=1}^K \hat{p}_{mk} (1 - \hat{p}_{mk}) \,,
 <p>We should point out here that the decision tree algorithm is a <em>greedy algorithm</em>, one that makes what we will call “locally optimal” choices rather than “globally optimal” choices. Since this model utilizes top-down <em>recursive binary splitting</em>, the final split structure might not be the one that has, overall, the smallest possible RSS or Gini value.</p>
 <p>Another thing to keep in mind regarding trees is that overfitting can be an issue: a tree in theory could place a hyper-rectangle around each datum! Such a model would be be highly flexible (with training set mean-squared error or misclassification equal to zero!), but it would not generalize well. To help prevent overfitting, decision tree algorithms come with <em>control parameters</em> that dictate the conditions under which they accept proposed splits. For instance, the <code>rpart</code> package features the following control parameters:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.control</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.control</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$minsplit
 [1] 20
@@ -450,9 +452,9 @@ $xval
 <p>In this example, we load data for <span class="math inline">\(n = 1000\)</span> stars, including their locations on the sky, their brightness at a number of wavelengths, and their surface temperatures. In all, there are 10 predictor variables, with surface temperature being the response variable.</p>
 <p>Below we load the <code>rpart</code> package and use the <code>rpart()</code> function to build a regression tree. We utilize a 70-30 training-testing split.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rp.out  <span class="ot">&lt;-</span> <span class="fu">rpart</span>(Teff<span class="sc">~</span>., <span class="at">data=</span>df.train)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rp.out  <span class="ot">&lt;-</span> <span class="fu">rpart</span>(Teff<span class="sc">~</span>., <span class="at">data=</span>df.train)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>rp.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rp.out, <span class="at">newdata=</span>df.test)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>((rp.pred<span class="sc">-</span>df.test<span class="sc">$</span>Teff)<span class="sc">^</span><span class="dv">2</span>)), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>((rp.pred<span class="sc">-</span>df.test<span class="sc">$</span>Teff)<span class="sc">^</span><span class="dv">2</span>)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 621.705</code></pre>
 </div>
@@ -460,7 +462,7 @@ $xval
 <p>We find that the root mean-squared error for the test set is 622, meaning that a typical model residual is 622 degrees Kelvin. This is, on the face of it, not too shabby, given that the mean surface temperature in our sample is 5530 degrees Kelvin. However, this value is substantially higher than that for multiple linear regression, for which the RMSE was 467.</p>
 <p>Can we better quantify the quality of a decision tree model, using <code>rpart()</code>’s own output, and without regard to multiple linear regression? We can, using the <code>printcp()</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(rp.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(rp.out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Regression tree:
@@ -491,8 +493,8 @@ n= 700
 <p>If we examine the row associated with the final split, we find that the <code>rel error</code> is 0.47, which indicates that an <span class="math inline">\(R^2\)</span> estimate is 1 <span class="math inline">\(-\)</span> 0.47 = 0.53. (The column <code>xerror</code> is what is called an “out of bag” error estimate, resulting from performing 10-fold cross-validation on the training data. If we take the final value of <code>xerror</code>, multiply it against the <code>Root node error</code>, and take the square root, we get a figure on par with the test-set RMSE output above. Because we have split the data, however, we can ignore <code>xerror</code> as a model assessment metric, and concentrate on the test-set RMSE. But, as we will see below, <code>xerror</code> <em>does</em> play an important role in complexity-cost pruning. So we are not done with this metric yet…)</p>
 <p>We can attempt to infer the importance of the different predictor variables by plotting the learned tree.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(rp.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart.plot)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(rp.out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -515,9 +517,9 @@ n= 700
 </div>
 <p>From the <code>plotcp()</code> documentation: “[a] good choice of <code>cp</code> for pruning is often the leftmost value for which the mean lies below the horizontal line.” Here, that leftmost value corresponds to 11 nodes (as opposed to the original 19), or <code>nsplit</code> equals 10 in the table output above. For this <code>nsplit</code> value, <code>cp</code> equals 0.023841. To prune the tree, we take the data structure output by <code>rpart()</code> and pass it into the <code>prune()</code> function, along with our adopted value of <code>cp</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rp.out2    <span class="ot">&lt;-</span> <span class="fu">prune</span>(rp.out, <span class="at">cp=</span><span class="fl">0.023841</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rp.out2    <span class="ot">&lt;-</span> <span class="fu">prune</span>(rp.out, <span class="at">cp=</span><span class="fl">0.023841</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>rp.pred2   <span class="ot">&lt;-</span> <span class="fu">predict</span>(rp.out2, <span class="at">newdata=</span>df.test)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>((rp.pred2<span class="sc">-</span>df.test<span class="sc">$</span>Teff)<span class="sc">^</span><span class="dv">2</span>)), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>((rp.pred2<span class="sc">-</span>df.test<span class="sc">$</span>Teff)<span class="sc">^</span><span class="dv">2</span>)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 672.84</code></pre>
 </div>
@@ -539,8 +541,8 @@ n= 700
 <h4 data-number="8.1.1.2" class="anchored" data-anchor-id="classification"><span class="header-section-number">8.1.1.2</span> Classification</h4>
 <p>In this example, we load the heart disease dataset, for which <span class="math inline">\(n = 270\)</span>. Recall that this dataset includes 13 potential indicators of heart disease, along with the binary response variable <code>Disease</code>, with values <code>Absent</code> (class 0) and <code>Present</code> (class 1).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>rp.out <span class="ot">&lt;-</span> <span class="fu">rpart</span>(Disease<span class="sc">~</span>., <span class="at">data=</span>df.train)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(rp.out, <span class="at">extra=</span><span class="dv">104</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>rp.out <span class="ot">&lt;-</span> <span class="fu">rpart</span>(Disease<span class="sc">~</span>., <span class="at">data=</span>df.train)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(rp.out, <span class="at">extra=</span><span class="dv">104</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -552,7 +554,7 @@ n= 700
 <p>Our classification tree model shows that there are no truly dominant predictor variables, beyond perhaps <code>Thallium</code> (the variable for which the first split is made). This is consistent with the summary output from logistic regression, which exhibited many moderate to moderately low <span class="math inline">\(p\)</span>-values. We also note that the predictor variables seen in the top two levels of splits also appear in the best-subset selection model.</p>
 <p>Before continuing, we (re)define the “helper function” that takes in a vector of test-set labels and predicted Class 1 probabilities, along with the names of the two response levels, and outputs the area under curve, the optimal threshold value (the one that minimizes Youden’s <span class="math inline">\(J\)</span> statistic), and the misclassification rate that we observe when adopting that threshold value. We will utilize this function over the remainder of this chapter to assess the performances of our different models.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(pROC))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(pROC))</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(label, prob, factor1, factor2)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>{</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  mod.roc  <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(<span class="fu">roc</span>(label, prob))</span>
@@ -564,12 +566,12 @@ n= 700
 <span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  pred <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(prob<span class="sc">&gt;</span>t, factor2, factor1)</span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"The misclassification rate is"</span>, <span class="fu">round</span>(<span class="fu">mean</span>(pred<span class="sc">!=</span>label), <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>(pred, label)</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Having done this, let’s see how the classification tree model performs:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>rp.prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(rp.out, <span class="at">newdata=</span>df.test, <span class="at">type=</span><span class="st">"prob"</span>)[, <span class="dv">2</span>]</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, rp.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>rp.prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(rp.out, <span class="at">newdata=</span>df.test, <span class="at">type=</span><span class="st">"prob"</span>)[, <span class="dv">2</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, rp.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -591,7 +593,7 @@ pred      Absent Present
 </div>
 <p>The area under curve, or AUC, is 0.862 (versus 0.940 for logistic regression without subset selection), while the misclassification rate, or MCR, is 0.160 (versus 0.111). So while we might declare logistic regression the winner here, we should check to see if pruning will improve the classification tree.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(rp.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">printcp</span>(rp.out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Classification tree:
@@ -612,7 +614,7 @@ n= 189
 4 0.016878      4   0.43038 0.74684 0.080638
 5 0.010000      7   0.37975 0.67089 0.078172</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(rp.out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotcp</span>(rp.out)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -622,9 +624,9 @@ n= 189
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rp.pruned <span class="ot">&lt;-</span> <span class="fu">prune</span>(rp.out, <span class="at">cp=</span><span class="fl">0.016878</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rp.pruned <span class="ot">&lt;-</span> <span class="fu">prune</span>(rp.out, <span class="at">cp=</span><span class="fl">0.016878</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>rp.prob   <span class="ot">&lt;-</span> <span class="fu">predict</span>(rp.pruned, <span class="at">newdata=</span>df.test, <span class="at">type=</span><span class="st">"prob"</span>)[, <span class="dv">2</span>]</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, rp.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, rp.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -647,10 +649,10 @@ pred      Absent Present
 <p>The answer is…no.</p>
 <p>But there is one other thing to check here. The sample size is relatively small, so perhaps we should reduce the minimum number of data that needs to be in a node before we can attempt a split:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>rp.out <span class="ot">&lt;-</span> <span class="fu">rpart</span>(Disease<span class="sc">~</span>., <span class="at">data=</span>df.train, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>rp.out <span class="ot">&lt;-</span> <span class="fu">rpart</span>(Disease<span class="sc">~</span>., <span class="at">data=</span>df.train, </span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">control=</span><span class="fu">rpart.control</span>(<span class="at">minsplit=</span><span class="dv">6</span>)) <span class="co"># allows for two data in each terminal node</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>rp.prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(rp.out, <span class="at">newdata=</span>df.test, <span class="at">type=</span><span class="st">"prob"</span>)[, <span class="dv">2</span>]</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, rp.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, rp.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -688,21 +690,21 @@ pred      Absent Present
 <p>The bootstrap algorithm is a clever way to “repeat” an experiment that we cannot actually repeat, and it has been shown theoretically to provide useful results.</p>
 <p>Below we show how we would sample numbers between 1 and 10 with replacement.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">sample</span>(<span class="dv">10</span>, <span class="dv">10</span>, <span class="at">replace=</span><span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">sample</span>(<span class="dv">10</span>, <span class="dv">10</span>, <span class="at">replace=</span><span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1]  1  3  3  3  6  7  9  9  9 10</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">sample</span>(<span class="dv">10</span>, <span class="dv">10</span>, <span class="at">replace=</span><span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">sample</span>(<span class="dv">10</span>, <span class="dv">10</span>, <span class="at">replace=</span><span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1]  1  1  2  3  4  5  5  6  8 10</code></pre>
 </div>
 </div>
 <p>In the first vector, the number 3 is sampled three times, as is the number 9, while 2, 4, 5, and 8 are not sampled at all. In the second vector, the numbers 1 and 5 are each sampled twice, while 7 and 9 are not sampled. If we equate these numbers with specific rows of a data frame, we can see right away how we can bootstrap data: we simply run code such as the following.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>s       <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">sample</span>(<span class="fu">nrow</span>(df), <span class="fu">nrow</span>(df), <span class="at">replace=</span><span class="cn">TRUE</span>))</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>df.boot <span class="ot">&lt;-</span> df[s, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>df.boot <span class="ot">&lt;-</span> df[s, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Note that the probability that a particular row in a data frame is represented at least once approaches <span class="math inline">\(\approx\)</span> 63.2% as the sample size <span class="math inline">\(n\)</span> goes to infinity. (For those curious about how one would derive this number: let <span class="math inline">\(X\)</span> be the number of times a particular row is represented. The probability that <span class="math inline">\(X\)</span> takes on a particular value is binomially distributed: <span class="math inline">\(X \sim\)</span> Binom(<span class="math inline">\(n,1/n\)</span>), where the probability of choosing the row in any one draw is <span class="math inline">\(1/n\)</span>. If we carry through the math, we would find that <span class="math inline">\(P(X &gt; 0)\)</span>, the probability of seeing a given row represented one or more times, is <span class="math inline">\(1 - P(X=0)\)</span>, which approaches <span class="math inline">\(1 - e^{-1} = 0.632\)</span> as <span class="math inline">\(n\)</span> goes to infinity.)</p>
 <ul>
@@ -718,10 +720,10 @@ pred      Absent Present
 <h4 data-number="8.2.1.1" class="anchored" data-anchor-id="regression-1"><span class="header-section-number">8.2.1.1</span> Regression</h4>
 <p>Here we learn a random forest model for the same stellar temperature data that we use above to learn a regression tree.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(randomForest))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(randomForest))</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>rf.out  <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Teff<span class="sc">~</span>., <span class="at">data=</span>df.train, <span class="at">importance=</span><span class="cn">TRUE</span>)</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>rf.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>rf.out</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -733,8 +735,8 @@ No. of variables tried at each split: 3
           Mean of squared residuals: 310418.6
                     % Var explained: 47.38</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>rf.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf.out, <span class="at">newdata=</span>df.test)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>((rf.pred<span class="sc">-</span>df.test<span class="sc">$</span>Teff)<span class="sc">^</span><span class="dv">2</span>)), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>rf.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf.out, <span class="at">newdata=</span>df.test)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>((rf.pred<span class="sc">-</span>df.test<span class="sc">$</span>Teff)<span class="sc">^</span><span class="dv">2</span>)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 522.618</code></pre>
 </div>
@@ -766,9 +768,9 @@ No. of variables tried at each split: 3
 <h4 data-number="8.2.1.2" class="anchored" data-anchor-id="classification-1"><span class="header-section-number">8.2.1.2</span> Classification</h4>
 <p>Here we learn a random forest model for the same heart disease data that we use above to learn a classification tree.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>rf.out  <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Disease<span class="sc">~</span>., <span class="at">data=</span>df.train, <span class="at">importance=</span><span class="cn">TRUE</span>)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(rf.out, <span class="at">type=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(rf.out, <span class="at">type=</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -776,8 +778,8 @@ No. of variables tried at each split: 3
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>rf.prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf.out, <span class="at">newdata=</span>df.test, <span class="at">type=</span><span class="st">"prob"</span>)[, <span class="dv">2</span>]</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, rf.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>rf.prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf.out, <span class="at">newdata=</span>df.test, <span class="at">type=</span><span class="st">"prob"</span>)[, <span class="dv">2</span>]</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, rf.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -825,29 +827,29 @@ TBD - Replace the figures below.
 <h4 data-number="8.3.1.1" class="anchored" data-anchor-id="regression-2"><span class="header-section-number">8.3.1.1</span> Regression</h4>
 <p>We apply extreme gradient boosting, or <code>xgboost</code>, to our stellar temperature data. Note the function calls that are displayed below look “weird” because the <code>xgboost</code> package developers have yet, at the time of writing, to adapt to general <code>R</code> modeling function syntax. We also note that <code>xgboost</code> currently works only with quantitative predictor variables, meaning that any factor variables need to be transformed to have numeric values. (For instance, <code>no</code> and <code>yes</code> can be changed to 0 and 1, while nominal factor variables can be dealt with through the use of one-hot encoding: e.g., make <code>no</code> a column with value one where the datum is <code>no</code> and 0 otherwise, and make <code>yes</code> another, similar column. The use of one-hot encoding makes the most sense when there are three or more categories associated with a predictor variable.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(xgboost))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(xgboost))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: package 'xgboost' was built under R version 4.5.2</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "Teff"     "RA"       "Dec"      "Parallax" "PM.RA"    "PM.Dec"  
  [7] "g"        "b"        "r"        "Gal.L"    "Gal.B"   </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>pcol       <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>  <span class="co"># columns with predictor variables</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>pcol       <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>  <span class="co"># columns with predictor variables</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>rcol       <span class="ot">&lt;-</span> <span class="dv">1</span>     <span class="co"># column with response variable</span></span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>xg.train   <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(<span class="at">data=</span><span class="fu">as.matrix</span>(df.train[, pcol]), <span class="at">label=</span>df.train[, rcol])</span>
 <span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>xgb.cv.out <span class="ot">&lt;-</span> <span class="fu">xgb.cv</span>(<span class="at">params=</span><span class="fu">list</span>(<span class="at">objective=</span><span class="st">"reg:squarederror"</span>), <span class="at">data=</span>xg.train, <span class="at">nrounds=</span><span class="dv">100</span>, <span class="at">nfold=</span><span class="dv">5</span>, <span class="at">verbose=</span><span class="dv">0</span>)</span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>nround     <span class="ot">&lt;-</span> xgb.cv.out<span class="sc">$</span>evaluation_log<span class="sc">$</span>iter[<span class="fu">which.min</span>(xgb.cv.out<span class="sc">$</span>evaluation_log<span class="sc">$</span>test_rmse_mean)]</span>
 <span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>xgb.out    <span class="ot">&lt;-</span> <span class="fu">xgboost</span>(<span class="at">x=</span>df.train[, pcol], <span class="at">y=</span>df.train[, rcol], <span class="at">objective=</span><span class="st">"reg:squarederror"</span>, <span class="at">nrounds=</span>nround)</span>
 <span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>xgb.pred   <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb.out, <span class="at">newdata=</span><span class="fu">as.matrix</span>(df.test[, pcol]))</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>((xgb.pred<span class="sc">-</span>df.test[, rcol])<span class="sc">^</span><span class="dv">2</span>)), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>((xgb.pred<span class="sc">-</span>df.test[, rcol])<span class="sc">^</span><span class="dv">2</span>)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 433.243</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>imp.out    <span class="ot">&lt;-</span> <span class="fu">xgb.importance</span>(<span class="at">model=</span>xgb.out)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">xgb.plot.importance</span>(<span class="at">importance_matrix=</span>imp.out,<span class="at">col=</span><span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>imp.out    <span class="ot">&lt;-</span> <span class="fu">xgb.importance</span>(<span class="at">model=</span>xgb.out)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">xgb.plot.importance</span>(<span class="at">importance_matrix=</span>imp.out,<span class="at">col=</span><span class="st">"blue"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -873,14 +875,14 @@ TBD - Replace the figures below.
 <h4 data-number="8.3.1.2" class="anchored" data-anchor-id="classification-2"><span class="header-section-number">8.3.1.2</span> Classification</h4>
 <p>Here we will once again work with the heart-disease dataset. However, given that some of the variables are categorical, we have to carry out some transformations: we transform the binary variable <code>Gender</code> to have values 0 (male) and 1 (female), the binary variables <code>Angina</code> and <code>FBS.120</code> to have values 0 (no) and 1 (yes), and the binary respose variable <code>Disease</code> to have values 0 and 1 (for “Absent” and “Present”). The last change means that the final confusion matrix will be in terms of 0 and 1.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(xgboost))</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(xgboost))</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "Age"         "BP"          "Chol"        "Max.HR"      "ST.Dep"     
  [6] "ST.Slope"    "Num.Vessels" "Thallium"    "Chest.Pain"  "EKG"        
 [11] "Gender"      "Angina"      "FBS.120"     "Disease"    </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>pcol          <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">13</span>  <span class="co"># columns with predictor variables</span></span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>rcol          <span class="ot">&lt;-</span> <span class="dv">14</span>    <span class="co"># column with response variable</span></span>
 <span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>xg.train      <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(<span class="at">data=</span><span class="fu">as.matrix</span>(df.train[, pcol]), <span class="at">label=</span>df.train[, rcol])</span>
@@ -888,7 +890,7 @@ TBD - Replace the figures below.
 <span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>nround        <span class="ot">&lt;-</span> xgb.cv.out<span class="sc">$</span>evaluation_log<span class="sc">$</span>iter[<span class="fu">which.min</span>(xgb.cv.out<span class="sc">$</span>evaluation_log<span class="sc">$</span>test_error_mean)]</span>
 <span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>xgb.out       <span class="ot">&lt;-</span> <span class="fu">xgboost</span>(<span class="at">x=</span><span class="fu">as.matrix</span>(df.train[, pcol]), <span class="at">y=</span><span class="fu">factor</span>(df.train[, rcol]), <span class="at">objective=</span><span class="st">"binary:logistic"</span>, <span class="at">nrounds=</span>nround, <span class="at">eval_metric=</span><span class="st">"error"</span>)</span>
 <span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>xgb.pred      <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb.out, <span class="at">newdata=</span><span class="fu">as.matrix</span>(df.test[, pcol]))</span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(<span class="fu">factor</span>(df.test<span class="sc">$</span>Disease), xgb.pred, <span class="st">"0"</span>, <span class="st">"1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(<span class="fu">factor</span>(df.test<span class="sc">$</span>Disease), xgb.pred, <span class="st">"0"</span>, <span class="st">"1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -935,7 +937,7 @@ P[Y = j \vert \mathbf{x}] = \frac{1}{k} \sum_{i=1}^k \mathbb{I}(Y_i = j)
 X_{ij} ~~~ \rightarrow ~~~ \frac{X_{ij} - \overline{X_i}}{s_i} \,,
 \]</span> where <span class="math inline">\(\overline{X_i}\)</span> is the sample mean for the <span class="math inline">\(i^{\rm th}\)</span> predictor variable, and <span class="math inline">\(s_i\)</span> is the sample standard deviation.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FNN)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FNN)</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>k.max <span class="ot">&lt;-</span> <span class="dv">100</span></span>
 <span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>mse.k <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>,k.max)</span>
@@ -944,7 +946,7 @@ X_{ij} ~~~ \rightarrow ~~~ \frac{X_{ij} - \overline{X_i}}{s_i} \,,
 <span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  mse.k[kk] <span class="ot">&lt;-</span> <span class="fu">mean</span>((knn.out<span class="sc">$</span>pred<span class="sc">-</span>df.train[,<span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>k.min <span class="ot">&lt;-</span> <span class="fu">which.min</span>(mse.k)</span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The optimal number of nearest neighbors is "</span>,k.min,<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The optimal number of nearest neighbors is "</span>,k.min,<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The optimal number of nearest neighbors is  8 </code></pre>
 </div>
@@ -960,11 +962,11 @@ X_{ij} ~~~ \rightarrow ~~~ \frac{X_{ij} - \overline{X_i}}{s_i} \,,
 </div>
 <p>We find that the optimal number of neighbors is 8. Note that in any given analysis, if the optimal number is equal to <code>k.max</code>, then the value of <code>k.max</code> is too small: increase its value and start over!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>knn.out <span class="ot">&lt;-</span> <span class="fu">knn.reg</span>(<span class="at">train=</span>df.train[, <span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>], <span class="co"># the predictors are in cols 2-11</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>knn.out <span class="ot">&lt;-</span> <span class="fu">knn.reg</span>(<span class="at">train=</span>df.train[, <span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>], <span class="co"># the predictors are in cols 2-11</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">test=</span>df.test[, <span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>],</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y=</span>df.train[, <span class="dv">1</span>],</span>
 <span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">k=</span>k.min, <span class="at">algorithm=</span><span class="st">"brute"</span>)</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>((knn.out<span class="sc">$</span>pred<span class="sc">-</span>df.test[, <span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sqrt</span>(<span class="fu">mean</span>((knn.out<span class="sc">$</span>pred<span class="sc">-</span>df.test[, <span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 630</code></pre>
 </div>
@@ -985,28 +987,28 @@ X_{ij} ~~~ \rightarrow ~~~ \frac{X_{ij} - \overline{X_i}}{s_i} \,,
 <h4 data-number="8.4.1.2" class="anchored" data-anchor-id="classification-3"><span class="header-section-number">8.4.1.2</span> Classification</h4>
 <p>We once again return to the heart disease dataset. As we do when learning an xgboost model, we transform the binary variable <code>Gender</code> to have values 0 (male) and 1 (female), and the binary variables <code>Angina</code> and <code>FBS.120</code> to have values 0 (no) and 1 (yes). However, unlike before, the binary response variable <code>Disease</code> does not need to be transformed: the <code>FNN</code> package handles categorical responses seamlessly. (And here, we scale the predictor variable values.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>k.max <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>k.max <span class="ot">&lt;-</span> <span class="dv">100</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>mcr.k <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, k.max)</span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ( kk <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>k.max ) {</span>
 <span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  knn.out   <span class="ot">&lt;-</span> <span class="fu">knn.cv</span>(<span class="at">train=</span>df.train[,<span class="sc">-</span><span class="dv">11</span>], <span class="at">cl=</span>df.train[,<span class="dv">11</span>],<span class="at">k=</span>kk, <span class="at">algorithm=</span><span class="st">"brute"</span>)</span>
 <span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  mcr.k[kk] <span class="ot">&lt;-</span> <span class="fu">mean</span>(knn.out<span class="sc">!=</span>df.train<span class="sc">$</span>Disease)</span>
 <span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>k.min <span class="ot">&lt;-</span> <span class="fu">which.min</span>(mcr.k)</span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The optimal number of nearest neighbors is "</span>,k.min,<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The optimal number of nearest neighbors is "</span>,k.min,<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The optimal number of nearest neighbors is  29 </code></pre>
 </div>
 </div>
 <p>The optimum number of neighbors is 29.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>knn.out <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train=</span>df.train[, <span class="sc">-</span><span class="dv">11</span>],</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>knn.out <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train=</span>df.train[, <span class="sc">-</span><span class="dv">11</span>],</span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">test=</span>df.test[, <span class="sc">-</span><span class="dv">11</span>],</span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">cl=</span>df.train[, <span class="dv">11</span>],</span>
 <span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">k=</span>k.min, <span class="at">algorithm=</span><span class="st">"brute"</span>, <span class="at">prob=</span><span class="cn">TRUE</span>)</span>
 <span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>knn.prob    <span class="ot">&lt;-</span> <span class="fu">attributes</span>(knn.out)<span class="sc">$</span>prob</span>
 <span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>w           <span class="ot">&lt;-</span> <span class="fu">which</span>(knn.out<span class="sc">==</span><span class="st">"Absent"</span>)</span>
 <span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>knn.prob[w] <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> knn.prob[w]</span>
-<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, knn.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, knn.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1069,10 +1071,10 @@ p(C_k \vert \mathbf{x}) \propto p(C_k) \prod_{i=1}^p p(x_i \vert C_k) \,,
 <h4 data-number="8.5.1.1" class="anchored" data-anchor-id="classification-4"><span class="header-section-number">8.5.1.1</span> Classification</h4>
 <p>Here we learn a Naive Bayes model for the heart disease data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(e1071))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(e1071))</span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>nb.out <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(Disease<span class="sc">~</span>., <span class="at">data=</span>df.train)</span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>nb.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>nb.out</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Naive Bayes Classifier for Discrete Predictors
@@ -1155,8 +1157,8 @@ Y              [,1]      [,2]
 <p>The “A-priori probabilities” show that 58.2% and 41.8% of the training data are comprised of people for whom heart disease is absent and present, respectively.</p>
 <p>The rest of the output shows the parameters of the normal distributions that are used to model the quantitative predictors, as well as conditional probabilities for the categorical predictors. For instance, regarding <code>Age</code>, it is inferred that those without heart disease have ages that are distributed according to a normal distribution with mean 52.7 and standard deviation 9.19, with the corresponding numbers for those with heart disease being 57.4 and 7.64. (Thus those with heart disease are inferred to be older, which makes sense). Then, for <code>Gender</code>, the training data are telling us that the probability of being female when heart disease is absent is 0.391; the corresponding figure when it is present is 0.203. (Thus, if a test datum has gender <code>Female</code>, we are less likely to predict an outcome of <code>Present</code>.)</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>nb.prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(nb.out, <span class="at">newdata=</span>df.test, <span class="at">type=</span><span class="st">"raw"</span>)[, <span class="dv">2</span>]</span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, nb.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>nb.prob <span class="ot">&lt;-</span> <span class="fu">predict</span>(nb.out, <span class="at">newdata=</span>df.test, <span class="at">type=</span><span class="st">"raw"</span>)[, <span class="dv">2</span>]</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">f</span>(df.test<span class="sc">$</span>Disease, nb.prob, <span class="st">"Absent"</span>, <span class="st">"Present"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1278,7 +1280,7 @@ pred      Absent Present
 </div>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-James2021r" class="csl-entry" role="listitem">
 James, Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani. 2021. <em>An Introduction to Statistical Learning: With Applications in r</em>. Springer New York, NY. <a href="https://doi.org/10.1007/978-1-0716-1418-1">https://doi.org/10.1007/978-1-0716-1418-1</a>.
 </div>
@@ -1338,13 +1340,14 @@ James, Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani. 2021. <em>A
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
