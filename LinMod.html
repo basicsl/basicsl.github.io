@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>4&nbsp; Linear Models – Basic Statistical Learning: a Guide for the Perplexed</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-5ccb035bea26c1e21f80f44cf7c27909.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -106,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -119,7 +122,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -254,17 +257,19 @@ window.Quarto = {
    
   <ul>
   <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup"><span class="header-section-number">4.1</span> Setup</a></li>
-  <li><a href="#model-assumptions-and-diagnostics" id="toc-model-assumptions-and-diagnostics" class="nav-link" data-scroll-target="#model-assumptions-and-diagnostics"><span class="header-section-number">4.2</span> Model Assumptions and Diagnostics</a>
+  <li><a href="#sec-model-assumptions" id="toc-sec-model-assumptions" class="nav-link" data-scroll-target="#sec-model-assumptions"><span class="header-section-number">4.2</span> Model Assumptions</a></li>
+  <li><a href="#model-diagnostics" id="toc-model-diagnostics" class="nav-link" data-scroll-target="#model-diagnostics"><span class="header-section-number">4.3</span> Model Diagnostics</a>
   <ul class="collapse">
-  <li><a href="#mean-model-mispecification" id="toc-mean-model-mispecification" class="nav-link" data-scroll-target="#mean-model-mispecification"><span class="header-section-number">4.2.1</span> Mean Model Mispecification</a></li>
-  <li><a href="#non-constant-error-variance" id="toc-non-constant-error-variance" class="nav-link" data-scroll-target="#non-constant-error-variance"><span class="header-section-number">4.2.2</span> Non-Constant Error Variance</a></li>
-  <li><a href="#non-normality-of-errors" id="toc-non-normality-of-errors" class="nav-link" data-scroll-target="#non-normality-of-errors"><span class="header-section-number">4.2.3</span> Non-Normality of Errors</a></li>
+  <li><a href="#mean-model-mispecification" id="toc-mean-model-mispecification" class="nav-link" data-scroll-target="#mean-model-mispecification"><span class="header-section-number">4.3.1</span> Mean Model Mispecification</a></li>
+  <li><a href="#non-constant-error-variance" id="toc-non-constant-error-variance" class="nav-link" data-scroll-target="#non-constant-error-variance"><span class="header-section-number">4.3.2</span> Non-Constant Error Variance</a></li>
+  <li><a href="#non-normality-of-errors" id="toc-non-normality-of-errors" class="nav-link" data-scroll-target="#non-normality-of-errors"><span class="header-section-number">4.3.3</span> Non-Normality of Errors</a></li>
   </ul></li>
-  <li><a href="#outliers" id="toc-outliers" class="nav-link" data-scroll-target="#outliers"><span class="header-section-number">4.3</span> Outliers</a></li>
-  <li><a href="#multiollinearity" id="toc-multiollinearity" class="nav-link" data-scroll-target="#multiollinearity"><span class="header-section-number">4.4</span> Multiollinearity</a>
+  <li><a href="#outliers" id="toc-outliers" class="nav-link" data-scroll-target="#outliers"><span class="header-section-number">4.4</span> Outliers</a></li>
+  <li><a href="#multiollinearity" id="toc-multiollinearity" class="nav-link" data-scroll-target="#multiollinearity"><span class="header-section-number">4.5</span> Multiollinearity</a>
   <ul class="collapse">
-  <li><a href="#variance-inflation-factor" id="toc-variance-inflation-factor" class="nav-link" data-scroll-target="#variance-inflation-factor"><span class="header-section-number">4.4.1</span> Variance Inflation Factor</a></li>
+  <li><a href="#variance-inflation-factor" id="toc-variance-inflation-factor" class="nav-link" data-scroll-target="#variance-inflation-factor"><span class="header-section-number">4.5.1</span> Variance Inflation Factor</a></li>
   </ul></li>
+  <li><a href="#example-in-r" id="toc-example-in-r" class="nav-link" data-scroll-target="#example-in-r"><span class="header-section-number">5</span> Example in R</a></li>
   </ul>
 </nav>
     </div>
@@ -396,18 +401,18 @@ two slide) so that we have the functional form for $f_Y(y_i \vert \mu_i)$
 <p>Simple linear regression describes the linear relationship between the outcome <span class="math inline">\(Y\)</span> and a covariate of interest <span class="math inline">\(x\)</span> (for simplicity, we will assume that the <span class="math inline">\(x\)</span>’s are fixed and the <span class="math inline">\(Y\)</span>’s are random variables). Under simple linear regression, we assume that for all units <span class="math inline">\(i = 1, \dots, n\)</span>:</p>
 <p><span id="eq-SLR"><span class="math display">\[
 \begin{aligned}
-Y_i = \beta_0 + \beta_1 x_i + \epsilon_i \text{with }\epsilon_i \sim \text{Normal}(0, \sigma^2)
+Y_i = \beta_0 + \beta_1 x_i + \epsilon_i \quad \text{with }\epsilon_i \sim \text{Normal}(0, \sigma^2)
 \end{aligned}
 \tag{4.1}\]</span></span></p>
-<p>The simple linear regression model given in <a href="#eq-SLR" class="quarto-xref">Equation&nbsp;<span>4.1</span></a> can be extended in various ways. For example, we might want to include different powers of <span class="math inline">\(x\)</span> (e.g., <span class="math inline">\(x, x^2, x^3, \dots\)</span>) in the linear model. This is known as <em>polynomial regression</em>, which we discuss in more detail in <a href="./NonLinMod.html">Chapter 6</a>.</p>
-<p>Another natural extension is to include multiple covariates <span class="math inline">\(\mathbf{x} = (x_1, \dots, x_p)\)</span>, rather than just a single covariate, in the linear model. This is commonly referred to as <em>multiple linear regression</em>, which assumes that for all units <span class="math inline">\(i = 1, \dots, n\)</span>:</p>
+<p>We can extend the simple linear regression model given in <a href="#eq-SLR" class="quarto-xref">Equation&nbsp;<span>4.1</span></a> in various ways. For example, we might want to include different powers of covariate <span class="math inline">\(x\)</span> (e.g., <span class="math inline">\(x, x^2, x^3, \dots\)</span>) in the linear model. This is known as <em>polynomial regression</em>, which we discuss in more detail in <a href="./NonLinMod.html">Chapter 6</a>.</p>
+<p>Another natural extension, which we focus on in this chapter, is to include <em>multiple</em> covariates <span class="math inline">\(\mathbf{x} = (x_1, \dots, x_p)\)</span>, rather than just a single covariate, in the linear model. This is commonly referred to as <em>multiple linear regression</em>, which assumes that for all units <span class="math inline">\(i = 1, \dots, n\)</span>:</p>
 <p><span id="eq-MLR"><span class="math display">\[
 Y_i = \beta_0 + \beta_1 x_{1i} + \cdots + \beta_p x_{pi} + \epsilon_i \quad \text{with } \epsilon_i \sim \text{Normal}(0, \sigma^2)
 \tag{4.2}\]</span></span></p>
-<p>Thus, simple linear regression can be seen as a special case of multiple linear regression, where the number of covariates <span class="math inline">\(p = 1\)</span>. For simplicity, we refer to mulitple linear regression as linear regression.</p>
+<p>Notice that we can view simple linear regression as a special case of multiple linear regression, where the number of covariates <span class="math inline">\(p = 1\)</span>. For this reason, multiple linear regression is often just referred to as linear regression, and we use the term <em>linear regression</em> throughout this chapter.</p>
 </section>
-<section id="model-assumptions-and-diagnostics" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="model-assumptions-and-diagnostics"><span class="header-section-number">4.2</span> Model Assumptions and Diagnostics</h2>
+<section id="sec-model-assumptions" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="sec-model-assumptions"><span class="header-section-number">4.2</span> Model Assumptions</h2>
 <p>Per <a href="#eq-MLR" class="quarto-xref">Equation&nbsp;<span>4.2</span></a>, linear regression makes the following assumptions:</p>
 <ol type="1">
 <li><p>The error terms have mean zero: <span class="math inline">\(E[\epsilon_i] = 0\)</span>, or equivalently, the mean of <span class="math inline">\(Y_i\)</span> is a linear function of <span class="math inline">\(\mathbf{x}_i\)</span>: <span class="math display">\[
@@ -417,54 +422,90 @@ E[Y_i] = \beta_0 + \beta_1 x_{1i} + \dots + \beta_p x_{pi}.
 <li><p>The error terms are independent of each other. That is, having information about an error term <span class="math inline">\(\epsilon_i\)</span> does not tell us something about another error term <span class="math inline">\(\epsilon_j\)</span>.</p></li>
 <li><p>The error terms are normally distributed: <span class="math inline">\(\epsilon_i \sim \text{Normal}(0, \sigma^2)\)</span></p></li>
 </ol>
-<p>However, we cannot directly calculate the parameters <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_p\)</span>, as we would need access to the entire population to do so. Instead, we estimate the parameters using our sample using our (random) sample <span class="math inline">\((\mathbf{x}, y)_{i = 1}^n\)</span> from the population. We denote our sample estimates as: <span class="math inline">\(b_0, b_1, \dots, b_p\)</span>. So, our fitted linear model is:</p>
+<p><strong>Important:</strong> we do not directly know the linear regression parameters: <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_p\)</span>, and <span class="math inline">\(\sigma^2\)</span>; instead, we estimate them using a (random) sample from the population:</p>
+<p><span class="math display">\[
+(\mathbf{x}_1, y_1), (\mathbf{x}_2, y_2), \dots, (\mathbf{x}_n, y_n),
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{x}_i = (x_{i1}, x_{i2}, \dots, x_{in})\)</span> represents the <em>observed</em> covariates for unit <span class="math inline">\(i\)</span>, and <span class="math inline">\(y_i\)</span> denotes the <em>observed</em> outcome for unit <span class="math inline">\(i\)</span>.</p>
+<p>To distinguish the true linear regression parameters from our estimates, we use <span class="math inline">\(b_0, b_1, \dots, b_p\)</span> to denote our parameter estimates. As a result, our fitted linear model is:</p>
 <p><span id="eq-prediction"><span class="math display">\[
 \hat{y}_i = b_0 + b_1 x_{1i} + \dots + b_p x_{pi},
 \tag{4.3}\]</span></span></p>
-<p>where <span class="math inline">\(\hat{y}_i\)</span> denotes our <em>predicted</em> outcome for observation <span class="math inline">\(i\)</span>.</p>
-<p>We can use the fitted linear model’s <em>residuals</em> (i.e., the observed errors) to assess assumptions (1)-(4). Residuals are the sample version of the error terms in <a href="#eq-MLR" class="quarto-xref">Equation&nbsp;<span>4.2</span></a>, and are defined as:</p>
+<p>where <span class="math inline">\(\hat{y}_i\)</span> is the <em>predicted</em> outcome, or <em>fitted value</em> for unit <span class="math inline">\(i\)</span>.</p>
+</section>
+<section id="model-diagnostics" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="model-diagnostics"><span class="header-section-number">4.3</span> Model Diagnostics</h2>
+<p>Model diagnostics are necessary to assess whether the linear regression assumptions in <a href="#sec-model-assumptions" class="quarto-xref"><span>Section 4.2</span></a> are satisfied and, consequently, whether linear regression is a good fit for our data.</p>
+<p>An important tool for model diagnostics is the model <em>residuals</em>. <em>Residuals</em> are the observed error terms, which are the sample version of the error terms in <a href="#eq-MLR" class="quarto-xref">Equation&nbsp;<span>4.2</span></a>. For unit <span class="math inline">\(i\)</span>, the residual is defined as:</p>
 <p><span id="eq-residual"><span class="math display">\[
 \begin{aligned}
 e_i &amp;= y_i - \hat{y}_i \\
 &amp;= y_i - (b_0 + b_1 x_{1i} + \dots + b_p x_{pi})
 \end{aligned}
 \tag{4.4}\]</span></span></p>
-<section id="mean-model-mispecification" class="level3" data-number="4.2.1">
-<h3 data-number="4.2.1" class="anchored" data-anchor-id="mean-model-mispecification"><span class="header-section-number">4.2.1</span> Mean Model Mispecification</h3>
-<p>Assumption (1) requires that the mean model of the outcome is <em>linear</em> with respect to the included covariates. If this assumption is violated, then the current linear model is not a good representation of the data-generating process.[[need to add influence on inference and/or predictions]]</p>
-<p>There are two primary ways in which the mean model of the outcome may be misspecified in linear regression. First, some covariates may have a <em>nonlinear</em> relationship with the outcome that is not properly captured by the linear model. Second, the linear model may omit one or more important covariates that are associated with the outcome.</p>
-<p><strong>Nonlinearity:</strong> We can assess whether there is nonlinear relationship between the covariate and outcome by plotting the residuals against the fitted values. If the mean model is correctly specified, the points will be randomly scattered around zero, with no clear pattern. For example, the linear model producing the fitted vs.&nbsp;residual plot in <a href="#fig-misspecified" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>(a) is correctly specified since the points are randomly scattered around zero. In constrast, the linear model producing the fitted vs.&nbsp;residual plot in <a href="#fig-misspecified" class="quarto-xref">Figure&nbsp;<span>4.1</span></a>(b) is misspecified, with the points following a quadratic trend.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-misspecified" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-misspecified-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="LinMod_files/figure-html/fig-misspecified-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
+<section id="mean-model-mispecification" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="mean-model-mispecification"><span class="header-section-number">4.3.1</span> Mean Model Mispecification</h3>
+<p>Assumption (1) requires that the mean model of the outcome is <em>linear</em> with respect to the included covariates.:</p>
+<p><span class="math display">\[
+E[Y_i] = \beta_0 + \beta_1 x_{1i} + \dots + \beta_p x_{pi}.
+\]</span></p>
+<p>If this assumption is violated, then the linear model is not a good representation of the data-generating process, and the mean model of the outcome is <em>misspecified</em>.</p>
+<p>There are two primary ways in which the mean model of the outcome may be misspecified in linear regression. First, some covariates may have a <em>nonlinear</em> relationship with the outcome that is not properly captured by the specified linear model. Second, the linear model may omit one or more important covariates that are associated with the outcome.</p>
+<p><strong>Nonlinearity:</strong> We can assess whether there is nonlinear relationship between an included covariate and the outcome by plotting the residuals against the fitted values. If the mean model is correctly specified, the residuals should be randomly scattered around zero for every fitted value, with no clear pattern.</p>
+<p>To illustrate the difference between the fitted vs.&nbsp;residual consider the following toy example, where the true relationship between our outcome <span class="math inline">\(Y\)</span> and covariate <span class="math inline">\(x\)</span> is quadratic; that is:</p>
+<p><span class="math display">\[
+Y_i = 2 + 3 x_{i} + x^2_{i} + \epsilon_i, \quad \text{with } \epsilon_i \sim \text{Normal}(0, \sigma^2)
+\]</span></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(tidyverse))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4747</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>error <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">2</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">min =</span> <span class="dv">1</span>, <span class="at">max =</span> <span class="dv">10</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> x,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span><span class="sc">*</span>x <span class="sc">+</span> x<span class="sc">**</span><span class="dv">2</span> <span class="sc">+</span> error</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="co"># save this to data folder? </span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-misspecified-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.1: TO ADD
-</figcaption>
+<p>However, let’s suppose we fit a linear model with only <span class="math inline">\(x_i\)</span>, excluding the squared-term <span class="math inline">\(x_i^2\)</span>. Then, our linear model would be <em>misspecified</em>, and there would be a clear (quadratic) trend in the fitted vs.&nbsp;residual plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>misspecified_fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> df1)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">augment</span>(misspecified_fit) <span class="sc">|&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">'grey20'</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>() <span class="sc">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Fitted"</span>, <span class="at">y =</span> <span class="st">"Residual"</span>) <span class="sc">+</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="LinMod_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>We can evaluate where the misspecification occurs by plotting the residuals against each covariate. [[ADD DETAILS]]. <a href="#fig-misspecified_covar" class="quarto-xref">Figure&nbsp;<span>4.2</span></a> shows that the mispecification occurs in <span class="math inline">\(\mathbf{x}_1\)</span>, and not <span class="math inline">\(\mathbf{x}_2\)</span>.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div id="fig-misspecified_covar" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-misspecified_covar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="LinMod_files/figure-html/fig-misspecified_covar-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
+<p>In contrast, when our linear model is correctly specified, with both <span class="math inline">\(x_i\)</span> and <span class="math inline">\(x_i^2\)</span> included, the residuals are randomly scattered around zero for each fitted value.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(amnt_earnings_med_10y <span class="sc">~</span> cost_avg, <span class="at">data =</span> college_scorecard)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">augment</span>(fit) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.7</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">augment</span>(fit) <span class="sc">|&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> cost_avg, <span class="at">y =</span> .resid)) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.7</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-misspecified_covar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.2: TO ADD
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>[[add blurb about how to fix]]</p>
-<p><strong>Missing covariates:</strong> We can also assess whether the linear model is missing are one or more important covariates using residuals. We can plot the values of any potential covariates <em>not</em> included in the linear model against the residuals to determine if that predictor should be added. For instance, suppose we have two covariates <span class="math inline">\(\mathbf{x}_1\)</span> and <span class="math inline">\(\mathbf{x}_2\)</span>, but only include <span class="math inline">\(\mathbf{x}_1\)</span> in our linear model. <a href="#fig-missing-covar" class="quarto-xref">Figure&nbsp;<span>4.3</span></a> shows that the points in the plot of <span class="math inline">\(\mathbf{x}_2\)</span> against the residuals have a linear trend. This suggests that our mean model is incorrectly specified; in particular, <span class="math inline">\(\mathbf{x}_2\)</span> should be included in our linear model.</p>
+<p><strong>Missing covariates:</strong> Our linear model may also be misspecified because we are missing are one or more important covariates. To diagnose this, we can plot the values of any potential covariates <em>not</em> included in the linear model against the residuals to determine if that predictor should be added.</p>
+<p>For instance, suppose we have two covariates <span class="math inline">\(\mathbf{x}_1\)</span> and <span class="math inline">\(\mathbf{x}_2\)</span>, but only include <span class="math inline">\(\mathbf{x}_1\)</span> in our linear model.</p>
+<p><span class="math display">\[
+Y_i = 2 + 3 x_{1i} + 4x_{2i} + \epsilon_i, \quad \text{with } \epsilon_i \sim \text{Normal}(0, \sigma^2)
+\]</span></p>
+<p><a href="#fig-missing-covar" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> shows that the points in the plot of <span class="math inline">\(\mathbf{x}_2\)</span> against the residuals have a linear trend. This suggests that our mean model is incorrectly specified; in particular, <span class="math inline">\(\mathbf{x}_2\)</span> should be included in our linear model.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div id="fig-missing-covar" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
@@ -473,15 +514,15 @@ Figure&nbsp;4.2: TO ADD
 <img src="LinMod_files/figure-html/fig-missing-covar-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-missing-covar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.3: TO ADD
+Figure&nbsp;4.1: TO ADD
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="non-constant-error-variance" class="level3" data-number="4.2.2">
-<h3 data-number="4.2.2" class="anchored" data-anchor-id="non-constant-error-variance"><span class="header-section-number">4.2.2</span> Non-Constant Error Variance</h3>
+<section id="non-constant-error-variance" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="non-constant-error-variance"><span class="header-section-number">4.3.2</span> Non-Constant Error Variance</h3>
 <p>Assumption (2) of linear regression is that the error terms have constant variance. If the error variance is constant, we say that the errors are called <em>homoskedastic</em>. Meanwhile, the errors are called <em>heteroskedastic</em> if they have non-constant variance.[[need to add influence on inference and/or predictions]]</p>
 <p>Like for mean model misspecification, we can use the fitted values versus residuals plot to determine whether the constant error variance assumption is satisfied. Under constant error variance, we expect for the variance of the residuals to be approximately constant across the fitted values. [[explain figure]]</p>
 <div class="cell" data-layout-align="center">
@@ -492,7 +533,7 @@ Figure&nbsp;4.3: TO ADD
 <img src="LinMod_files/figure-html/fig-error-var-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-error-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.4: TO ADD
+Figure&nbsp;4.2: TO ADD
 </figcaption>
 </figure>
 </div>
@@ -500,10 +541,10 @@ Figure&nbsp;4.4: TO ADD
 </div>
 <p>There are various ways to correct for error heteroskedasticity. One approach is to transform the outcome to stablize the variance. [[add how this would be done and what are some covariates of this]]. Alternatively, [[weighted regression]]. A third approach is to use the <em>sandwich estimator</em> to estimate the variance of our parameter estimates. We show how to compute the sandwich estimator in <em>R</em> in [[ADD SECTION]].</p>
 </section>
-<section id="non-normality-of-errors" class="level3" data-number="4.2.3">
-<h3 data-number="4.2.3" class="anchored" data-anchor-id="non-normality-of-errors"><span class="header-section-number">4.2.3</span> Non-Normality of Errors</h3>
+<section id="non-normality-of-errors" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="non-normality-of-errors"><span class="header-section-number">4.3.3</span> Non-Normality of Errors</h3>
 <p>Assumption (4) requires that the errors are normally distributed. If this assumption holds, then the sampling distribution of our parameter estimates will be normally distributed; so, we can use standard procedures for obtain valid confidence intervals and <span class="math inline">\(p\)</span>-values [[need to explain more what these are]]. On the other hand, if assumptions (1)-(3) hold, but assumption (4) does not, the linear model is still perfectly valid – we just cannot “trust” the estimated uncertainties on the coefficients and associated <span class="math inline">\(p\)</span>-values; in other words, inference is affected, but not prediction. However, an important caveat to this is that if the number of observations is sufficiently large [[add heuristic of what this is]], the sampling distribution of our parameter estimates will be approximately normally distribution even if the errors are not normally distributed [[footnote to CLT]]. Therefore, assumption (4) is “optional” if (i) we have a small number of observations but only care about prediction, not inference, or (ii) we have a sufficiently large number of observations in our sample.</p>
-<p>We can assess whether the errors are normally distributed by plotting a histogram of the residuals. <a href="#fig-resid-histogram" class="quarto-xref">Figure&nbsp;<span>4.5</span></a> shows an example of the histogram of the residuals, where the error terms are normally distributed. We can see that the residuals appear to be <em>roughly</em> normally distributed.</p>
+<p>We can assess whether the errors are normally distributed by plotting a histogram of the residuals. <a href="#fig-resid-histogram" class="quarto-xref">Figure&nbsp;<span>4.3</span></a> shows an example of the histogram of the residuals, where the error terms are normally distributed. We can see that the residuals appear to be <em>roughly</em> normally distributed.</p>
 <div class="cell" data-layout-align="center" data-caption="TO ADD">
 <div class="cell-output-display">
 <div id="fig-resid-histogram" class="quarto-float quarto-figure quarto-figure-center anchored" width="672" data-fig-align="center">
@@ -512,7 +553,7 @@ Figure&nbsp;4.4: TO ADD
 <img src="LinMod_files/figure-html/fig-resid-histogram-1.png" id="fig-resid-histogram" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-resid-histogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.5
+Figure&nbsp;4.3
 </figcaption>
 </figure>
 </div>
@@ -520,15 +561,26 @@ Figure&nbsp;4.5
 </div>
 <p>We can formally test whether the residuals follow a normal distribution using the Shapiro-Wilk test. The null hypothesis (<span class="math inline">\(H_0\)</span>) of the Shapiro-Wilk test is the data is normally distributed, and the alternative hypothesis (<span class="math inline">\(H_1\)</span>) is that the data are <em>not</em> normally distributed. If we obtain a <span class="math inline">\(p\)</span>-value less than our pre-specified cut-off (e.g., <span class="math inline">\(p &lt; 0.05\)</span>), then we reject the null hypothesis that the data are normally distributed. If the <span class="math inline">\(p\)</span>-value is greater than our pre-specified cut-off we fail to reject the null hypothesis that the data are normally distributed.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>y.hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>e     <span class="ot">&lt;-</span> df<span class="sc">$</span>y <span class="sc">-</span> y.hat</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(e)<span class="sc">$</span>p.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>y.hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>e     <span class="ot">&lt;-</span> df<span class="sc">$</span>y <span class="sc">-</span> y.hat</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">shapiro.test</span>(e)<span class="sc">$</span>p.value</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9099408</code></pre>
 </div>
 </div>
 <p>[[shapiro wilk test example in R]]</p>
-<p>Another option to check for non-normal errors is to use a QQ-plot (i.e., a Quantile-Quantile plot). In particular, we can plot the observed quantiles of the standardized residuals against the theoretical quantiles of a normal distribution with mean zero and variance one [[need to better introduce standardized residuals]]. If the errors are normally distributed, we expect observed quantiles of standardized residuals to approximately follow the theoretical quantiles of a normal distribution with mean zero and variance one. <a href="#fig-resid-qqplot" class="quarto-xref">Figure&nbsp;<span>4.6</span></a> shows the QQ-plot, in which the residuals are simulated to be normally distributed. While the observed standardized residuals quantiles appear to deviate a bit from the theoretical quantiles of the normal distribution (particularly in the upper and lower quantiles), these deviations are relatively small. This indicates that the assumption of the errors being normally distributed is satisfied.</p>
+<p>Another option to check for non-normal errors is to use a QQ-plot (i.e., a Quantile-Quantile plot). A QQ-plot uses the model’s <em>standardized residuals</em>, which are the residuals divided by their standard deviation (i.e., square root of the variance). Recall by assumption:</p>
+<p><span class="math display">\[
+e_i \sim
+\]</span></p>
+<p><span class="math display">\[
+e_{\text{standardized}, i} = \frac{e_i}{\sigma}
+\]</span></p>
+<p>There are called <em>standardized residuals</em> because they have mean zero and standard deviation one; that is:</p>
+<p><span class="math display">\[
+e_{\text{standardized}, i} \sim \mathcal{N}(0, 1)
+\]</span></p>
+<p>where we plot the observed quantiles of the <em>standardized residuals</em> against the theoretical quantiles of a normal distribution with mean zero and variance one [[need to better introduce standardized residuals]]. If the errors are normally distributed, we expect observed quantiles of standardized residuals to approximately follow the theoretical quantiles of a normal distribution with mean zero and variance one. <a href="#fig-resid-qqplot" class="quarto-xref">Figure&nbsp;<span>4.4</span></a> shows the QQ-plot, in which the residuals are simulated to be normally distributed. While the observed standardized residuals quantiles appear to deviate a bit from the theoretical quantiles of the normal distribution (particularly in the upper and lower quantiles), these deviations are relatively small. This indicates that the assumption of the errors being normally distributed is satisfied.</p>
 <div class="cell" data-layout-align="center" data-caption="TO ADD">
 <div class="cell-output-display">
 <div id="fig-resid-qqplot" class="quarto-float quarto-figure quarto-figure-center anchored" width="672" data-fig-align="center">
@@ -537,7 +589,7 @@ Figure&nbsp;4.5
 <img src="LinMod_files/figure-html/fig-resid-qqplot-1.png" id="fig-resid-qqplot" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-resid-qqplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.6
+Figure&nbsp;4.4
 </figcaption>
 </figure>
 </div>
@@ -545,13 +597,13 @@ Figure&nbsp;4.6
 </div>
 </section>
 </section>
-<section id="outliers" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="outliers"><span class="header-section-number">4.3</span> Outliers</h2>
+<section id="outliers" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="outliers"><span class="header-section-number">4.4</span> Outliers</h2>
 </section>
-<section id="multiollinearity" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="multiollinearity"><span class="header-section-number">4.4</span> Multiollinearity</h2>
-<section id="variance-inflation-factor" class="level3" data-number="4.4.1">
-<h3 data-number="4.4.1" class="anchored" data-anchor-id="variance-inflation-factor"><span class="header-section-number">4.4.1</span> Variance Inflation Factor</h3>
+<section id="multiollinearity" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="multiollinearity"><span class="header-section-number">4.5</span> Multiollinearity</h2>
+<section id="variance-inflation-factor" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="variance-inflation-factor"><span class="header-section-number">4.5.1</span> Variance Inflation Factor</h3>
 <p>The variance inflation factor, or vif, is the factor by which the estimated variance for a coefficient is inflated due to multicollinearity. If a vif value is high, then the coefficient estimate for that variable obtained from the <code>lm()</code> function can be much more uncertain than R indicates.</p>
 <p><strong>Example:</strong> Suppose we have the following fitted model:</p>
 <p><span class="math display">\[
@@ -594,6 +646,28 @@ Table&nbsp;4.1: My Caption
 <li><p>The actual standard error estimate for <span class="math inline">\(b_2\)</span>: <span class="math inline">\(2 \times \sqrt{9} = 6\)</span>.</p></li>
 </ul>
 <p>A typical rule-of-thumb is to worry if vif values are above 5 (more conservative) or 10 (less conservative). One mitigation strategy is to remove one variable at a time until the vif values for the remaining covariates fall below 5 or 10. However, this can lead to [[post-selection problems?]]. Moreover, removing covariates can adversely affect the linear model’s predictive abilities. Thus, common alternative approaches include performing ridge regression or principal components regression. [[I think it would be best to include more details of these in other chapters]].</p>
+</section>
+</section>
+<section id="example-in-r" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Example in R</h1>
+<p>For example, suppose we are interested in understanding the association of [[ADD]] with [[add]] and [[add]] for American colleges and universities, and fit the following linear model:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{median earnings after graduation}_i = \beta_0 &amp;+ \beta_1 \cdot (\text{undergraduate enrollment})_i \\
+&amp;+ \beta_2 \cdot (\text{average net cost})_i + \epsilon_i
+\end{aligned}
+\]</span></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(tidyverse))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(collegeScorecard))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>college_scorecard <span class="ot">&lt;-</span> school <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(scorecard, <span class="at">by =</span> <span class="fu">join_by</span>(id)) <span class="sc">|&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(academic_year <span class="sc">==</span> <span class="st">"2020-21"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  deg_predominant <span class="sc">==</span> <span class="st">"Bachelor"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, amnt_earnings_med_10y, n_undergrads, cost_avg) <span class="sc">|&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <!--
 ### The Setting
 
@@ -1073,7 +1147,6 @@ d_i = \mbox{sign}(y_i-\hat{p}_i) \sqrt{-2[y_i \log \hat{p}_i + (1-y_i) \log (1 -
 
 
 </section>
-</section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
@@ -1133,13 +1206,14 @@ d_i = \mbox{sign}(y_i-\hat{p}_i) \sqrt{-2[y_i \log \hat{p}_i + (1-y_i) \log (1 -
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

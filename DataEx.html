@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-5ccb035bea26c1e21f80f44cf7c27909.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -258,9 +258,9 @@ window.Quarto = {
   <ul>
   <li><a href="#case-studies" id="toc-case-studies" class="nav-link active" data-scroll-target="#case-studies"><span class="header-section-number">2.1</span> Case Studies</a>
   <ul class="collapse">
-  <li><a href="#quantiative-response-high-school-test-scores" id="toc-quantiative-response-high-school-test-scores" class="nav-link" data-scroll-target="#quantiative-response-high-school-test-scores"><span class="header-section-number">2.1.1</span> Quantiative Response: High School Test Scores</a></li>
-  <li><a href="#categorical-response-heart-disease-data" id="toc-categorical-response-heart-disease-data" class="nav-link" data-scroll-target="#categorical-response-heart-disease-data"><span class="header-section-number">2.1.2</span> Categorical Response: Heart Disease Data</a></li>
-  <li><a href="#all-qualitative-variables-stellar-temperatures" id="toc-all-qualitative-variables-stellar-temperatures" class="nav-link" data-scroll-target="#all-qualitative-variables-stellar-temperatures"><span class="header-section-number">2.1.3</span> All Qualitative Variables: Stellar Temperatures</a></li>
+  <li><a href="#high-school-test-scores" id="toc-high-school-test-scores" class="nav-link" data-scroll-target="#high-school-test-scores"><span class="header-section-number">2.1.1</span> High School Test Scores</a></li>
+  <li><a href="#heart-disease-data" id="toc-heart-disease-data" class="nav-link" data-scroll-target="#heart-disease-data"><span class="header-section-number">2.1.2</span> Heart Disease Data</a></li>
+  <li><a href="#stellar-temperatures" id="toc-stellar-temperatures" class="nav-link" data-scroll-target="#stellar-temperatures"><span class="header-section-number">2.1.3</span> Stellar Temperatures</a></li>
   </ul></li>
   <li><a href="#the-canonical-analysis-workflow" id="toc-the-canonical-analysis-workflow" class="nav-link" data-scroll-target="#the-canonical-analysis-workflow"><span class="header-section-number">2.2</span> The Canonical Analysis Workflow</a></li>
   <li><a href="#data-input" id="toc-data-input" class="nav-link" data-scroll-target="#data-input"><span class="header-section-number">2.3</span> Data Input</a>
@@ -314,15 +314,33 @@ window.Quarto = {
 </header>
 
 
+<p>Exploratory data analysis (EDA) is a foundational step of every statistical analysis. In this chapter, we review the EDA pipeline, starting with how to import data into <code>R</code> and working up to topics such as creating data visualizations and handling outliers.</p>
 <section id="case-studies" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="case-studies"><span class="header-section-number">2.1</span> Case Studies</h2>
-<p><strong>TODO</strong>: short introduction about how/where we will be using these datasets throughout book.</p>
-<section id="quantiative-response-high-school-test-scores" class="level3" data-number="2.1.1">
-<h3 data-number="2.1.1" class="anchored" data-anchor-id="quantiative-response-high-school-test-scores"><span class="header-section-number">2.1.1</span> Quantiative Response: High School Test Scores</h3>
-<p>The high school dataset contains demographic and standardized test score information for 200 students. There is no single target variable, but we will use this dataset to attempt to predict quantitative response values, like reading scores, given all other information.</p>
+<p>Throughout this textbook, we will be exploring and applying statistical learning methods to a few different datasets. Here, we briefly discuss the background of each dataset and explore its structure.</p>
+<p>Before we get started, let’s load the <code>tidyverse</code> package, which contains a collection of R packages designed with a similar structure in order to make data import, wrangling, and visualization intuitive and easy to learn. If you haven’t used this package before, be sure to uncomment the first line of code and install the package.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/hs.csv"</span>,<span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("tidyverse")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.4     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+<section id="high-school-test-scores" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="high-school-test-scores"><span class="header-section-number">2.1.1</span> High School Test Scores</h3>
+<p>The high school dataset contains demographic and standardized test score information for 200 students. Demographic information includes the student’s sex (<code>Gender</code>) <strong>TODO: more inclusive name?</strong> and socioeconomic status (<code>SES</code>), both of which are categorical variables. We also have information on whether the student attends a public or private school (<code>SchType</code>), whether they are in a vocation, academic, or general program (<code>ProgTyp</code>), whether or not they are enrolled in their school’s honors program (<code>HonorsProg</code>), and how many awards they have won (<code>Awards</code>). In term of test scores, we are provided each student’s reading, writing, math, science, and social studies scores, which are scored on the <strong>TODO: X scale</strong>. Each student is identified by an <code>ID</code>, which is statistically uninformative. This data is comes from <strong>TODO: source</strong>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/hs.csv"</span>,<span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(scores)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       ID            Gender        SES         SchTyp        ProgTyp   
  Min.   :  1.00   female:109   high  :58   private: 32   academic:105  
@@ -331,89 +349,598 @@ window.Quarto = {
  Mean   :100.50                                                        
  3rd Qu.:150.25                                                        
  Max.   :200.00                                                        
-    Reading         Writing           Math          Science         SocStud    
- Min.   :28.00   Min.   :31.00   Min.   :33.00   Min.   :26.00   Min.   :26.0  
- 1st Qu.:44.00   1st Qu.:45.75   1st Qu.:45.00   1st Qu.:44.00   1st Qu.:46.0  
- Median :50.00   Median :54.00   Median :52.00   Median :53.00   Median :52.0  
- Mean   :52.23   Mean   :52.77   Mean   :52.65   Mean   :51.85   Mean   :52.4  
- 3rd Qu.:60.00   3rd Qu.:60.00   3rd Qu.:59.00   3rd Qu.:58.00   3rd Qu.:61.0  
- Max.   :76.00   Max.   :67.00   Max.   :75.00   Max.   :74.00   Max.   :71.0  
-        HonorsProg      Awards    
- enrolled    : 53   Min.   :0.00  
- not enrolled:147   1st Qu.:0.00  
-                    Median :1.00  
-                    Mean   :1.67  
-                    3rd Qu.:2.00  
-                    Max.   :7.00  </code></pre>
+    Reading         Writing           Math          Science     
+ Min.   :28.00   Min.   :31.00   Min.   :33.00   Min.   :26.00  
+ 1st Qu.:44.00   1st Qu.:45.75   1st Qu.:45.00   1st Qu.:44.00  
+ Median :50.00   Median :54.00   Median :52.00   Median :53.00  
+ Mean   :52.23   Mean   :52.77   Mean   :52.65   Mean   :51.85  
+ 3rd Qu.:60.00   3rd Qu.:60.00   3rd Qu.:59.00   3rd Qu.:58.00  
+ Max.   :76.00   Max.   :67.00   Max.   :75.00   Max.   :74.00  
+    SocStud             HonorsProg      Awards    
+ Min.   :26.00   enrolled    : 53   Min.   :0.00  
+ 1st Qu.:46.00   not enrolled:147   1st Qu.:0.00  
+ Median :52.00                      Median :1.00  
+ Mean   :52.41                      Mean   :1.67  
+ 3rd Qu.:61.00                      3rd Qu.:2.00  
+ Max.   :71.00                      Max.   :7.00  </code></pre>
 </div>
 </div>
-<p>The data contain 12 variables overall, of which four are categorical. However, we will note now that one of the variables is statistically uninformative: see the <code>ID</code> variable in the summary above. One should always examine data that have been entered and be prepared to remove uninformative variables, which we can do by, e.g., running the following code:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(tidyverse))</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">select</span>(.,<span class="sc">-</span>ID) <span class="ot">-&gt;</span> df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>TBD: pointer to <code>dplyr</code> material. For more information on this dataset, see, e.g., the documentation for the <code>hsbdemo()</code> function of <code>R</code>’s <code>glsm</code> package.</p>
 </section>
-<section id="categorical-response-heart-disease-data" class="level3" data-number="2.1.2">
-<h3 data-number="2.1.2" class="anchored" data-anchor-id="categorical-response-heart-disease-data"><span class="header-section-number">2.1.2</span> Categorical Response: Heart Disease Data</h3>
-<p>The heart disease dataset contains demographic and medical information about 270 patients, with the nominal target variable being <code>Disease</code> (which is either <code>Absent</code> or <code>Present</code>).</p>
+<section id="heart-disease-data" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="heart-disease-data"><span class="header-section-number">2.1.2</span> Heart Disease Data</h3>
+<p>The heart disease dataset contains demographic and medical information on 270 patients, with the primary variable of interest being <code>Disease</code>, which is either absent or present. Demographic information includes patient <code>Age</code> and sex (<code>Gender</code>) <strong>TODO:rename</strong>, and general health variables are blood pressure (<code>BP</code>), whether or not the patient has a fasting blood sugar below <strong>TODO:check</strong> 120 mg/gL (<code>FBS.120</code>), and the patient’s total cholesterol in mg/dL (<code>Chol</code>). The remainder of the variables are more specific to heart disease, including the patient’s maximum heart rate (<code>Max.HR</code>), level of ST depression (<code>ST.Dep</code>) and ST slope (<code>ST.Slope</code>), <strong>TODO:vessels, thallium, ekg description</strong> (<code>Num.Vessels</code>), (<code>Thallium</code>), whether or not the patient has angina (<code>Angina</code>), the patient’s level of chest pain on a 1-4 scale (<code>Chest.Pain</code>), and (<code>EKG</code>).<strong>TODO: data source</strong></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>heart <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/heart_disease.csv"</span>,<span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>heart <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/heart_disease.csv"</span>,<span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(heart)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>    Gender        SES         SchTyp        ProgTyp       Reading     
- female:109   high  :58   private: 32   academic:105   Min.   :28.00  
- male  : 91   low   :47   public :168   general : 45   1st Qu.:44.00  
-              middle:95                 vocation: 50   Median :50.00  
-                                                       Mean   :52.23  
-                                                       3rd Qu.:60.00  
-                                                       Max.   :76.00  
-    Writing           Math          Science         SocStud    
- Min.   :31.00   Min.   :33.00   Min.   :26.00   Min.   :26.0  
- 1st Qu.:45.75   1st Qu.:45.00   1st Qu.:44.00   1st Qu.:46.0  
- Median :54.00   Median :52.00   Median :53.00   Median :52.0  
- Mean   :52.77   Mean   :52.65   Mean   :51.85   Mean   :52.4  
- 3rd Qu.:60.00   3rd Qu.:59.00   3rd Qu.:58.00   3rd Qu.:61.0  
- Max.   :67.00   Max.   :75.00   Max.   :74.00   Max.   :71.0  
-        HonorsProg      Awards    
- enrolled    : 53   Min.   :0.00  
- not enrolled:147   1st Qu.:0.00  
-                    Median :1.00  
-                    Mean   :1.67  
-                    3rd Qu.:2.00  
-                    Max.   :7.00  </code></pre>
+<pre><code>      Age              BP             Chol           Max.HR          ST.Dep    
+ Min.   :29.00   Min.   : 94.0   Min.   :126.0   Min.   : 71.0   Min.   :0.00  
+ 1st Qu.:48.00   1st Qu.:120.0   1st Qu.:213.0   1st Qu.:133.0   1st Qu.:0.00  
+ Median :55.00   Median :130.0   Median :245.0   Median :153.5   Median :0.80  
+ Mean   :54.43   Mean   :131.3   Mean   :249.7   Mean   :149.7   Mean   :1.05  
+ 3rd Qu.:61.00   3rd Qu.:140.0   3rd Qu.:280.0   3rd Qu.:166.0   3rd Qu.:1.60  
+ Max.   :77.00   Max.   :200.0   Max.   :564.0   Max.   :202.0   Max.   :6.20  
+    ST.Slope      Num.Vessels        Thallium        Gender    Angina   
+ Min.   :1.000   Min.   :0.0000   Min.   :3.000   Female: 87   No :181  
+ 1st Qu.:1.000   1st Qu.:0.0000   1st Qu.:3.000   Male  :183   Yes: 89  
+ Median :2.000   Median :0.0000   Median :3.000                         
+ Mean   :1.585   Mean   :0.6704   Mean   :4.696                         
+ 3rd Qu.:2.000   3rd Qu.:1.0000   3rd Qu.:7.000                         
+ Max.   :3.000   Max.   :3.0000   Max.   :7.000                         
+   Chest.Pain    FBS.120        EKG           Disease   
+ Min.   :1.000   No :230   Min.   :0.000   Absent :150  
+ 1st Qu.:3.000   Yes: 40   1st Qu.:0.000   Present:120  
+ Median :3.000             Median :2.000                
+ Mean   :3.174             Mean   :1.022                
+ 3rd Qu.:4.000             3rd Qu.:2.000                
+ Max.   :4.000             Max.   :2.000                </code></pre>
 </div>
 </div>
-<p>The data contain 14 variables overall, with exactly half being quantitative and half being categorical. For more information on what the variables represent, see the data card on the <a href="https://www.kaggle.com/datasets/neurocipher/heartdisease/data">the Kaggle webpage</a> where these data are hosted. (Note that we have changed the values for some of the variables to be, e.g., explicitly <code>No</code>/<code>Yes</code> instead of 0/1, etc. Also note that because <code>Num.Vessels</code> has numerical meaning - i.e., because it is an <em>ordinal</em> variable, one for whom the order of values matters - it has been left as a quantitative variable despite only having the values 0, 1, 2, and 3.)</p>
+<!-- The data contain 14 variables overall, with exactly half being quantitative and half being categorical. For more information on what the variables represent, see the data card on the [the Kaggle webpage](https://www.kaggle.com/datasets/neurocipher/heartdisease/data) where these data are hosted. (Note that we have changed the values for some of the variables to be, e.g., explicitly `No`/`Yes` instead of 0/1, etc. Also note that because `Num.Vessels` has numerical meaning - i.e., because it is an *ordinal* variable, one for whom the order of values matters - it has been left as a quantitative variable despite only having the values 0, 1, 2, and 3.) -->
 </section>
-<section id="all-qualitative-variables-stellar-temperatures" class="level3" data-number="2.1.3">
-<h3 data-number="2.1.3" class="anchored" data-anchor-id="all-qualitative-variables-stellar-temperatures"><span class="header-section-number">2.1.3</span> All Qualitative Variables: Stellar Temperatures</h3>
-<p>TBD: add info</p>
+<section id="stellar-temperatures" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="stellar-temperatures"><span class="header-section-number">2.1.3</span> Stellar Temperatures</h3>
+<p>The stellar temperatures dataset contains information on 10,000 measurements of stars. These measurements are collected from <em>Gaia</em>, a space-based telescope commissioned by the European Space Agency, which was in operatation from 2013 to 2025. In that time, Gaia made more than three trillion observations of two billion stars and other objects throughout our Milky Way galaxy and beyond, mapping their motions, luminosity, temperature, and composition. A portion of the data collected by Gaia was published in <em>The Astronomical Journal</em> in 2019 by Yu Bai et al., which is where this smaller subset of measurements is sourced from. We load the data <strong>TODO: from X</strong> and take a look at its structure.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>stellar <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/star_temps.csv"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(stellar)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>stellar <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"./data/star_temps.csv"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(stellar)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>      Teff            RA                Dec             Parallax      
- Min.   :3664   Min.   :  0.0043   Min.   :-85.713   Min.   : 0.1179  
- 1st Qu.:4911   1st Qu.: 80.6802   1st Qu.:  9.583   1st Qu.: 0.6239  
- Median :5548   Median :131.7663   Median : 25.928   Median : 1.0460  
- Mean   :5518   Mean   :154.5872   Mean   : 23.149   Mean   : 1.4354  
- 3rd Qu.:6018   3rd Qu.:231.4918   3rd Qu.: 39.772   3rd Qu.: 1.7423  
- Max.   :8631   Max.   :359.9147   Max.   : 85.299   Max.   :16.9419  
-     PM.RA               PM.Dec                g                b         
- Min.   :-258.5010   Min.   :-207.1520   Min.   : 5.191   Min.   : 5.776  
- 1st Qu.:  -5.9387   1st Qu.:  -9.3328   1st Qu.:12.777   1st Qu.:13.207  
- Median :  -0.9095   Median :  -4.0930   Median :13.878   Median :14.322  
- Mean   :  -1.6585   Mean   :  -6.0106   Mean   :13.831   Mean   :14.302  
- 3rd Qu.:   3.1290   3rd Qu.:  -0.5092   3rd Qu.:14.983   3rd Qu.:15.481  
- Max.   : 188.1720   Max.   : 106.0590   Max.   :18.809   Max.   :19.448  
-       r              Gal.L               Gal.B       
- Min.   : 4.564   Min.   :  0.03854   Min.   :-89.23  
- 1st Qu.:12.204   1st Qu.: 91.57640   1st Qu.:-16.91  
- Median :13.287   Median :163.15234   Median : 12.25  
- Mean   :13.222   Mean   :154.39329   Mean   : 11.80  
- 3rd Qu.:14.362   3rd Qu.:198.41551   3rd Qu.: 37.98  
- Max.   :18.689   Max.   :359.99939   Max.   : 89.42  </code></pre>
+<pre><code>Rows: 10,000
+Columns: 11
+$ Teff     &lt;dbl&gt; 6112.170, 5172.570, 6121.700, 6265.820, 6717.410, 5325.570, 4…
+$ RA       &lt;dbl&gt; 239.74168, 39.76790, 143.60699, 118.55395, 291.55607, 170.595…
+$ Dec      &lt;dbl&gt; 23.181299, 36.764920, 9.224044, 16.165308, 39.224496, 19.9960…
+$ Parallax &lt;dbl&gt; 1.3040, 3.6058, 1.1635, 0.9794, 1.6464, 0.6480, 3.0071, 0.545…
+$ PM.RA    &lt;dbl&gt; -7.268, 25.877, 10.092, -0.166, 5.901, -8.062, -36.817, -1.35…
+$ PM.Dec   &lt;dbl&gt; 2.029, -172.907, -10.563, -9.018, 0.276, -6.065, -0.097, 3.01…
+$ g        &lt;dbl&gt; 13.69551, 13.09189, 13.83536, 12.87293, 11.33363, 16.91027, 1…
+$ b        &lt;dbl&gt; 14.01445, 13.55505, 14.11267, 13.13956, 11.55238, 17.29075, 1…
+$ r        &lt;dbl&gt; 13.210281, 12.484341, 13.394859, 12.458502, 10.981853, 16.336…
+$ Gal.L    &lt;dbl&gt; 38.36613, 145.82831, 224.35701, 204.97085, 71.75512, 227.4524…
+$ Gal.B    &lt;dbl&gt; 47.619888, -21.275571, 40.278186, 20.988470, 10.608653, 68.42…</code></pre>
+</div>
+</div>
+<p>This dataset has information on 11 variables from the 10,000 star measurements. <a href="#tbl-stars" class="quarto-xref">Table&nbsp;<span>2.1</span></a> provides a codebook for this dataset.</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'gt' was built under R version 4.5.1</code></pre>
+</div>
+<div id="tbl-stars" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-stars-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2.1: Description of variables in the <code>stellar</code> dataset.
+</figcaption>
+<div aria-describedby="tbl-stars-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="fghluszkuz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#fghluszkuz table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#fghluszkuz thead, #fghluszkuz tbody, #fghluszkuz tfoot, #fghluszkuz tr, #fghluszkuz td, #fghluszkuz th {
+  border-style: none;
+}
+
+#fghluszkuz p {
+  margin: 0;
+  padding: 0;
+}
+
+#fghluszkuz .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#fghluszkuz .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#fghluszkuz .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#fghluszkuz .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#fghluszkuz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fghluszkuz .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fghluszkuz .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#fghluszkuz .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#fghluszkuz .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#fghluszkuz .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#fghluszkuz .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#fghluszkuz .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#fghluszkuz .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#fghluszkuz .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#fghluszkuz .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#fghluszkuz .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#fghluszkuz .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#fghluszkuz .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#fghluszkuz .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fghluszkuz .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#fghluszkuz .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#fghluszkuz .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#fghluszkuz .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fghluszkuz .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#fghluszkuz .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#fghluszkuz .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fghluszkuz .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fghluszkuz .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#fghluszkuz .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fghluszkuz .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#fghluszkuz .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#fghluszkuz .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fghluszkuz .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fghluszkuz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#fghluszkuz .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#fghluszkuz .gt_left {
+  text-align: left;
+}
+
+#fghluszkuz .gt_center {
+  text-align: center;
+}
+
+#fghluszkuz .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#fghluszkuz .gt_font_normal {
+  font-weight: normal;
+}
+
+#fghluszkuz .gt_font_bold {
+  font-weight: bold;
+}
+
+#fghluszkuz .gt_font_italic {
+  font-style: italic;
+}
+
+#fghluszkuz .gt_super {
+  font-size: 65%;
+}
+
+#fghluszkuz .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#fghluszkuz .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#fghluszkuz .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#fghluszkuz .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#fghluszkuz .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#fghluszkuz .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#fghluszkuz .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#fghluszkuz .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#fghluszkuz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table cell caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="Variable.Name" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Variable Name</th>
+<th id="Description" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Description</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable.Name">Teff</td>
+<td class="gt_row gt_left" headers="Description">Estimated surface temperature of the star</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="Variable.Name">RA</td>
+<td class="gt_row gt_left gt_striped" headers="Description">Position of the star on the sky, measured east–west</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable.Name">Dec</td>
+<td class="gt_row gt_left" headers="Description">Position of the star on the sky, measured north–south</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="Variable.Name">Parallax</td>
+<td class="gt_row gt_left gt_striped" headers="Description">Apparent shift in the star's position used to estimate its distance from Earth</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable.Name">PM.RA</td>
+<td class="gt_row gt_left" headers="Description">How quickly the star moves across the sky in the east–west direction</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="Variable.Name">PM.Dec</td>
+<td class="gt_row gt_left gt_striped" headers="Description">How quickly the star moves across the sky in the north–south direction</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable.Name">g</td>
+<td class="gt_row gt_left" headers="Description">Brightness of the star measured in a green/visual-light band</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="Variable.Name">b</td>
+<td class="gt_row gt_left gt_striped" headers="Description">Brightness of the star measured in a blue-light band</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable.Name">r</td>
+<td class="gt_row gt_left" headers="Description">Brightness of the star measured in a red-light band</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left gt_striped" headers="Variable.Name">Gal.L</td>
+<td class="gt_row gt_left gt_striped" headers="Description">Position of the star within the Milky Way, measured around the Galactic plane</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Variable.Name">Gal.B</td>
+<td class="gt_row gt_left" headers="Description">Position of the star above or below the Galactic plane</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</figure>
 </div>
 </div>
 </section>
@@ -437,7 +964,7 @@ window.Quarto = {
 <p>After downloading the data, open your script in RStudio/Positron and check your working directory by typing <code>getwd()</code> in the console. Does the listed file path match where your script is located? If needed, change the working directory by using <code>setwd()</code>.</p>
 <p>Now we can write code to import the data. Below, we import the high school test scores dataset (hs.csv), which is located in the <em>data</em> subfolder of our working directory. This can be done using <code>read.csv()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>hs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/hs.csv"</span>, <span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>hs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/hs.csv"</span>, <span class="at">stringsAsFactors=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>read.csv()</code> takes a number of optional arguments. <code>stringAsFactors=TRUE</code> converts character strings (text) into factors when importing the data frame. In the high school test scores data, there are several categorical variables that take a small number of values (e.g.&nbsp;school type, program type, honors program). Treating these variables as factors is good practice in downstream analyses. Other optional arguments include <code>header</code>, which can be set to <code>TRUE</code> if the file contains the names of the variables as its first line, and <code>sep</code>, which allows delimiters other than comma, such as semicolon, tab, or pipe. Type <code>?read.csv</code> to see more optional arugments that may prove useful, especially when importing large or messy data.</p>
 <p>Alternative file formats (e.g.&nbsp;.rds, .xlsx, .dta) can be imported using other functions, such as <code>readRDS()</code>, <code>readxl::read_xlsx()</code>, or <code>haven::read_dta()</code>. While these have their own optional arguments, the key step of specifying the correct file path to the data is the same.</p>
@@ -450,13 +977,13 @@ window.Quarto = {
 ,2,2
 3,3,3  -->
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>txt <span class="ot">&lt;-</span> <span class="st">"x,y,z</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">        1,,1</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">        ,2,2</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">        3,3,-99"</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">text =</span> txt, <span class="at">colClasses =</span> <span class="st">"numeric"</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>txt <span class="ot">&lt;-</span> <span class="st">"x,y,z</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="st">        1,,1</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="st">        ,2,2</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="st">        3,3,-99"</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">text =</span> txt, <span class="at">colClasses =</span> <span class="st">"numeric"</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   x  y   z
 1  1 NA   1
@@ -466,8 +993,8 @@ window.Quarto = {
 </div>
 <p>It is important to note, however, that missing data are not always represented by empty table cells. For instance, as shown in <code>df</code> above, the person collecting the data may elect to use a particular value (like <code>-99</code>) to indicate missingness (and, perhaps, not document that choice!). We should always be careful to examine data during exploratory data analysis to see if there are particular values that appear strange (and perhaps over-represented). We can always convert these values to <code>NA</code> as we need to, as demonstrated in the code below.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">==-</span><span class="dv">99</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df[df<span class="sc">==-</span><span class="dv">99</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   x  y  z
 1  1 NA  1
@@ -477,8 +1004,8 @@ window.Quarto = {
 </div>
 <p>Additionally, missing values in imported data may not truly be missing. For example, in the <code>names</code> dataset below, it is likely fair to assume that Mia is an only child, meaning we can replace <code>NA</code> with <code>0</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">text =</span> txt, <span class="at">colClasses =</span> <span class="fu">c</span>(<span class="st">"factor"</span>, <span class="st">"integer"</span>))</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>names</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">text =</span> txt, <span class="at">colClasses =</span> <span class="fu">c</span>(<span class="st">"factor"</span>, <span class="st">"integer"</span>))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>names</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            name siblings
 1           Fred        2
@@ -487,8 +1014,8 @@ window.Quarto = {
 4          Mateo        3
 5            Kai        1</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> names <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">siblings =</span> tidyr<span class="sc">::</span><span class="fu">replace_na</span>(siblings, <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> names <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">siblings =</span> tidyr<span class="sc">::</span><span class="fu">replace_na</span>(siblings, <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The short explanation of why missing data matter is that statistical learning algorithms cannot run if there are missing table entries. Any observations with a missing value for a variable that is part of the algorithm will be omitted entirely. The picture below represents two measurements, <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, made for 12 objects. Both measurements are observed for 10 of the 12 objects. However, for one object, <span class="math inline">\(x_1\)</span> is known, but <span class="math inline">\(x_2\)</span> is missing. The value of <span class="math inline">\(x_2\)</span> can therefore lie anywhere along the vertical orange line. Statistical learning algorithms will not “guess” where that <span class="math inline">\(x_2\)</span> datum is to go.</p>
 <p><img src="./figures/missing_data_I.png" class="img-fluid"></p>
@@ -606,17 +1133,17 @@ notice what we never expected to see.</code></pre>
 </div>
 <p>The first step to constructing a data visualization with <code>ggplot2</code> is to specify the <strong>data</strong> by passing it into the <code>ggplot()</code> function. This stores the data to be used later by other parts of the plotting system.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>heart)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>heart)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Next, we specify a <strong>mapping</strong> using <code>aes()</code> within the <code>ggplot()</code> function. Short for <em>aesthetics</em>, this describes how variables in the data are connected to visual properties of the plot. For example, if want <code>Age</code> to map to the x-coordinates and <code>BP</code> to the y-coordinates, we’d state that as follows:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The last required component for creating a plot are the <strong>layers</strong>, which take the mapped data and represent it in a way that humans can understand. Every layer consists of a geometry, which determines how the data are displayed (e.g.&nbsp;as points, lines, curves).</p>
 <p>Using the code below, we have created our first complete data visualization! The layer <code>geom_point()</code> specifies that each observation should be displayed as a point. Notice that <code>geom_point()</code> is added to the data and mapping components using <code>+</code>. A common mistake when creating visualizations with <code>ggplot2</code> is to use a pipe (<code>|&gt;</code> or <code>%&gt;%</code>) in place of a <code>+</code>. Just remember, once you start the initial <code>gglot()</code> call, all components become connected with a <code>+</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP))<span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP))<span class="sc">+</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -628,10 +1155,10 @@ notice what we never expected to see.</code></pre>
 <p>We now introduce what we consider as bonus components. These components have default settings in order to allow the user to build plots more efficiently, which is what makes them not required. However, knowing how to modify them can greatly enhance the clarity of your visualizations.</p>
 <p>The first of these components is <strong>scales</strong>. Scales may be responsible for updating the limits of a plot, setting the breaks, formatting the labels, or applying a transformation. To add a scales component, find a function patterned as <code>scale_{aesthetic}_{type}()</code>, where <code>{aesthetic}</code> is one of the pairings made in the mapping part of a plot. For instance, below we map the <code>Disease</code> variable to the viridis color palette. Additionally, we state that we want more granularity of labels on the y-axis using <code>scale_y_continuous()</code> with <code>n.breaks=6</code> (notice in the plot above, there were only four).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP, <span class="at">color =</span> Disease))<span class="sc">+</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()<span class="sc">+</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP, <span class="at">color =</span> Disease))<span class="sc">+</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()<span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">6</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -642,11 +1169,11 @@ notice what we never expected to see.</code></pre>
 </div>
 <p>Our next optional component is <strong>facets</strong>. Facets can be used to split up the plot into smaller panels based on one or more variables. They are especially helpful when trying to visualize trends within multiple subsets at once. For example, in the plot below, facets allow us to compare the relationship between <code>Age</code> and <code>BP</code> for males to females. By coloring by <code>Disease</code>, we can see more males in the dataset have heart disease than females.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP, <span class="at">color =</span> Disease))<span class="sc">+</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()<span class="sc">+</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">6</span>)<span class="sc">+</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Gender)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP, <span class="at">color =</span> Disease))<span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()<span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">n.breaks =</span> <span class="dv">6</span>)<span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Gender)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -657,9 +1184,9 @@ notice what we never expected to see.</code></pre>
 </div>
 <p>A third optional component is <strong>coordinates</strong>. The vast majority of the time, Cartesian coordinates are used, but certain data may be well-suited for polar or radial coordiates. Another useful <code>coord_{}</code> function is <code>coord_fixed()</code>. This can be used to display a plot with a fixed aspect ratio so that one unit has the same length in both the x and y directions. <em>note: silly with current example</em>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP))<span class="sc">+</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP))<span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -670,11 +1197,11 @@ notice what we never expected to see.</code></pre>
 </div>
 <p>Finally, there is the <strong>theme</strong> component, where all additional customizations related to the look of the plot are done. The theme can be used for additional customizations including changing the background color, removing the legend, changing the size of the text, and <em>much</em> more. <code>ggplot2</code> offers a variety of pre-designed themes to choose from (<code>theme_bw()</code>, <code>theme_classic()</code>, and <code>theme_minimal()</code> are some of our personal favorites!), each of which can be further customized with the <code>theme()</code> function.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP, <span class="at">color =</span> Disease))<span class="sc">+</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()<span class="sc">+</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heart, <span class="fu">aes</span>(<span class="at">x=</span> Age, <span class="at">y=</span>BP, <span class="at">color =</span> Disease))<span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>()<span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -692,14 +1219,14 @@ notice what we never expected to see.</code></pre>
 <h3 data-number="2.5.3" class="anchored" data-anchor-id="example"><span class="header-section-number">2.5.3</span> Example</h3>
 <p>Let’s now go through an example of the EDA process using <a href="https://github.com/rfordatascience/tidytuesday/blob/main/data/2024/2024-05-28/readme.md">Lisa’s Vegetable Garden Data</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. We will specifically explore Lisa’s planting and harvesting in 2020. We start by importing the data directly from Github.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-28/planting_2020.csv'</span>)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>harvest_2020 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-28/harvest_2020.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-28/planting_2020.csv'</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>harvest_2020 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-05-28/harvest_2020.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="understand-how-the-data-is-structured" class="level4" data-number="2.5.3.1">
 <h4 data-number="2.5.3.1" class="anchored" data-anchor-id="understand-how-the-data-is-structured"><span class="header-section-number">2.5.3.1</span> Understand how the data is structured</h4>
 <p>Our first step in the EDA process is to understand how the data is structured. Let’s start with the <code>planting_2020</code> dataset. A nice way to get a quick overview of our data is the <code>glimpse()</code> function.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(planting_2020)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(planting_2020)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 93
 Columns: 7
@@ -714,12 +1241,12 @@ $ notes                &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N
 </div>
 <p>We can see that <code>planting_2020</code> includes seven variables and 93 observations. We appear to have four character variables (<code>plot</code>, <code>vegetable</code>, <code>variety</code>, and <code>notes</code>), one numeric variable (<code>number_seeds_planted</code>), one date variable (<code>date</code>), and one logical variable (<code>number_seeds_exact</code>). Below, we change <code>plot</code>, <code>vegetable</code>, and <code>variety</code> to factors. Typically, characters are for general-purpose text strings, while factors are for categorical data with a fixed set of predefined levels. In this case, <code>plot</code>, <code>vegetable</code>, and <code>variety</code> can only take a number of values—Lisa only has so many plots, and there are only so many types of vegetables and vegetable varieties. On the other hand, <code>notes</code>, which we notice is mostly missing, is a place for Lisa to write various notes if necessary. These notes can be <em>anything</em>, thus leaving it as a character is appropriate.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="ot">&lt;-</span> planting_2020 <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(plot, vegetable, variety), as.factor))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="ot">&lt;-</span> planting_2020 <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(plot, vegetable, variety), as.factor))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s also check out the <code>harvest_2020</code> data.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(harvest_2020)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(harvest_2020)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 781
 Columns: 5
@@ -732,8 +1259,8 @@ $ units     &lt;chr&gt; "grams", "grams", "grams", "grams", "grams", "grams", "g
 </div>
 <p>We have five variables and 781 observations, where each observation represents a harvest of a particular vegetable variety. Just like in <code>planting_2020</code>, we can convert <code>vegetable</code> and <code>variety</code> factors. <code>units</code> can be additionally treated as a factor—we’ll want to check and make sure all rows take the same units so that we can compare the weight across different observations.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>harvest_2020 <span class="ot">&lt;-</span> harvest_2020 <span class="sc">%&gt;%</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(vegetable, variety, units), as.factor))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>harvest_2020 <span class="ot">&lt;-</span> harvest_2020 <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(vegetable, variety, units), as.factor))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="understand-relevant-variables-individually" class="level4" data-number="2.5.3.2">
@@ -741,8 +1268,8 @@ $ units     &lt;chr&gt; "grams", "grams", "grams", "grams", "grams", "grams", "g
 <p>Now that we understand what information is included in <code>planting_2020</code> and <code>harvest_2020</code>, let’s create some univariate summaries and visualizations.</p>
 <p>First, let’s start with checking for missingness in each variable. An easy way to do this is using the <code>vis_miss()</code> function from <code>naniar</code> package.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_miss</span>(planting_2020)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(naniar)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_miss</span>(planting_2020)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -750,7 +1277,7 @@ $ units     &lt;chr&gt; "grams", "grams", "grams", "grams", "grams", "grams", "g
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_miss</span>(harvest_2020)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_miss</span>(harvest_2020)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -761,7 +1288,7 @@ $ units     &lt;chr&gt; "grams", "grams", "grams", "grams", "grams", "grams", "g
 </div>
 <p>Above, we see there is no missingness in the <code>harvest_2020</code> dataset. On the other hand, however, the <code>note</code> variable in <code>planting_2020</code> is almost entirely missing. This makes sense as column is an optional place for Lisa to leave extra comments. We do, however, have one observation where Lisa did not record information about the number of seeds she planted or the date. Investigating further, we see this is for perennial strawberries.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(number_seeds_planted))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">is.na</span>(number_seeds_planted))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 7
   plot  vegetable    variety  number_seeds_planted date   number_seeds_exact
@@ -772,7 +1299,7 @@ $ units     &lt;chr&gt; "grams", "grams", "grams", "grams", "grams", "grams", "g
 </div>
 <p>Having looked at missigness, let’s start with some univariate summaries and visualizations of categorical variables. We can use <code>count()</code> with <code>nrow()</code> to check how many values each categorical variable takes. Using <code>count()</code> alone will tell us the number of observations of each level of our categorical factor variable.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> <span class="fu">count</span>(vegetable)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> <span class="fu">count</span>(vegetable)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 31 × 2
    vegetable            n
@@ -792,27 +1319,27 @@ $ units     &lt;chr&gt; "grams", "grams", "grams", "grams", "grams", "grams", "g
 </div>
 <p>Adding on <code>nrow()</code> tells us simply the number of levels. Below, we can see Lisa planted 31 different vegetables <em>(wow!)</em> with 65 unique varietes in 23 different plots.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> <span class="fu">count</span>(vegetable) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> <span class="fu">count</span>(vegetable) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 31</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> <span class="fu">count</span>(variety) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> <span class="fu">count</span>(variety) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 65</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> <span class="fu">count</span>(plot) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> <span class="fu">count</span>(plot) <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 23</code></pre>
 </div>
 </div>
 <p>We can use a bar chart to see how many times Lisa recorded a planting of each vegetable. Let’s arrange from most to least plotted vegetables, make the bars horizontal, and change the theme. We can see that Lisa recorded many plantings of tomatoes and squash—we’ll have to check later on if these were the vegetables she harvested the most!</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(vegetable) <span class="sc">%&gt;%</span></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span> n , <span class="at">y =</span> <span class="fu">fct_reorder</span>(vegetable, n)))<span class="sc">+</span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="st">"Number of plantings"</span>, <span class="at">y=</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(vegetable) <span class="sc">%&gt;%</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span> n , <span class="at">y =</span> <span class="fu">fct_reorder</span>(vegetable, n)))<span class="sc">+</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span> <span class="st">"Number of plantings"</span>, <span class="at">y=</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -823,11 +1350,11 @@ $ units     &lt;chr&gt; "grams", "grams", "grams", "grams", "grams", "grams", "g
 </div>
 <p>Now, let’s check out how many seeds Lisa was using in each recorded planting. Because seeds is a continuous variable, a histogram is appropriate here. Note the warning message: <em>Warning: Removed 1 row containing non-finite outside the scale range (<code>stat_bin()</code>)</em>. This row represents the missing value that we previously identified.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> </span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>number_seeds_planted))<span class="sc">+</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">5</span>)<span class="sc">+</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Number of seeds planted"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>number_seeds_planted))<span class="sc">+</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">5</span>)<span class="sc">+</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Number of seeds planted"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Removed 1 row containing non-finite outside the scale range
 (`stat_bin()`).</code></pre>
@@ -842,8 +1369,8 @@ $ units     &lt;chr&gt; "grams", "grams", "grams", "grams", "grams", "grams", "g
 </div>
 <p>Above, we set the binwidth to five, meaning each vertical bar represents a five wide range of seeds planted (e.g.&nbsp;1-5 seeds, 6-10 seeds, etc). It appears that most often Lisa is planting between 1-15 seeds, with the distribution being right skewed. For a couple of plantings, Lisa planted roughly 100 and 200 seeds, which are visual outliers. Checking these observations out, we see they are lettuce and spinach plantings, and <code>number_seeds_exact</code> tells us that the number of seeds planted in both cases was an estimate.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> </span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(number_seeds_planted <span class="sc">&gt;</span> <span class="dv">90</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>planting_2020 <span class="sc">%&gt;%</span> </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(number_seeds_planted <span class="sc">&gt;</span> <span class="dv">90</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 7
   plot  vegetable variety     number_seeds_planted date       number_seeds_exact
@@ -855,14 +1382,14 @@ $ units     &lt;chr&gt; "grams", "grams", "grams", "grams", "grams", "grams", "g
 </div>
 <p>Let’s also do some univariete EDA of <code>harvest_2020</code>. First, let’s see how many harvests Lisa made each month in 2020. To do this, we will use the <code>month()</code> function from the <code>lubridate</code> R package. Below, we see that harvest season is from June through October, with Lisa making almost 300 harvests in August.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>harvest_2020 <span class="sc">%&gt;%</span> </span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">harvest_month =</span> <span class="fu">month</span>(date, <span class="at">label =</span>T)) <span class="sc">%&gt;%</span></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(harvest_month) <span class="sc">%&gt;%</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>harvest_month, <span class="at">y=</span>n))<span class="sc">+</span></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Harvest month"</span>, <span class="at">y=</span> <span class="st">"Number of harvests"</span>)<span class="sc">+</span></span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>harvest_2020 <span class="sc">%&gt;%</span> </span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">harvest_month =</span> <span class="fu">month</span>(date, <span class="at">label =</span>T)) <span class="sc">%&gt;%</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(harvest_month) <span class="sc">%&gt;%</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>harvest_month, <span class="at">y=</span>n))<span class="sc">+</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Harvest month"</span>, <span class="at">y=</span> <span class="st">"Number of harvests"</span>)<span class="sc">+</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -873,7 +1400,7 @@ $ units     &lt;chr&gt; "grams", "grams", "grams", "grams", "grams", "grams", "g
 </div>
 <p>Finally, let’s check out the distribution of the weight of these harvests. We first confirm that all harvests are weighed in grams.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(harvest_2020<span class="sc">$</span>units)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(harvest_2020<span class="sc">$</span>units)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] grams
 Levels: grams</code></pre>
@@ -881,11 +1408,11 @@ Levels: grams</code></pre>
 </div>
 <p>Using a density plot, below we find that the distribution of harvest weights is heavily right skewed. While most vegetable harvests are under 1000 g, it appears Lisa had at least one harvest over 7000 g. A good next step will be to understand what vegetables have particularly heavy or light harvests. This brings us to the final step of our EDA process, exploring relationships between variables.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>harvest_2020 <span class="sc">%&gt;%</span> </span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>weight))<span class="sc">+</span></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>()<span class="sc">+</span></span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Weight (g)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>harvest_2020 <span class="sc">%&gt;%</span> </span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>weight))<span class="sc">+</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>()<span class="sc">+</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Weight (g)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -899,13 +1426,13 @@ Levels: grams</code></pre>
 <h4 data-number="2.5.3.3" class="anchored" data-anchor-id="explore-relationships-between-variables"><span class="header-section-number">2.5.3.3</span> Explore relationships between variables</h4>
 <p>Let’s continue with the <code>harvest_2020</code> dataset to start, specifically with our question about understanding harvest weight by vegetable. In particular, let’s first identify the vegetables with the smallest and largest average harvest weight.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>avg_harvest_weight_by_veg <span class="ot">&lt;-</span> harvest_2020 <span class="sc">%&gt;%</span> </span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(vegetable) <span class="sc">%&gt;%</span></span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n_harvests =</span> <span class="fu">n</span>(), <span class="at">avg_harvest_weight =</span> <span class="fu">mean</span>(weight)) <span class="sc">%&gt;%</span></span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(avg_harvest_weight)</span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>avg_harvest_weight_by_veg <span class="sc">%&gt;%</span></span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>avg_harvest_weight_by_veg <span class="ot">&lt;-</span> harvest_2020 <span class="sc">%&gt;%</span> </span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(vegetable) <span class="sc">%&gt;%</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n_harvests =</span> <span class="fu">n</span>(), <span class="at">avg_harvest_weight =</span> <span class="fu">mean</span>(weight)) <span class="sc">%&gt;%</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(avg_harvest_weight)</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>avg_harvest_weight_by_veg <span class="sc">%&gt;%</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 3
   vegetable n_harvests avg_harvest_weight
@@ -916,8 +1443,8 @@ Levels: grams</code></pre>
 4 basil             15               32.7
 5 spinach           22               42.0</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>avg_harvest_weight_by_veg <span class="sc">%&gt;%</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_tail</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>avg_harvest_weight_by_veg <span class="sc">%&gt;%</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_tail</span>(<span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 3
   vegetable n_harvests avg_harvest_weight
@@ -932,31 +1459,31 @@ Levels: grams</code></pre>
 <p>It makes sense that leafy vegetables (e.g.&nbsp;cilantro, basil, spinach) have low average harvest weights while bigger vegetables (e.g.&nbsp;squash, pumpkins) have a heavy average harvest weight.</p>
 <p>It may also be interesting to explore there relationship between number of seeds planted and harvest weight. To do so, let’s create two dataframes: <code>vegetable_seeds</code>, representing the number of seeds Lisa planted for each vegetable variety, and <code>harvest_weights</code>, representing the total weight of each vegetable variety that Lisa harvested. Along the way, we correct a couple spelling mistakes in order to obtain properly joined rows<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. We also replace missing values with zero. This represents situations where Lisa harvested without planting any seeds (e.g.&nbsp;perennial plants) or planted seeds but the plant did not produce any crops.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>vegetable_seeds <span class="ot">&lt;-</span> planting_2020 <span class="sc">|&gt;</span></span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(vegetable, variety) <span class="sc">|&gt;</span></span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n_seeds =</span> <span class="fu">sum</span>(number_seeds_planted)) </span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>harvest_weights <span class="ot">&lt;-</span> harvest_2020 <span class="sc">|&gt;</span></span>
-<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(vegetable, variety) <span class="sc">|&gt;</span></span>
-<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">harvest_weight_lbs =</span> <span class="fu">sum</span>(weight)<span class="sc">/</span><span class="dv">454</span>) <span class="sc">|&gt;</span></span>
-<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vegetable =</span> <span class="fu">case_when</span>(vegetable <span class="sc">==</span> <span class="st">"rudabaga"</span> <span class="sc">~</span> <span class="st">"rutabaga"</span>,  </span>
-<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>                               <span class="cn">TRUE</span> <span class="sc">~</span> vegetable),</span>
-<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">variety =</span> <span class="fu">case_when</span>(variety <span class="sc">==</span> <span class="st">"perrenial"</span> <span class="sc">~</span> <span class="st">"perennial"</span>, </span>
-<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span> <span class="sc">~</span> variety)) </span>
-<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a>plant_harvest <span class="ot">&lt;-</span> vegetable_seeds <span class="sc">|&gt;</span></span>
-<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(harvest_weights, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"vegetable"</span>, <span class="st">"variety"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">harvest_weight_lbs =</span> <span class="fu">replace_na</span>(harvest_weight_lbs, <span class="dv">0</span>), </span>
-<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">n_seeds =</span> <span class="fu">replace_na</span>(n_seeds, <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>vegetable_seeds <span class="ot">&lt;-</span> planting_2020 <span class="sc">|&gt;</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(vegetable, variety) <span class="sc">|&gt;</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n_seeds =</span> <span class="fu">sum</span>(number_seeds_planted)) </span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>harvest_weights <span class="ot">&lt;-</span> harvest_2020 <span class="sc">|&gt;</span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(vegetable, variety) <span class="sc">|&gt;</span></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">harvest_weight_lbs =</span> <span class="fu">sum</span>(weight)<span class="sc">/</span><span class="dv">454</span>) <span class="sc">|&gt;</span></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vegetable =</span> <span class="fu">case_when</span>(vegetable <span class="sc">==</span> <span class="st">"rudabaga"</span> <span class="sc">~</span> <span class="st">"rutabaga"</span>,  </span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>                               <span class="cn">TRUE</span> <span class="sc">~</span> vegetable),</span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">variety =</span> <span class="fu">case_when</span>(variety <span class="sc">==</span> <span class="st">"perrenial"</span> <span class="sc">~</span> <span class="st">"perennial"</span>, </span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span> <span class="sc">~</span> variety)) </span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>plant_harvest <span class="ot">&lt;-</span> vegetable_seeds <span class="sc">|&gt;</span></span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(harvest_weights, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"vegetable"</span>, <span class="st">"variety"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">harvest_weight_lbs =</span> <span class="fu">replace_na</span>(harvest_weight_lbs, <span class="dv">0</span>), </span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">n_seeds =</span> <span class="fu">replace_na</span>(n_seeds, <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can now create a scatterplot with number of seeds planted on the x-axis and harvest weight on the y-axis. The scatterplot displays a weak, negative relationship between total seeds planted and harvest weight. Interestingly, for several plants (Romanesco zucchini, saved pumpkins, Amish Paste tomatoes, Volunteers tomatoes), Lisa planted under only a few seeds but harvested over fifty pounds of each vegetable variety. On the other hand, for a few different lettuce and carrot varieties, Lisa planted (or estimated that she planted) over one hundred seeds, but harvested under ten pounds of each vegetable variety.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>plant_harvest <span class="sc">|&gt;</span></span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>n_seeds, <span class="at">y=</span>harvest_weight_lbs))<span class="sc">+</span></span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">alpha=</span><span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
-<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Total seeds planted"</span>, <span class="at">y=</span> <span class="st">"Harvest weight (lbs)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>plant_harvest <span class="sc">|&gt;</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>n_seeds, <span class="at">y=</span>harvest_weight_lbs))<span class="sc">+</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">alpha=</span><span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Total seeds planted"</span>, <span class="at">y=</span> <span class="st">"Harvest weight (lbs)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1151,8 +1678,8 @@ table(fake.var,df$field)
 ```
         
 fake.var COSMOS EGS GOODSN GOODSS UDS
-       1    453 363    234    287 360
-       2    452 387    230    301 389
+       1    473 366    236    302 374
+       2    432 384    228    286 375
 ```
 
 
@@ -1267,7 +1794,15 @@ D_i =  \sqrt{(\mathbf{x}_i-\bar{\mathbf{x}})^T \Sigma^{-1} (\mathbf{x}_i-\bar{\m
 <p>where <span class="math inline">\(\mathbf{x}_i\)</span> represents a single row of the data (all observed values for observation <span class="math inline">\(i\)</span>) and <span class="math inline">\(\bar{\mathbf{x}}\)</span> represents the average values for each variable. <span class="math inline">\(\Sigma^{-1}\)</span> is the inverse of the covariance matrix, which describes the spread of the data. Its diagonal entries contain the variances of each variable, while its off-diagonal entries contain the covariances between pairs of variables, indicating how strongly they vary together. By incorporating the covariance matrix, the Mahalanobis distance automatically adjusts for differences in scale and for correlations among the variables, making it a more meaningful measure of distance in multivariate data. <span class="math inline">\(D_i\)</span>, the Mahalanobis distance, is not a pairwise distance but rather the distance from the global average point in <span class="math inline">\(p\)</span>-dimensional space of the data. Creating a histogram of each observation’s Mahalanobis distance can help identify points that lie anomalously far from the global average point.</p>
 <section id="removing-outliers" class="level3" data-number="2.6.1">
 <h3 data-number="2.6.1" class="anchored" data-anchor-id="removing-outliers"><span class="header-section-number">2.6.1</span> Removing outliers</h3>
-<p>Now that we have discussed how to identity outliers, discuss when to remove them and why/why not.</p>
+<p>Now that we have discussed how to identity outliers, we should outline how to handle them. In short, dealing with outliers requires careful judgment. Just as there are not hard and fast rules for what makes a data point an outlier, there is no singular rule for whether or not to remove an outlier from the analysis. However, there are a few guiding questions we can ourselves.</p>
+<ul>
+<li>Is outlier is due to some kind of measurement or recording error?
+<ul>
+<li>If so, and we can confidently correct the error, we can keep it in the analysis.</li>
+<li>If not, we must make the difficult decision of whether to keep the outlier and acknowledge that it may significantly influence our estimates—or to remove it and risk throwing away good information.</li>
+</ul></li>
+</ul>
+<p>There are two pieces of information that can help us make this difficult decision. The first is <strong>leverage</strong>.</p>
 <p>As a final note, regardless of what quantitative approach we take, <em>we need to explicitly record what data points we deem to be anomalous (and remove from the dataset)!</em> We always record our choices, to ensure our analyses are reproducible.</p>
 <!-- 
 - Via Dixon's Q Test, or Grubbs' Test, or the Tietjen-Moore Test, or the generalized extreme studentized deviate test, *if* the data are normally distributed. See, e.g., [this web page for more details](link to https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h1.htm). However, data are often *not* normally distributed!
@@ -1430,9 +1965,9 @@ ggplot(data=df.new,mapping=aes(x=value)) +
 <li>The six brightness metrics are obviously highly correlated!</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>pca.out <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(df[,<span class="sc">-</span><span class="dv">7</span>],<span class="at">scale=</span><span class="cn">TRUE</span>) <span class="co"># do not include response variable!</span></span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>v       <span class="ot">&lt;-</span> pca.out<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cumsum</span>(v<span class="sc">/</span><span class="fu">sum</span>(v)),<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>pca.out <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(df[,<span class="sc">-</span><span class="dv">7</span>],<span class="at">scale=</span><span class="cn">TRUE</span>) <span class="co"># do not include response variable!</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>v       <span class="ot">&lt;-</span> pca.out<span class="sc">$</span>sdev<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cumsum</span>(v<span class="sc">/</span><span class="fu">sum</span>(v)),<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.977 0.998 0.999 1.000 1.000 1.000</code></pre>
 </div>
@@ -1442,7 +1977,7 @@ ggplot(data=df.new,mapping=aes(x=value)) +
 <li><p>Let’s print the column(s) for the PCs that we retain:</p></li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(pca.out<span class="sc">$</span>rotation[,<span class="dv">1</span>],<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(pca.out<span class="sc">$</span>rotation[,<span class="dv">1</span>],<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    u     g     r     i     z     y 
 0.396 0.411 0.413 0.412 0.410 0.408 </code></pre>
@@ -1456,7 +1991,7 @@ ggplot(data=df.new,mapping=aes(x=value)) +
 <li><p>What information is in the second PC?</p></li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(pca.out<span class="sc">$</span>rotation[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(pca.out<span class="sc">$</span>rotation[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],<span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    PC1    PC2
 u 0.396  0.793
@@ -1495,16 +2030,16 @@ y 0.408 -0.398</code></pre>
 <li><p>Let’s split the data:</p></li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
-<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df),<span class="fu">round</span>(<span class="fl">0.7</span><span class="sc">*</span><span class="fu">nrow</span>(df)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df),<span class="fu">round</span>(<span class="fl">0.7</span><span class="sc">*</span><span class="fu">nrow</span>(df)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>The test-set mean-squared error for a linear-regression model learned in the data’s native space:</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>lm.out  <span class="ot">&lt;-</span> <span class="fu">lm</span>(redshift<span class="sc">~</span>.,<span class="at">data=</span>df,<span class="at">subset=</span>s)</span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>lm.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out,<span class="at">newdata=</span>df[<span class="sc">-</span>s,])</span>
-<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lm.pred<span class="sc">-</span>df<span class="sc">$</span>redshift[<span class="sc">-</span>s])<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>lm.out  <span class="ot">&lt;-</span> <span class="fu">lm</span>(redshift<span class="sc">~</span>.,<span class="at">data=</span>df,<span class="at">subset=</span>s)</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>lm.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out,<span class="at">newdata=</span>df[<span class="sc">-</span>s,])</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lm.pred<span class="sc">-</span>df<span class="sc">$</span>redshift[<span class="sc">-</span>s])<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.0008416416</code></pre>
 </div>
@@ -1513,11 +2048,11 @@ y 0.408 -0.398</code></pre>
 <li>The test-set mean-squared error for a PC regression model learned using all PCs:</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>df.pc <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(pca.out<span class="sc">$</span>x,df<span class="sc">$</span>redshift)</span>
-<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df.pc) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PC1"</span>,<span class="st">"PC2"</span>,<span class="st">"PC3"</span>,<span class="st">"PC4"</span>,<span class="st">"PC5"</span>,<span class="st">"PC6"</span>,<span class="st">"y"</span>)</span>
-<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>.,<span class="at">data=</span>df.pc,<span class="at">subset=</span>s)</span>
-<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>lm.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out,<span class="at">newdata=</span>df.pc[<span class="sc">-</span>s,])</span>
-<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lm.pred<span class="sc">-</span>df.pc<span class="sc">$</span>y[<span class="sc">-</span>s])<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>df.pc <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(pca.out<span class="sc">$</span>x,df<span class="sc">$</span>redshift)</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df.pc) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PC1"</span>,<span class="st">"PC2"</span>,<span class="st">"PC3"</span>,<span class="st">"PC4"</span>,<span class="st">"PC5"</span>,<span class="st">"PC6"</span>,<span class="st">"y"</span>)</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>.,<span class="at">data=</span>df.pc,<span class="at">subset=</span>s)</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>lm.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out,<span class="at">newdata=</span>df.pc[<span class="sc">-</span>s,])</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lm.pred<span class="sc">-</span>df.pc<span class="sc">$</span>y[<span class="sc">-</span>s])<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.0008416416</code></pre>
 </div>
@@ -1527,9 +2062,9 @@ y 0.408 -0.398</code></pre>
 <li><p>What happens if we learn a model with just the first two PCs, the ones that account for 99.8% of the data variability?</p></li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>PC1<span class="sc">+</span>PC2,<span class="at">data=</span>df.pc,<span class="at">subset=</span>s)</span>
-<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>lm.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out,<span class="at">newdata=</span>df.pc[<span class="sc">-</span>s,])</span>
-<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lm.pred<span class="sc">-</span>df.pc<span class="sc">$</span>y[<span class="sc">-</span>s])<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>PC1<span class="sc">+</span>PC2,<span class="at">data=</span>df.pc,<span class="at">subset=</span>s)</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>lm.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out,<span class="at">newdata=</span>df.pc[<span class="sc">-</span>s,])</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>((lm.pred<span class="sc">-</span>df.pc<span class="sc">$</span>y[<span class="sc">-</span>s])<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.001437671</code></pre>
 </div>
@@ -1542,9 +2077,9 @@ y 0.408 -0.398</code></pre>
 <li><p>What happens if we utilize <code>bestglm</code>?</p></li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(bestglm))</span>
-<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>bg.out <span class="ot">&lt;-</span> <span class="fu">bestglm</span>(df.pc,<span class="at">IC=</span><span class="st">"BIC"</span>)</span>
-<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>bg.out<span class="sc">$</span>BestModel</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressMessages</span>(<span class="fu">library</span>(bestglm))</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>bg.out <span class="ot">&lt;-</span> <span class="fu">bestglm</span>(df.pc,<span class="at">IC=</span><span class="st">"BIC"</span>)</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>bg.out<span class="sc">$</span>BestModel</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -1563,7 +2098,7 @@ Coefficients:
 <li><p>Let’s summarize the “best” model</p></li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bg.out<span class="sc">$</span>BestModel)<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bg.out<span class="sc">$</span>BestModel)<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                Estimate   Std. Error    t value     Pr(&gt;|t|)
 (Intercept)  0.174550826 0.0009369600 186.294847 0.000000e+00
