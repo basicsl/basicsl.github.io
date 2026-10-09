@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>6&nbsp; Nonlinear Regression – Basic Statistical Learning: a Guide for the Perplexed</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -59,7 +65,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -93,10 +98,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-485d01fc63b59abcd3ee1bf1e8e2748d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d3f7f8e73c8d287b30bcf59c2b563615.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -126,7 +131,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -139,7 +144,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -344,7 +349,7 @@ Y \vert x = \beta_0 + \beta_1 x + \cdots + \beta_d x^d + \epsilon
 \]</span> To be clear, this is still a “linear model,” as the model <em>coefficients</em> are not raised to any power.</p>
 <p>Below, we show how to use LOOCV to determine the optimal polynomial degree. (But first, we will split the data into training and test sets.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>s        <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df),<span class="fu">round</span>(<span class="fl">0.7</span><span class="sc">*</span><span class="fu">nrow</span>(df)),<span class="at">replace=</span><span class="cn">FALSE</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df.train <span class="ot">&lt;-</span> df[s,]</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>df.test  <span class="ot">&lt;-</span> df[<span class="sc">-</span>s,]</span>
@@ -362,7 +367,7 @@ Y \vert x = \beta_0 + \beta_1 x + \cdots + \beta_d x^d + \epsilon
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  mse[jj] <span class="ot">&lt;-</span> <span class="fu">mean</span>((df.train<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"For degree ="</span>, jj, <span class="st">"the LOOCV MSE is"</span>, mse[jj], <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>For degree = 1 the LOOCV MSE is 5.77244 
 For degree = 2 the LOOCV MSE is 0.3994393 
@@ -387,9 +392,9 @@ For degree = 9 the LOOCV MSE is 0.3355489 </code></pre>
 <p>Here, we find that the MSE is minimized for a sixth-degree polynomial. While we could simply adopt that value, we note that (a) the MSE is a random variable (since, if we were to change the random-number-generator seed when creating the training and test sets, the MSE value would change), (b) the MSE value at <span class="math inline">\(d = 6\)</span> is only very slightly smaller than that at <span class="math inline">\(d = 3\)</span>, and (c) when given a set of otherwise equivalent models, the simplest one is the one we should choose. Here, if we were to perform the exercise of changing the seed and generating MSEs multiple times, we would find that the mean MSE for <span class="math inline">\(d = 6\)</span> is not statistically significantly smaller than that for <span class="math inline">\(d = 3\)</span>…and so we adopt the latter value.</p>
 <p>Having determined the optimal value for the polynomial degree, we first learn the polynomial regression model with all the training data…</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span><span class="fu">poly</span>(x, <span class="dv">3</span>, <span class="at">raw=</span><span class="cn">TRUE</span>), <span class="at">data=</span>df.train, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span><span class="fu">poly</span>(x, <span class="dv">3</span>, <span class="at">raw=</span><span class="cn">TRUE</span>), <span class="at">data=</span>df.train, </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">weights=</span><span class="dv">1</span><span class="sc">/</span>(e<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="st">"Estimate"</span><span class="ot">=</span><span class="fu">summary</span>(lm.out)<span class="sc">$</span>coefficients[,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="st">"Estimate"</span><span class="ot">=</span><span class="fu">summary</span>(lm.out)<span class="sc">$</span>coefficients[,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                             Estimate
 (Intercept)             -1.000393e+00
@@ -400,8 +405,8 @@ poly(x, 3, raw = TRUE)3 -3.837579e-05</code></pre>
 </div>
 <p>…then generate predictions for the test set…</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out, <span class="at">newdata=</span>df.test)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The MSE is"</span>,<span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out, <span class="at">newdata=</span>df.test)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The MSE is"</span>,<span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The MSE is 0.309 </code></pre>
 </div>
@@ -440,7 +445,7 @@ Y_i \vert x_i = \beta_0 + \beta_1 b_1(x_i) + \beta_2 b_2(x_2) + \beta_3 b_3(x_3)
 <p>Note that if <span class="math inline">\(d\)</span> is the degree of the polynomial and <span class="math inline">\(K\)</span> is the number of knots, the overall number of basis functions in the model will be <span class="math inline">\(d+K\)</span>.</p>
 <p>Below, we show how to use LOOCV to determine the optimal polynomial degree for a one-knot regression spline model, with the knot being placed by fiat at the median value of <span class="math inline">\(x\)</span>, 40.5.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>d    <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>d    <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n.train)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ( jj <span class="cf">in</span> d ) {</span>
@@ -451,7 +456,7 @@ Y_i \vert x_i = \beta_0 + \beta_1 b_1(x_i) + \beta_2 b_2(x_2) + \beta_3 b_3(x_3)
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  mse <span class="ot">&lt;-</span> <span class="fu">mean</span>((df.train<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"For degree ="</span>, jj, <span class="st">"the LOOCV MSE is"</span>, mse, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>For degree = 1 the LOOCV MSE is 17.21116 
 For degree = 2 the LOOCV MSE is 5.681544 
@@ -461,9 +466,9 @@ For degree = 4 the LOOCV MSE is 11.8805 </code></pre>
 </div>
 <p>We adopt the quadratic polynomial (<span class="math inline">\(d = 2\)</span>) model here.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span><span class="fu">bs</span>(x, <span class="at">degree=</span><span class="dv">2</span>, <span class="at">knots=</span><span class="fu">c</span>(<span class="fl">40.5</span>)), </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span><span class="fu">bs</span>(x, <span class="at">degree=</span><span class="dv">2</span>, <span class="at">knots=</span><span class="fu">c</span>(<span class="fl">40.5</span>)), </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data=</span>df.train, <span class="at">weights=</span><span class="dv">1</span><span class="sc">/</span>(e<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="st">"Estimate"</span><span class="ot">=</span><span class="fu">summary</span>(lm.out)<span class="sc">$</span>coefficients[,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="st">"Estimate"</span><span class="ot">=</span><span class="fu">summary</span>(lm.out)<span class="sc">$</span>coefficients[,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                      Estimate
 (Intercept)                         -0.8628274
@@ -471,8 +476,8 @@ bs(x, degree = 2, knots = c(40.5))1  5.4126798
 bs(x, degree = 2, knots = c(40.5))2  8.9930575
 bs(x, degree = 2, knots = c(40.5))3  0.5245555</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out, <span class="at">newdata=</span>df.test)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out, <span class="at">newdata=</span>df.test)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.318</code></pre>
 </div>
@@ -489,15 +494,15 @@ bs(x, degree = 2, knots = c(40.5))3  0.5245555</code></pre>
 <p>The test-set mean-squared error is 0.318, versus 0.309 for the polynomial regression model. The models give (not suprisingly in this context) essentially identical results. (In such a case we would adopt the simpler [and smoother] model, which is the global polynomial regression model.)</p>
 <p>Note that the three basis function coefficients above correspond to each of the three curves in the basis function figure further above; for an arbitrary value of <span class="math inline">\(x\)</span>, the prediction from the model would be the basis intercept term plus the first coefficient times the amplitude of the blue basis function at the value <span class="math inline">\(x\)</span>, etc. We demonstrate this below, for <span class="math inline">\(x = 10\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">predict</span>(lm.out, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="st">"x"</span><span class="ot">=</span>x)), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">predict</span>(lm.out, <span class="at">newdata=</span><span class="fu">data.frame</span>(<span class="st">"x"</span><span class="ot">=</span>x)), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    1 
 1.416 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">which</span>(bs.x<span class="sc">==</span>x)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">which</span>(bs.x<span class="sc">==</span>x)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">summary</span>(lm.out)<span class="sc">$</span>coefficients[,<span class="dv">1</span>]</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(b[<span class="dv">1</span>] <span class="sc">+</span> b[<span class="dv">2</span>]<span class="sc">*</span>spl[w,<span class="dv">1</span>] <span class="sc">+</span> b[<span class="dv">3</span>]<span class="sc">*</span>spl[w,<span class="dv">2</span>] <span class="sc">+</span> b[<span class="dv">4</span>]<span class="sc">*</span>spl[w,<span class="dv">3</span>], <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(b[<span class="dv">1</span>] <span class="sc">+</span> b[<span class="dv">2</span>]<span class="sc">*</span>spl[w,<span class="dv">1</span>] <span class="sc">+</span> b[<span class="dv">3</span>]<span class="sc">*</span>spl[w,<span class="dv">2</span>] <span class="sc">+</span> b[<span class="dv">4</span>]<span class="sc">*</span>spl[w,<span class="dv">3</span>], <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(Intercept) 
       1.416 </code></pre>
@@ -505,7 +510,7 @@ bs(x, degree = 2, knots = c(40.5))3  0.5245555</code></pre>
 </div>
 <p>It is often the case that in a regression spline model, we would not know <em>a priori</em> where to place knots. When that is the case, we would specify the number of degrees of freedom instead. This corresponds to the number of basis functions (not including the intercept term!) that would be used to build up the model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dof  <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">6</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dof  <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">6</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n.train)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ( jj <span class="cf">in</span> dof ) {</span>
@@ -516,7 +521,7 @@ bs(x, degree = 2, knots = c(40.5))3  0.5245555</code></pre>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  mse <span class="ot">&lt;-</span> <span class="fu">mean</span>((df.train<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"For dof ="</span>, jj, <span class="st">"the LOOCV MSE is"</span>, mse, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>For dof = 3 the LOOCV MSE is 28.31229 
 For dof = 4 the LOOCV MSE is 8.538485 
@@ -526,9 +531,9 @@ For dof = 6 the LOOCV MSE is 13.54418 </code></pre>
 </div>
 <p>Here we adopt four degrees of freedom.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span><span class="fu">bs</span>(x, <span class="at">df=</span><span class="dv">4</span>), </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>lm.out <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span><span class="fu">bs</span>(x, <span class="at">df=</span><span class="dv">4</span>), </span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data=</span>df.train, <span class="at">weights=</span><span class="dv">1</span><span class="sc">/</span>(e<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="st">"Estimate"</span><span class="ot">=</span><span class="fu">summary</span>(lm.out)<span class="sc">$</span>coefficients[,<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="st">"Estimate"</span><span class="ot">=</span><span class="fu">summary</span>(lm.out)<span class="sc">$</span>coefficients[,<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                 Estimate
 (Intercept)    -0.5844721
@@ -537,8 +542,8 @@ bs(x, df = 4)2 10.2763816
 bs(x, df = 4)3  5.1028602
 bs(x, df = 4)4  0.3166002</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out, <span class="at">newdata=</span>df.test)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out, <span class="at">newdata=</span>df.test)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.307</code></pre>
 </div>
@@ -557,8 +562,8 @@ bs(x, df = 4)4  0.3166002</code></pre>
 <h3 data-number="6.2.1" class="anchored" data-anchor-id="digression-regression-splines-v.-spline-interpolation"><span class="header-section-number">6.2.1</span> Digression: Regression Splines v. Spline Interpolation</h3>
 <p>A potentially confusing aspect to using splines is that some functions use them in the context of regression (i.e., they incorporate the idea of randomness) and some use them <em>deterministically</em> (i.e., as interpolators that thread functions through every point).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># note: uncertainties not taken into account</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>spl.out <span class="ot">&lt;-</span> <span class="fu">spline</span>(df<span class="sc">$</span>x, df<span class="sc">$</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># note: uncertainties not taken into account</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>spl.out <span class="ot">&lt;-</span> <span class="fu">spline</span>(df<span class="sc">$</span>x, df<span class="sc">$</span>y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -586,13 +591,13 @@ bs(x, df = 4)4  0.3166002</code></pre>
 </ul>
 <p>Because <span class="math inline">\(\lambda\)</span> is continuously valued and has a value that might be hard to estimate <em>a priori</em>, the more analytically efficient option is to use cross-validation. Setting <code>cv=TRUE</code> in the call to <code>smooth.spline()</code> eliminates the need for us to use LOOCV here.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ss.out <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ss.out <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">smooth.spline</span>(<span class="at">x=</span>df.train<span class="sc">$</span>x,</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">y=</span>df.train<span class="sc">$</span>y,</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">w=</span><span class="dv">1</span><span class="sc">/</span>(df.train<span class="sc">$</span>e<span class="sc">^</span><span class="dv">2</span>),</span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">cv=</span><span class="cn">TRUE</span>)</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>ss.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>ss.out</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Call:
 smooth.spline(x = df.train$x, y = df.train$y, w = 1/(df.train$e^2), 
@@ -603,8 +608,8 @@ Equivalent Degrees of Freedom (Df): 7.138138
 Penalized Criterion (weighted RSS): 8.537291
 PRESS(l.o.o. CV): 0.2020227</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ss.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ss.out, <span class="at">x=</span>df.test<span class="sc">$</span>x)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>ss.pred<span class="sc">$</span>y)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ss.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ss.out, <span class="at">x=</span>df.test<span class="sc">$</span>x)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>ss.pred<span class="sc">$</span>y)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.322</code></pre>
 </div>
@@ -625,7 +630,7 @@ PRESS(l.o.o. CV): 0.2020227</code></pre>
 <p>This is a “localized” version of a global polynomial regression model that we learn using the <code>loess()</code> function: at each point <span class="math inline">\(x_o\)</span>, a polynomial is fit, with more weight being given to nearby data points and less to those that are farther away. Because this is a polynomial-based model, one of the parameters will be <code>degree</code> (default 2), and because this is a local model, another will be the effective range of data around <span class="math inline">\(x_o\)</span> that will contribute to estimating <span class="math inline">\(Y \vert x_o\)</span> (here, <code>span</code>, which has a default value of 0.75: the proportion of data points that contribute to the estimate). A larger value of <code>span</code> means more neighboring data weigh in on the estimate made at <span class="math inline">\(x_o\)</span>; therefore, larger <code>span</code> values produce smoother regression functions.</p>
 <p>Below, we use LOOCV to determine the appropriate <code>span</code> value given a local quadratic polynomial. (Note that the <code>control</code> argument is included to allow model extrapolation; for instance, if the last data point is held out, the model must be extrapolated to generate a prediction at that point.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>span <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="at">by=</span><span class="fl">0.1</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>span <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="at">by=</span><span class="fl">0.1</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, n.train)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ( jj <span class="cf">in</span> span ) {</span>
@@ -638,7 +643,7 @@ PRESS(l.o.o. CV): 0.2020227</code></pre>
 <span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  mse <span class="ot">&lt;-</span> <span class="fu">mean</span>((df.train<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"For span ="</span>, jj, <span class="st">"the LOOCV MSE is"</span>, mse, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>For span = 0.1 the LOOCV MSE is 0.4408543 
 For span = 0.2 the LOOCV MSE is 0.2391312 
@@ -653,10 +658,10 @@ For span = 0.9 the LOOCV MSE is 0.2199544 </code></pre>
 </div>
 <p>We will adopt the value of 0.7 for <code>span</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>loess.out <span class="ot">&lt;-</span> <span class="fu">loess</span>(y<span class="sc">~</span>x, <span class="at">data=</span>loocv.df, <span class="at">weights=</span><span class="dv">1</span><span class="sc">/</span>(e<span class="sc">^</span><span class="dv">2</span>), <span class="at">span=</span><span class="fl">0.7</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>loess.out <span class="ot">&lt;-</span> <span class="fu">loess</span>(y<span class="sc">~</span>x, <span class="at">data=</span>loocv.df, <span class="at">weights=</span><span class="dv">1</span><span class="sc">/</span>(e<span class="sc">^</span><span class="dv">2</span>), <span class="at">span=</span><span class="fl">0.7</span>)</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(loess.out, <span class="at">newdata=</span>df.test)</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.317</code></pre>
 </div>
@@ -690,23 +695,23 @@ Y_i \vert x_i = \beta_0 + f_1(x_{1,i}) + \cdots + f_p(x_{p,i}) + \epsilon_i \,,
 <h3 data-number="6.5.1" class="anchored" data-anchor-id="example"><span class="header-section-number">6.5.1</span> Example</h3>
 <p>In the following example, we will contrast the results of learning linear regression and GAM models using the first example of the <code>mgcv</code> package’s <code>gamSim()</code> function. The sample size is <span class="math inline">\(n = 400\)</span>, there are four predictor variables (<code>x0</code> through <code>x3</code>), and the response variable is <code>y</code>. To keep things simpler, we will not split the data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mgcv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mgcv)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: nlme</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>This is mgcv 1.9-1. For overview type 'help("mgcv-package")'.</code></pre>
+<pre><code>This is mgcv 1.9-4. For overview type '?mgcv'.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>df.gam <span class="ot">&lt;-</span> <span class="fu">gamSim</span>(<span class="dv">1</span>, <span class="at">n=</span><span class="dv">400</span>, <span class="at">dist=</span><span class="st">"normal"</span>, <span class="at">scale=</span><span class="dv">2</span>)[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">101</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>df.gam <span class="ot">&lt;-</span> <span class="fu">gamSim</span>(<span class="dv">1</span>, <span class="at">n=</span><span class="dv">400</span>, <span class="at">dist=</span><span class="st">"normal"</span>, <span class="at">scale=</span><span class="dv">2</span>)[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Gu &amp; Wahba 4 term additive model</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>lm.out  <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>., <span class="at">data=</span>df.gam)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>lm.out  <span class="ot">&lt;-</span> <span class="fu">lm</span>(y<span class="sc">~</span>., <span class="at">data=</span>df.gam)</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>lm.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(lm.out)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.gam<span class="sc">$</span>y<span class="sc">-</span>lm.pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.gam<span class="sc">$</span>y<span class="sc">-</span>lm.pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 9.482</code></pre>
 </div>
@@ -724,9 +729,9 @@ Y_i \vert x_i = \beta_0 + f_1(x_{1,i}) + \cdots + f_p(x_{p,i}) + \epsilon_i \,,
 <p>The linear model does not represent well the data-generating process, as is evidenced by the fact that slope of the data points is not very different from zero. (However, there is <em>some</em> amount of underlying linear association: the adjusted <span class="math inline">\(R^2\)</span> is 0.346.)</p>
 <p>Now we learn a GAM model assuming a B-Spline basis for each of the predictor variables:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>gam.out  <span class="ot">&lt;-</span> <span class="fu">gam</span>(y<span class="sc">~</span><span class="fu">s</span>(x0, <span class="at">bs=</span><span class="st">"bs"</span>)<span class="sc">+</span><span class="fu">s</span>(x1, <span class="at">bs=</span><span class="st">"bs"</span>)<span class="sc">+</span><span class="fu">s</span>(x2, <span class="at">bs=</span><span class="st">"bs"</span>)<span class="sc">+</span><span class="fu">s</span>(x3, <span class="at">bs=</span><span class="st">"bs"</span>), <span class="at">data=</span>df.gam)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>gam.out  <span class="ot">&lt;-</span> <span class="fu">gam</span>(y<span class="sc">~</span><span class="fu">s</span>(x0, <span class="at">bs=</span><span class="st">"bs"</span>)<span class="sc">+</span><span class="fu">s</span>(x1, <span class="at">bs=</span><span class="st">"bs"</span>)<span class="sc">+</span><span class="fu">s</span>(x2, <span class="at">bs=</span><span class="st">"bs"</span>)<span class="sc">+</span><span class="fu">s</span>(x3, <span class="at">bs=</span><span class="st">"bs"</span>), <span class="at">data=</span>df.gam)</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>gam.pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(gam.out)</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.gam<span class="sc">$</span>y<span class="sc">-</span>gam.pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.gam<span class="sc">$</span>y<span class="sc">-</span>gam.pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3.837</code></pre>
 </div>
@@ -743,7 +748,7 @@ Y_i \vert x_i = \beta_0 + f_1(x_{1,i}) + \cdots + f_p(x_{p,i}) + \epsilon_i \,,
 </div>
 <p>To make inferences regarding the GAM model, we can look at both the table of smooth terms and a partial residuals plot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gam.out)<span class="sc">$</span>s.table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gam.out)<span class="sc">$</span>s.table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           edf   Ref.df         F   p-value
 s(x0) 3.050558 3.750961 17.377431 0.0000000
@@ -751,7 +756,7 @@ s(x1) 2.782932 3.444916 89.338781 0.0000000
 s(x2) 7.003643 7.767556 81.383268 0.0000000
 s(x3) 3.755035 4.587286  1.663008 0.1264493</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gam.out, <span class="at">pages=</span><span class="dv">1</span>, <span class="at">residuals=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gam.out, <span class="at">pages=</span><span class="dv">1</span>, <span class="at">residuals=</span><span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -805,7 +810,7 @@ f(x) = \sin\left(\frac{\pi}{b}x\right) x^a \,,
 <pre><code>1 - pchisq(chi2.min,n-p) # chi2.min is value of chi2 for optimized parameters</code></pre>
 <p>Below, we demonstrate how we would use <code>R</code>’s <code>optim()</code> function to optimize the values of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> in our model. (Note that if we only needed to optimize the value of one parameter, we would probably use the <code>optimize()</code> function instead.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>fit.fun <span class="ot">&lt;-</span> <span class="cf">function</span>(par, data)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>fit.fun <span class="ot">&lt;-</span> <span class="cf">function</span>(par, data)</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>{</span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> data<span class="sc">$</span>x</span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> data<span class="sc">$</span>y</span>
@@ -814,11 +819,11 @@ f(x) = \sin\left(\frac{\pi}{b}x\right) x^a \,,
 <span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>par <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="dv">100</span>) <span class="co"># initial guesses for a, b</span></span>
 <span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>op.out <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">optim</span>(par, fit.fun, <span class="at">data=</span>df.train))</span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(op.out<span class="sc">$</span>value, <span class="dv">3</span>)       <span class="co"># the minimum chi-square value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(op.out<span class="sc">$</span>value, <span class="dv">3</span>)       <span class="co"># the minimum chi-square value</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 48.269</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(op.out<span class="sc">$</span>par, <span class="dv">3</span>)         <span class="co"># the estimated parameter values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(op.out<span class="sc">$</span>par, <span class="dv">3</span>)         <span class="co"># the estimated parameter values</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  0.505 79.585</code></pre>
 </div>
@@ -827,7 +832,7 @@ f(x) = \sin\left(\frac{\pi}{b}x\right) x^a \,,
 <p>Finally, note how we make an initial guesses for <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> (<code>par &lt;- c(0.6,100)</code>). Our optimizer works fine with these guesses, but beware that in more complicated problems we run the risk of not finding the global minimum for <span class="math inline">\(\chi^2\)</span> if our initial guess is “bad.” (For instance, when we run the code above with an initial guess of <span class="math inline">\(a = 0.75\)</span>, the optimizer moves to a false minimum!)</p>
 <p>We find that <span class="math inline">\(\chi^2 = 48.269\)</span> and that <span class="math inline">\(\chi^2/(n-p) = \chi^2/(n-2) = 48.269/54 \approx 0.894\)</span>…so we would view the model as being an acceptable model. (Note that the training set has <span class="math inline">\(n = 56\)</span> data points.) We reinforce this conclusion by running the chi-square GoF test:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(op.out<span class="sc">$</span>value, <span class="fu">nrow</span>(df.train)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(op.out<span class="sc">$</span>value, <span class="fu">nrow</span>(df.train)<span class="sc">-</span><span class="dv">1</span>), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.728</code></pre>
 </div>
@@ -835,8 +840,8 @@ f(x) = \sin\left(\frac{\pi}{b}x\right) x^a \,,
 <p>The <span class="math inline">\(p\)</span>-value is 0.728; we fail to reject the null hypothesis that our model is an acceptable one.</p>
 <p>We have to do a little more work here to determine the test-set MSE, but not much:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">sin</span>(df.test<span class="sc">$</span>x<span class="sc">*</span>pi<span class="sc">/</span>op.out<span class="sc">$</span>par[<span class="dv">2</span>])<span class="sc">*</span>(df.test<span class="sc">$</span>x)<span class="sc">^</span>op.out<span class="sc">$</span>par[<span class="dv">1</span>]</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">sin</span>(df.test<span class="sc">$</span>x<span class="sc">*</span>pi<span class="sc">/</span>op.out<span class="sc">$</span>par[<span class="dv">2</span>])<span class="sc">*</span>(df.test<span class="sc">$</span>x)<span class="sc">^</span>op.out<span class="sc">$</span>par[<span class="dv">1</span>]</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">mean</span>((df.test<span class="sc">$</span>y<span class="sc">-</span>pred)<span class="sc">^</span><span class="dv">2</span>), <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.329</code></pre>
 </div>
@@ -900,7 +905,7 @@ K(u) = \frac{1}{2\pi} \exp\left(-\frac{u^2}{2}\right) \,,
 \hat{f}_{X,h}(z) = \frac{1}{n} \sum_{i=1}^n \frac{1}{2\pi h^2} \exp\left(-\frac{(x-X_i)^2}{2h^2}\right) \,.
 \]</span> In other words, the kernel density estimate at <span class="math inline">\(x\)</span> is the average of <span class="math inline">\(n\)</span> normal probability density functions, one defined for each datum <span class="math inline">\(X_i\)</span> and evaluated at the coordinate <span class="math inline">\(x\)</span>. In the figure below, we see that the KDE when we have one datum at <span class="math inline">\(x = -2\)</span>, three data at <span class="math inline">\(x = 0\)</span>, and two data at <span class="math inline">\(x = 3\)</span> is a superposition of six separate Gaussian kernels, each with the same specified width. In the equation above, <span class="math inline">\(h\)</span> plays the role of a standard deviation; in KDE, our goal is to determine the optimal value of this parameter. In general, we would call <span class="math inline">\(h\)</span> the “smoothing parameter.”</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">3</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">3</span>)</span>
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">density</span>(x,<span class="at">bw=</span><span class="fl">0.2</span>)</span>
 <span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -911,7 +916,7 @@ K(u) = \frac{1}{2\pi} \exp\left(-\frac{u^2}{2}\right) \,,
 <span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"x"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="fu">expression</span>(<span class="fu">paste</span>(<span class="fu">hat</span>(f),<span class="st">"(x)"</span>))) <span class="sc">+</span></span>
 <span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">x=</span><span class="sc">-</span><span class="dv">2</span>,<span class="at">xend=</span><span class="sc">-</span><span class="dv">2</span>,<span class="at">y=</span><span class="dv">0</span>,<span class="at">yend=</span><span class="fl">0.125</span>,<span class="at">col=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
 <span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">x=</span><span class="dv">0</span>,<span class="at">xend=</span><span class="dv">0</span>,<span class="at">y=</span><span class="dv">0</span>,<span class="at">yend=</span><span class="fl">0.375</span>,<span class="at">col=</span><span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">x=</span><span class="dv">3</span>,<span class="at">xend=</span><span class="dv">3</span>,<span class="at">y=</span><span class="dv">0</span>,<span class="at">yend=</span><span class="fl">0.25</span>,<span class="at">col=</span><span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">x=</span><span class="dv">3</span>,<span class="at">xend=</span><span class="dv">3</span>,<span class="at">y=</span><span class="dv">0</span>,<span class="at">yend=</span><span class="fl">0.25</span>,<span class="at">col=</span><span class="st">"black"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -940,8 +945,8 @@ K(u) = \frac{1}{2\pi} \exp\left(-\frac{u^2}{2}\right) \,,
 <p>We can see that the data exhibit bi-modality, and thus that we cannot simply assume that the underlying distribution is a normal distribution or any of the other standard distributions that we might know. Again, this is the setting of KDE: to estimate a distribution’s shape when assumptions cannot be made.</p>
 <p>Below, we use <code>R</code>’s <code>density()</code> function (with a Gaussian kernel) to generate a distribution estimate. Density estimators come with so-called “plug-in” estimates of the smoothing parameter (or “bandwidth”), and we will utilize that first:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>den.out <span class="ot">=</span> <span class="fu">density</span>(x)</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The default bandwidth = "</span>,<span class="fu">round</span>(den.out<span class="sc">$</span>bw,<span class="dv">3</span>),<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>den.out <span class="ot">=</span> <span class="fu">density</span>(x)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The default bandwidth = "</span>,<span class="fu">round</span>(den.out<span class="sc">$</span>bw,<span class="dv">3</span>),<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The default bandwidth =  0.179 </code></pre>
 </div>
@@ -959,9 +964,9 @@ K(u) = \frac{1}{2\pi} \exp\left(-\frac{u^2}{2}\right) \,,
 <p>This looks pretty good! If it had been necessary, we could have implemented, e.g., LOOCV in order to determine the optimal bandwidth. However, implementing LOOCV is a bit harder here because there is no response variable and thus there is no mean-squared error metric; rather, we would work with the mean integrated squared error (MISE). The details of working with the MISE are beyond the scope of the current book.</p>
 <p>Before wrapping up, we will point out one other “feature” of kernel density estimation: boundary bias. In the example above, there is no boundary bias, per se, because there are no data near the lower and upper boundaries on <span class="math inline">\(x\)</span>. (Meaning, to be clear, that we are able to detect data at small and large values of <span class="math inline">\(x\)</span> but we do not observe any.) What if we could only observe data over a limited range of <span class="math inline">\(x\)</span> values?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x[x<span class="sc">&gt;=</span><span class="dv">18</span> <span class="sc">&amp;</span> x <span class="sc">&lt;=</span><span class="dv">20</span>]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x[x<span class="sc">&gt;=</span><span class="dv">18</span> <span class="sc">&amp;</span> x <span class="sc">&lt;=</span><span class="dv">20</span>]</span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>den.out <span class="ot">=</span> <span class="fu">density</span>(x)</span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The default bandwidth = "</span>,<span class="fu">round</span>(den.out<span class="sc">$</span>bw,<span class="dv">3</span>),<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The default bandwidth = "</span>,<span class="fu">round</span>(den.out<span class="sc">$</span>bw,<span class="dv">3</span>),<span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The default bandwidth =  0.104 </code></pre>
 </div>
@@ -977,15 +982,15 @@ K(u) = \frac{1}{2\pi} \exp\left(-\frac{u^2}{2}\right) \,,
 </div>
 <p>Kernel density estimation involves smoothing; the larger the value of <span class="math inline">\(h\)</span>, the greater the degree of smoothing, and the more density that will “leak” beyond the data boundaries when there are data near those boundaries. Here, we see that KDE posits some amount of density below <span class="math inline">\(x = 18\)</span> and above <span class="math inline">\(x = 20\)</span>, whereas we would want all the density to lie within the range of the data. There is no unique mechanism for dealing with boundary bias, although one common one is to “remove” the density outside of the data range and to reset (or “renormalize”) the density values inside the range such that the area under the truncated density curve is 1.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What is the estimated density inside the data range?</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What is the estimated density inside the data range?</span></span>
 <span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> den.out<span class="sc">$</span>x <span class="sc">&gt;=</span> <span class="dv">18</span> <span class="sc">&amp;</span> den.out<span class="sc">$</span>x <span class="sc">&lt;=</span> <span class="dv">20</span></span>
 <span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>delta.x <span class="ot">&lt;-</span> (<span class="fu">max</span>(den.out<span class="sc">$</span>x) <span class="sc">-</span> <span class="fu">min</span>(den.out<span class="sc">$</span>x))<span class="sc">/</span>(den.out<span class="sc">$</span>n<span class="dv">-1</span>)</span>
-<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(den.out<span class="sc">$</span>y[l] <span class="sc">*</span> delta.x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(den.out<span class="sc">$</span>y[l] <span class="sc">*</span> delta.x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9675897</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>den.x <span class="ot">&lt;-</span> den.out<span class="sc">$</span>x[l]</span>
-<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>den.y <span class="ot">&lt;-</span> den.out<span class="sc">$</span>y[l] <span class="sc">/</span> <span class="fu">sum</span>(den.out<span class="sc">$</span>y[l] <span class="sc">*</span> delta.x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>den.x <span class="ot">&lt;-</span> den.out<span class="sc">$</span>x[l]</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>den.y <span class="ot">&lt;-</span> den.out<span class="sc">$</span>y[l] <span class="sc">/</span> <span class="fu">sum</span>(den.out<span class="sc">$</span>y[l] <span class="sc">*</span> delta.x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
@@ -999,7 +1004,7 @@ K(u) = \frac{1}{2\pi} \exp\left(-\frac{u^2}{2}\right) \,,
 <p>Note that the appearance of the left-most histogram bin is affected by <code>ggplot</code>’s algorithmic choice of bin boundaries; one can override this behavior by explicitly defining the boundaries.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
 <div id="ref-James2021r" class="csl-entry" role="listitem">
 James, Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani. 2021. <em>An Introduction to Statistical Learning: With Applications in r</em>. Springer New York, NY. <a href="https://doi.org/10.1007/978-1-0716-1418-1">https://doi.org/10.1007/978-1-0716-1418-1</a>.
 </div>
@@ -1059,13 +1064,14 @@ James, Gareth, Daniela Witten, Trevor Hastie, and Robert Tibshirani. 2021. <em>A
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
